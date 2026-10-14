@@ -1,0 +1,94 @@
+<!-- ================= 6. MODÜLASYON (devam): takımyıldız, dönme, mesaj, sembol hızı ================= -->
+<section class="slide" data-chapter="6" data-demo="constellation" id="takimyildiz">
+  <div class="text">
+    <h2>Takımyıldız ve gürültü</h2>
+    <p class="lead">Her sembol düzlemde bir yıldızdır. Gürültü onu yerinden oynatır; yıldız komşusunun bölgesine kayarsa bit yanlış okunur.</p>
+    <p>Alıcı gelen her sembolü <span class="ci">I</span>/<span class="cq">Q</span> düzleminde bir nokta olarak görür. Gürültü olmasaydı noktalar tam ideal yerlerine düşerdi; gerçekte her biri <span class="cn">kırçıl gri</span> bir bulutun içinde rastgele sapar.</p>
+    <p>İnce kesikli çizgiler karar sınırlarıdır: nokta hangi bölgeye düşerse alıcı o sembole karar verir. Sınırı aşan noktalar <span class="cr">kırmızı halkayla</span> işaretli.</p>
+    <p>Sağdaki sayaç hataları gerçekten sayar ve kuramla karşılaştırır. Sembol başına çok bit taşıyan takımyıldızlarda noktalar birbirine yakındır; aynı gürültüde daha çok hata yaparlar.</p>
+    <details class="more"><summary>Daha fazla: SNR ve hata oranı</summary>
+      <p>SNR burada Es/N0: sembol başına enerjinin gürültü yoğunluğuna oranı. Bit başına oran Eb/N0 = Es/N0 − 10·log₁₀(k), k sembol başına bit. Komşu noktalar tek bitte farklı olacak biçimde (Gray kodu) etiketlendiği için çoğu sembol hatası tek bit hatasıdır.</p>
+      <span class="formula">BPSK: Pb = Q(√(2·Es/N0))   QPSK: Pb = Q(√(Es/N0))</span>
+      <span class="formula">16-QAM: Pb ≈ ¾·Q(√(Es/(5·N0)))   8-PSK: Pb ≈ ⅔·Q(√(2·Es/N0)·sin(π/8))</span>
+      <p>Q(x), standart normal dağılımın x'ten büyük olma olasılığıdır. 8-PSK ve 16-QAM ifadeleri en yakın komşu yaklaşımıdır; çok düşük SNR'da ölçülen değer biraz daha yüksek çıkar.</p>
+    </details>
+    <p class="try">SNR'ı 4 dB'e indirin, sonra 16-QAM'e geçin: bulutlar birbirine karışır, hata sayacı hızlanır.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Ölçüm canlı: her karede ~6.000 rastgele bit modüle edilir, Es/N0'a göre beyaz Gauss gürültüsü (AWGN) eklenir, en yakın noktaya karar verilir ve hatalar sayılır. Ekranda bunların yalnızca saniyede 150'si çizilir.</li>
+    <li>Sayaç her (modülasyon, SNR) çifti için ayrı tutulur; aynı ayara dönünce saymaya devam eder. Eğrideki dolu noktalar ölçülen değerler, üçgenler "hiç hata yok, en fazla 1/bit sayısı" üst sınırı.</li>
+    <li>Kural: güvenilir bir BER için ~100 hata saymak gerekir. 10⁻⁶ ölçmek için yaklaşık 10⁸ bit gerekir; bu yüzden yüksek SNR'da sayaç uzun süre 0 kalır.</li>
+    <li>Betikle doğrulandı (2·10⁵–2·10⁶ bit): QPSK 8 dB'de ölçülen 5,9·10⁻³ / kuram 6,0·10⁻³; 16-QAM 12 dB'de 2,83·10⁻² / 2,81·10⁻². 8-PSK ve 16-QAM 0 dB'de ölçülen kuramdan %18–23 yüksek (yaklaşık formül).</li>
+    <li>Olası soru: "Gerçek sistemler bu kadar hatayla nasıl çalışıyor?" Hata düzeltme kodları (FEC) ekledikleri fazla bitlerle 10⁻³ gibi ham hata oranlarını neredeyse sıfıra indirir.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="6" data-demo="rotation" id="donme">
+  <div class="text">
+    <h2>Dönen takımyıldız</h2>
+    <p class="lead">Vericinin ve alıcının osilatörleri hiçbir zaman tıpatıp aynı değildir. Takımyıldız bu yüzden döner.</p>
+    <p><span class="cph">Faz kayması</span> bütün noktaları sabit bir açıyla çevirir: karar sınırları yerinde kalır, noktalar komşu bölgeye taşar. <span class="cph">Frekans hatası</span> daha sinsidir: alıcının osilatörü biraz hızlı ya da yavaşsa takımyıldız durmadan döner ve noktalar bir halkaya yayılır.</p>
+    <p>Alıcı bunu kendisi düzeltir. Her sembolde noktanın en yakın ideal noktaya göre ne kadar döndüğünü ölçer ve kendi osilatörünü o kadar geri çevirir. Bu geri besleme, <em>faz kilitli döngü</em>, birkaç yüz sembolde dönmeyi durdurur.</p>
+    <details class="more"><summary>Daha fazla: döngünün denklemi</summary>
+      <p>Düzeltilmiş nokta y, karar verilen ideal nokta d. Faz hatası e ölçülür, döngü hem fazı hem frekansı izler (ikinci derece döngü):</p>
+      <span class="formula">e = arg(y · d*)   φ̂ ← φ̂ + ω̂ + Kp·e   ω̂ ← ω̂ + Ki·e</span>
+      <p>QPSK 90° döndürülünce kendisiyle çakışır; döngü 0°, 90°, 180° ya da 270° kaymış kilitlenebilir. Görüntü düzgündür ama bitler yanlıştır. Bu belirsizliği bilinen öncü (pilot) semboller ya da farksal kodlama çözer; burada her 16. sembol öncüdür.</p>
+    </details>
+    <p class="try">Frekans hatasını 1,5 Hz'e çekin; takımyıldız halka olunca "Dönmeyi düzelt"e basın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Sembol hızı bilerek düşük: 200 Bd, ekranda gerçek zamanlı. 1,5 Hz frekans hatası sembol başına 360·1,5/200 = 2,7° dönme demektir; saniyede 1,5 tur.</li>
+    <li>"Dinle" iki ton çalar: biri sabit, biri takımyıldızla birlikte dönen. Dönme varsa vuru (vuv vuv) duyulur, vuru hızı ekrandaki tur hızıdır; döngü kilitlenince vuru durur. Faz kayması 180° iken iki ton birbirini söndürür.</li>
+    <li>Döngü karar yönlendirmeli (decision-directed). BPSK/QPSK için klasik biçimi Costas döngüsüdür (John P. Costas, "Synchronous Communications", Proc. IRE, 1956).</li>
+    <li>Döngü bant genişliği Bn·T = 0,04, sönüm 0,707. ±3 Hz içinde dört modülasyonda da kilitlenir; 16-QAM ve 8-PSK'da yüksek frekans hatasında kilitlenme daha uzun sürer. Gerçek alıcılar önce kaba bir frekans düzeltmesi (FLL) yapar.</li>
+    <li>"Öncü sembollerle düzeltilen" okuması döngünün hangi açıda kilitlendiğini gösterir (ör. 90°). Öncüler olmasa BER bu durumda ~0,5 olurdu.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="6" data-demo="message" id="mesaj">
+  <div class="text">
+    <h2>Mesajını gönder</h2>
+    <p class="lead">Hepsini birleştirelim: yazdığınız metin bitlere, bitler sembollere, semboller dalgaya dönüşüyor; gürültülü kanaldan geçip yeniden metin oluyor.</p>
+    <p>Her harf UTF-8 ile bir ya da birkaç bayta, yani 8'li bit gruplarına çevrilir; ş, ğ, ı gibi Türkçe harfler iki bayt tutar. Bitler sembol başına taşınan sayıda gruplanır ve her grup bir <span class="ci">I</span>/<span class="cq">Q</span> değeri olur.</p>
+    <p>Alıcı her sembol boyunca gelen örneklerin ortalamasını alır ve en yakın takımyıldız noktasına karar verir. Yanlış kararlar <span class="cr">kırmızı bitlere</span>, kırmızı bitler bozuk harflere dönüşür. Tek bir bit hatası bir harfi bambaşka bir harfe çevirebilir.</p>
+    <details class="more"><summary>Daha fazla: harf hatası ve hata düzeltme</summary>
+      <p>Bit hata oranı p ise 8 bitlik bir baytın sağlam gelme olasılığı (1 − p)⁸'dir:</p>
+      <span class="formula">P(bayt bozuk) = 1 − (1 − p)⁸ ≈ 8·p</span>
+      <p>p = 10⁻² iken her 12–13 bayttan biri bozulur. Gerçek sistemler bitlere fazlalık ekler (hata düzeltme kodu, FEC) ve sonuna bir sağlama (CRC) koyar; alıcı hataları düzeltir ya da en azından fark eder.</p>
+    </details>
+    <p class="try">Kendi mesajınızı yazıp Gönder'e basın, sonra SNR'ı yavaşça düşürüp harflerin bozulmasını izleyin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Kanal modeli: her sembol 8 örnek boyunca sabit (dikdörtgen darbe), her örneğe Gauss gürültüsü eklenir. Alıcı 8 örneğin ortalamasını alır; bu dikdörtgen darbenin uyumlu süzgecidir ve gürültüyü √8 kat azaltır. 4. şeritteki kısa fildişi çizgiler bu ortalamalardır.</li>
+    <li>SNR kaydırıcısı aynı gürültü örneğini ölçekler: kaydırınca hangi bitin önce bozulduğu görülür. Gönder her basışta yeni bir gürültü örneği çeker.</li>
+    <li>"Dinle" bitleri Bell 202 modem tonlarıyla çalar: 1 için 1.200 Hz, 0 için 2.200 Hz. Gerçek Bell 202 saniyede 1.200 bit gönderir; burada şerit hızına uyacak kadar yavaşlatılmış.</li>
+    <li>8-PSK'da 8'in katı bit 3'e bölünmeyebilir; son sembole dolgu biti eklenir (gri).</li>
+    <li>Bozuk bir bayt geçerli bir UTF-8 karakteri oluşturmazsa "�" görünür. Mesaj en fazla 20 bayt olabilir (ş, ğ, ü gibi harfler 2 bayt sayılır), yoksa şeritler okunmayacak kadar incelir.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="6" data-demo="symbolrate" id="sembol-hizi">
+  <div class="text">
+    <h2>Sembol hızı ve bant genişliği</h2>
+    <p class="lead">Saniyede ne kadar çok sembol gönderirseniz sinyal spektrumda o kadar geniş yer kaplar.</p>
+    <p>Sembolleri keskin basamaklarla göndermek spektrumu gereksiz yere yayar. Bu yüzden her sembol yumuşak bir darbeye dönüştürülür: yükseltilmiş kosinüs kökü. Roll-off (β) bu yumuşaklığı ayarlar. β = 0'da spektrum dik kenarlı bir dikdörtgendir ama darbenin kuyrukları çok uzundur; β = 1'de darbe kısalır, bant iki katına çıkar.</p>
+    <p>Kaplanan bant genişliği yaklaşık Rs·(1+β)'dır. Bit hızı ise sembol hızı çarpı sembol başına bittir: aynı bantta 16-QAM, QPSK'nın iki katı bit taşır ama önceki deneyde gördüğümüz gibi aynı hata oranı için daha yüksek <span class="cn">SNR</span> ister.</p>
+    <details class="more"><summary>Daha fazla: formüller</summary>
+      <span class="formula">B ≈ Rs·(1 + β)   Rb = Rs·log₂M   η = log₂M / (1 + β) bit/sn/Hz</span>
+      <p>Verici ve alıcıdaki iki kök süzgeç birlikte yükseltilmiş kosinüs olur. Bu darbe komşu sembollerin örnekleme anlarında tam sıfırdan geçer; semboller birbirine karışmaz. Uydu yayını DVB-S2 β = 0,35, 0,25 ya da 0,20 kullanır; DVB-S2X 0,05'e kadar iner.</p>
+    </details>
+    <p class="try">β'yı 0'a çekin: spektrum dikdörtgenleşir, darbenin kuyrukları uzar. Sonra sembol hızını artırın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Spektrum gerçekten hesaplanır: rastgele semboller sembol başına en az 8 örnekle seyreltilir, DSP.rrc (10 sembol uzunluğunda) ile süzülür, 2.048 noktalı Hann pencereli FFT'lerin ortalaması alınır. 0 dB bant ortasının ortalama gücüdür.</li>
+    <li>"Ölçülen %99 güç bandı" toplam gücün %99'unu içeren aralık. Rs·(1+β) spektrumun sıfıra indiği kenardır; kenarlara yakın güç az olduğu için %99 bandı biraz daha dardır (ölçüm: 250 kBd, β = 0,35'te 292 kHz'e karşı 338 kHz; β = 1'de 409 kHz'e karşı 500 kHz). β = 0'da darbe 10 sembolde kesildiği için kenarlarda küçük dalgalanma görülür.</li>
+    <li>Modülasyonu değiştirmek spektrumu değiştirmez (aynı Rs ve β): yalnızca bit hızı ve gereken SNR değişir. "BER 10⁻³ için Es/N0" kuramsal formülden hesaplanır.</li>
+    <li>Örnek: RTL-SDR'ın 2,4 MHz'lik penceresine β = 0,35 ile en fazla ~1,78 MBd sığar.</li>
+    <li>"Dinle": aynı takımyıldız ve darbe, 1.800 Hz'lik bir ses taşıyıcısında, sembol hızının binde biriyle (ör. 250 kBd → 250 Bd). Hızlandıkça ses cızırtılı bir vızıltıya döner.</li>
+    <li>Kaynak: DVB-S2 roll-off değerleri ETSI EN 302 307-1 §5.6; DVB-S2X EN 302 307-2 (Rohde &amp; Schwarz DVB-S2 teknoloji sayfası).</li>
+  </ul></aside>
+</section>

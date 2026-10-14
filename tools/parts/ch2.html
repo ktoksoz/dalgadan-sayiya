@@ -1,0 +1,88 @@
+<!-- ================= 2. ÖRNEKLEME ================= -->
+<section class="slide" data-chapter="2" data-demo="adc" id="adc">
+  <div class="text">
+    <h2>Dalgayı ölçmek: ADC</h2>
+    <p class="lead">Bilgisayar dalgayı göremez; yalnızca belli aralıklarla ölçülmüş sayıları görür.</p>
+    <p>Bu ölçümü <strong>ADC</strong> (analog-sayısal dönüştürücü) yapar. İki ayarı vardır: saniyede kaç kez ölçtüğü (örnekleme hızı) ve her ölçümü kaç basamakla yazdığı (bit derinliği).</p>
+    <p>Bit az olunca ölçüm en yakın basamağa yuvarlanır. Gerçek değerle yazılan değer arasındaki fark, yani <span class="cn">nicemleme hatası</span>, sinyale eklenmiş bir gürültü gibi davranır. Bit derinliğini düşürüp "Dinle"ye basın: o gürültüyü cızırtı olarak duyarsınız.</p>
+    <details class="more"><summary>Daha fazla: her bit 6 dB</summary>
+      <p>N bitlik bir ADC 2<sup>N</sup> seviye verir. Tam ölçekli bir sinüs için sinyal ile nicemleme gürültüsünün oranı:</p>
+      <span class="formula">SQNR ≈ 6,02 · N + 1,76 dB</span>
+      <p>Ekrandaki "ölçülen" değer, 65.536 örneklik bir sinüs gerçekten nicemlenip hatanın gücü ölçülerek hesaplanır. 1–2 bitte formül tutmaz, çünkü hata artık rastgele bir gürültü gibi değil, sinyale bağlı bir bozulma gibi davranır. RTL-SDR 8 bitlik bir ADC kullanır: kuramsal üst sınır yaklaşık 50 dB.</p>
+    </details>
+    <p class="try">Bit derinliğini 1'e indirin, sonra yavaşça 8'e çıkarın; gri hata çubuklarının küçülüşüne bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Ekranda 440 Hz'lik ton, iki periyot. İnce fildişi çizgi gerçek dalga, kalın merdiven ADC'nin verdiği değerler (tut-bekle), gri çizgiler her örneğin nicemleme hatası.</li>
+    <li>Nicemleyici orta-yükselen (mid-rise), −1…+1 aralığı 2<sup>N</sup> eşit dilim. 8 seviyeye kadar her seviyenin ikili kodu yazılır.</li>
+    <li>Ölçülen SQNR (demonun hesapladığı): 1 bit 6,4 dB, 2 bit 12,8 dB, 4 bit 25,3 dB, 8 bit 49,8 dB, 12 bit 74,0 dB, 16 bit 98,1 dB; formül 7,8 / 13,8 / 25,8 / 49,9 / 74,0 / 98,1 dB.</li>
+    <li>"Dinle": kaynak (ton ya da Neşeye Övgü melodisi) seçilen hızda tutulur ve nicemlenir. Düşük örnekleme hızında ses boğuklaşır ve madenîleşir: basit DAC'ın (tut-bekle) imgeleri. Sonraki slayt örtüşmeyi ayrıca gösterir.</li>
+    <li>Olası soru: "CD kaç bit?" 16 bit, 44,1 kHz: ≈ 98 dB.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="2" data-demo="nyquist" id="nyquist">
+  <div class="text">
+    <h2>Nyquist sınırı ve örtüşme</h2>
+    <p class="lead">Çok seyrek ölçerseniz, hızlı bir dalga size yavaş bir dalga gibi görünür.</p>
+    <p>Bir dalgayı tanımak için her salınımda en az iki kez ölçmek gerekir. Bu yüzden örnekleme hızının yarısı bir sınırdır: <strong>Nyquist sınırı</strong>.</p>
+    <p>Sinyal bu sınırı geçince noktalar <span class="alias-c">sahte, daha yavaş bir dalga</span> çizmeye başlar. Buna <strong>örtüşme</strong> denir. Alttaki diyagram frekansın sınıra çarpıp geri katlandığını gösterir: sinyal ne kadar hızlanırsa hızlansın, görünen frekans hep sıfır ile sınır arasında kalır.</p>
+    <details class="more"><summary>Daha fazla: görünen frekans</summary>
+      <span class="formula">f<sub>görünen</sub> = | f − k · f<sub>s</sub> |, &nbsp; k = en yakın tam sayı (f / f<sub>s</sub>)</span>
+      <p>8 kHz örneklemede 7 kHz'lik ton 1 kHz gibi, 9 kHz'lik ton da yine 1 kHz gibi görünür. Örneklerden bakarak ikisini ayırmanın yolu yoktur. Bu yüzden ADC'nin önüne, sınırın üstünü kesen bir örtüşme önleyici filtre konur.</p>
+    </details>
+    <p class="try">"Dinle"yi açıp <b>Süpür</b>'e basın: ton tizleşirken 4 kHz'de geri dönüp pesleşir.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>İnce fildişi: gerçek dalga. Noktalar: örnekler. Pirinç rengi: örneklerden geri kurulabilecek tek dalga (ideal DAC'ın çıkışı). Sınırın altında ikisi üst üste biner.</li>
+    <li>"Dinle" ideal geri kurulumu çalar: örnekleri ideal bir DAC'tan geçirseydik duyacağımız ton. Süpürme 200 Hz'den 2,2 × fs'ye 7 saniyede gider.</li>
+    <li>Katlanma diyagramındaki üçgen dalga, spektrumun fs/2 çizgisinde "akordeon gibi" katlanmasıdır. IQ ile örneklemede (sonraki bölüm) pencere −fs/2…+fs/2 olur ve işaret de korunur.</li>
+    <li>Olası soru: "Tam fs/2'de ne olur?" Örnekler fazına göre ya tepe ya sıfır yakalar; güvenilir değildir. Pratikte sınırın biraz altında kalınır.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="2" data-demo="wagonWheel" id="vagon-tekerlegi">
+  <div class="text">
+    <h2>Geriye dönen tekerlek</h2>
+    <p class="lead">Filmlerde arabanın tekerleği bazen durur, bazen geriye döner. Bu da örtüşmedir.</p>
+    <p>Kamera saniyede belli sayıda kare çeker: tekerleği <em>örnekler</em>. İki kare arasında bir kol tam bir kol aralığı kadar dönerse, her karede kollar aynı yerde görünür ve tekerlek durmuş sanılır. Biraz eksik dönerse kollar her karede biraz geride yakalanır: tekerlek geriye döner gibi görünür.</p>
+    <p>Sağdaki kamera görüntüsü ile alttaki grafik, önceki slayttaki katlanmanın aynısıdır; yalnızca bu sefer gözle görülür.</p>
+    <details class="more"><summary>Daha fazla: görünen hız</summary>
+      <span class="formula">adım = tur/sn ÷ kare/sn; &nbsp; görünen adım = adım − k · (1/K)</span>
+      <p>K kollu tekerlek her 1/K turda kendine benzer; k, adımı −1/(2K)…+1/(2K) aralığına getiren tam sayıdır. 24 kare/sn ve 6 kolda tekerlek 4 tur/sn'de durur gibi görünür. Grafikte işaretin korunduğuna dikkat: kamera dönüş yönünü görebiliyor. IQ verisi de radyoda aynı şeyi sağlar.</p>
+    </details>
+    <p class="try">Tekerlek hızını 4 tur/sn'ye çıkarın, sonra biraz geri çekin: kameradaki tekerlek geriye dönsün.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Soldaki tekerlek "göz": ekranın her karesinde o sürede taranan açı bulanık çizilir; sağdaki yalnızca kameranın kare anlarını gösterir. Film şeridi son kareleri sıralar.</li>
+    <li>24 kare/sn, 6 kol: 4 tur/sn'de durur, 3,8'de geri (−0,2 tur/sn), 4,2'de yavaş ileri. 1 kol seçilirse 24 tur/sn'ye kadar yön doğru görünür (grafik sınırı 10).</li>
+    <li>"Dinle": her kol tepeden geçerken bir tık (tiz), kamera her kare çektiğinde bir deklanşör tıkı (pes). Tekerlek durmuş göründüğünde iki ritim aynı hızda çalar.</li>
+    <li>Gerçek dünyada: floresan lambalı ortamda dönen pervaneler, helikopter pervanesi videoları. Ekranınızın tazeleme hızı da bir örnekleme; çok hızlı tekerleği burada da bulanık çiziyoruz ki ekranın kendi örtüşmesi karışmasın.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="2" data-demo="hundredMHz" id="100mhz">
+  <div class="text">
+    <h2>100 MHz'i nasıl örnekleriz?</h2>
+    <p class="lead">100 MHz'lik bir FM yayınını doğrudan örneklemek için saniyede 200 milyondan fazla ölçüm gerekir.</p>
+    <p>Bu, 8 bitle bile saniyede yüzlerce megabayt demek: bir dakikalık kayıt onlarca gigabayt. Oysa ucuz bir <strong>RTL-SDR</strong> saniyede yalnızca yaklaşık 2,4 milyon örnek alır. Örnekleme hızını o değere çekin: noktalar 100 MHz'i çok uzaktan, sahte bir dalga olarak görür.</p>
+    <p>Hile şu: bütün banda değil, yalnızca dinlemek istediğimiz dar şeride ihtiyacımız var. Radyo önce o şeridi 0 Hz'e kaydırır, sonra örnekler. Bunun için her ölçümde iki sayı gerekir: <span class="ci">I</span> ve <span class="cq">Q</span>. Bir sonraki bölümün konusu tam olarak bu.</p>
+    <details class="more"><summary>Daha fazla: veri hızı</summary>
+      <span class="formula">veri hızı = f<sub>s</sub> × bit ÷ 8 &nbsp; bayt/sn</span>
+      <p>250 MS/sn × 8 bit = 250 MB/sn; bir dakika 15 GB. IQ ile 2,4 MS/sn × 2 sayı × 8 bit = 4,8 MB/sn; USB 2.0'ın kuramsal 480 Mbit/sn (60 MB/sn) sınırının rahatça altında.</p>
+    </details>
+    <p class="try"><b>RTL-SDR hızı</b>'na basın, sonra <b>İpucu</b>'yu açıp istasyonun 0 Hz'e kaymasını izleyin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Göstergeler hesaplanır: veri hızı = örnekleme hızı × bit ÷ 8 (tek gerçek kanal, sıkıştırmasız); 1 dakika = 60 ×.</li>
+    <li>RTL-SDR: 8 bit ADC, kararlı ≈ 2,4 MS/sn (rtl-sdr.com: 2,56 MS/sn'ye kadar örnek kaybı yok, en çok 3,2 MS/sn ama kararsız). IQ çifti başına 2 bayt → 4,8 MB/sn.</li>
+    <li>USB 2.0: 480 Mbit/sn kuramsal (60 MB/sn), pratikte daha az. USB 3.0: 5 Gbit/sn (625 MB/sn).</li>
+    <li>"Dinle": örneklerin çizdiği dalga 100.000 kat yavaşlatılmış (100 MHz → 1000 Hz). Örnekleme hızını düşürdükçe ton, örtüşmenin keyfine göre zıplar.</li>
+    <li>Doğrudan örnekleme yapan cihazlar da var (ör. yüksek hızlı ADC'li alıcılar, RTL-SDR V3'ün HF modu), ama uygun fiyatlı alıcıların çoğu önce aşağı kaydırır (süperheterodin fikri!).</li>
+    <li>Köprü cümlesi: "Peki 0 Hz'e kaydırınca neden iki sayı gerekiyor? Çünkü artık +f ile −f'i ayırmamız lazım; tıpkı tekerleğin yönü gibi."</li>
+  </ul></aside>
+</section>

@@ -1,0 +1,109 @@
+<!-- ================= 7. GERÇEK DÜNYADA ================= -->
+<section class="slide" data-chapter="7" data-demo="galeri" id="galeri">
+  <div class="text">
+    <h2>Havada neler var?</h2>
+    <p class="lead">Bir SDR'ı açıp bandı gezdiğinizde her sinyalin şelalede kendine özgü bir izi olduğunu görürsünüz. Beşini burada, gerçek biçimlerine sadık kalarak tarayıcıda ürettik.</p>
+    <p>FM yayın geniş ve kesintisiz bir şerittir. Uçakların ADS-B paketleri yalnızca 120 mikrosaniye sürer ve ince yatay çizgiler bırakır. Kumanda kısa patlamalar hâlinde, Mors noktalı-çizgili bir izle görünür.</p>
+    <p>Alttaki panelde her sinyalin çözücüsü çalışır: FM'in içindeki 19 kHz pilot, uçak paketinin bitleri ve CRC denetimi, uydunun satır satır beliren görüntüsü, Mors metni, kumandanın 24 bitlik kodu.</p>
+    <details class="more"><summary>Daha fazla: ADS-B ve APT'nin içi</summary>
+      <p><strong>ADS-B:</strong> Her paket 8 µs'lik bir başlangıçla açılır (0; 1; 3,5 ve 4,5 µs'de birer darbe). Ardından saniyede bir milyon bitle 56 ya da 112 bit gelir. Her bit 1 µs sürer; 0,5 µs'lik darbe ilk yarıdaysa 1, ikinci yarıdaysa 0 demektir (darbe konum modülasyonu). Son 24 bit, paketin bozulmadığını gösteren CRC'dir.</p>
+      <p><strong>NOAA APT:</strong> Uydu her yarım saniyede bir satır gönderir: 2080 kelime, yani saniyede 4160 kelime. Kelimeler 2400 Hz'lik bir tonun genliğine yazılır (AM); bu ton da 137 MHz'lik taşıyıcıya FM ile biner. Satır başlarındaki 1040 Hz'lik senk A ile 832 darbe/sn'lik senk B, o tanıdık "tik-tak" sesini çıkarır.</p>
+    </details>
+    <p class="try">ADS-B'yi seçin ve paketlerin şelalede bıraktığı kısa çizgilere bakın. Sonra NOAA APT'ye geçip Dinle'ye basın: tik-tak sesini duyup görüntünün satır satır belirmesini izleyin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Hepsi sentetik: sinyaller tarayıcıda gerçek zamanlı IQ olarak üretilir; şelale, çözücü ve ses aynı IQ'dan çıkar. Gerçek bir kayıtla çalışmak için sonraki slayt.</li>
+    <li>FM: Avrupa'da 87,5–108 MHz, ±75 kHz sapma, 200 kHz'e yakın kanal. Stereo pilot 19 kHz, L−R 38 kHz'lik alt taşıyıcıda, RDS 57 kHz'te (burada RDS yok). Ses mono çözülür.</li>
+    <li>ADS-B: 1090 MHz, 1 Mbit/sn PPM. Paketler gerçek Mode S CRC-24 algoritmasıyla (üreteç 0x1FFF409) üretilip denetlenir. Çağrı adları (DALGA1, IQ2048…) hayalî. Zayıf uçakların paketlerinde CRC hatası görülmesi gerçekçi: gürültü bit bozar.</li>
+    <li>NOAA APT: NOAA-15, 18 ve 19 2025'te hizmetten çıkarıldı (NOAA-18: 6 Haziran, NOAA-19: 13 Ağustos, NOAA-15: 19 Ağustos 2025; kaynak: <a href="https://www.nesdis.noaa.gov/news/suspension-of-poes-data-users-after-june-16-2025-and-decommissioning" target="_blank" rel="noopener">NOAA NESDIS duyurusu</a>). 137 MHz'de bugün Rus Meteor-M N2-3 ve N2-4 uydularının sayısal LRPT yayını (OQPSK, 137,9 MHz) alınabiliyor; N2-3'ün anteni tam açılmadığı için sinyali daha zayıf. SatDump gibi programlar çözer (durum: <a href="https://space.oscar.wmo.int/satellites/view/meteor_m_n2_4" target="_blank" rel="noopener">WMO OSCAR</a>).</li>
+    <li>Amatör telsiz: 2 m bandında konuşma dar bant FM (12,5 kHz kanal), Mors (CW) bandın alt ucunda. Şelaleye tıklayıp başka istasyona geçilir; CW'de en yakın tepeye oturur, NFM'de 12,5 kHz kanal ızgarasına.</li>
+    <li>433 MHz: PT2262/EV1527 benzeri kod: kısa darbe ~350 µs, uzun = 3 kısa, 24 bit; her basışta çerçeve sekiz kez tekrarlanır. "Kumandaya bas" düğmesi yeni bir paket gönderir.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="7" data-demo="iqfile" id="kendi-kaydin">
+  <div class="text">
+    <h2>Kendi kaydınızı açın</h2>
+    <p class="lead">Bir RTL-SDR ya da HackRF ile kaydettiğiniz IQ dosyasını buraya bırakın: tüm kaydın şelalesini görür, bir istasyona tıklayıp dinlersiniz.</p>
+    <p><strong>Dosyanız yalnızca bu tarayıcıda işlenir, hiçbir yere yüklenmez.</strong> Büyük dosyalar parça parça okunur; yüzlerce megabaytlık bir kayıt da belleği doldurmaz.</p>
+    <p>Ham IQ dosyasında başlık yoktur: biçim, örnekleme hızı ve merkez frekans dosyanın içinde yazmaz. Biçimi dosya adının uzantısından tahmin ederiz; hızı ve frekansı siz girersiniz. SigMF bu bilgileri yanındaki .sigmf-meta dosyasında taşır.</p>
+    <details class="more"><summary>Daha fazla: kayıt nasıl alınır?</summary>
+      <p>RTL-SDR ile 100 MHz'te, 2,048 MS/sn'de 10 saniye (20.480.000 örnek, 41 MB):</p>
+      <span class="formula">rtl_sdr -f 100000000 -s 2048000 -n 20480000 kayit.cu8</span>
+      <p>HackRF ile (8 bit işaretli, 10 MS/sn'de 10 saniye, 200 MB):</p>
+      <span class="formula">hackrf_transfer -r kayit.cs8 -f 100000000 -s 10000000 -n 100000000</span>
+      <p>Her örnek iki sayıdır (I ve Q): cu8 ve cs8'de örnek başına 2 bayt, cs16'da 4, cf32'de 8 bayt. SDR++ ve SDR# gibi programların WAV biçimli kayıtlarını bu görüntüleyici okumaz.</p>
+    </details>
+    <p class="try">Dosyanız yoksa "Örnek kayıt üret"e basın. Şelalede bir istasyona tıklayın, kipi (AM, NFM, WFM) seçip Dinle'ye basın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Gizlilik: dosya File API ile okunur, ağ isteği yoktur. Sayfa internetsiz (file://) açıldığında da çalışır.</li>
+    <li>Büyük dosya: şelalenin her satırı için File.slice ile yalnızca küçük bir dilim (en fazla 16 FFT çerçevesi) okunur; en fazla 600 satır. Dinlerken dosya 50 ms'lik parçalar hâlinde, sesin hemen önünden okunur.</li>
+    <li>Alıcı zinciri: NCO ile seçilen frekansı 0'a kaydır → en fazla 8'lik basamaklarla ~240 kHz'e azalt → süz, demodüle et (AM/NFM/WFM) → ses.</li>
+    <li>Örnek kayıt: 100 MHz merkezli, 1,024 MS/sn, 4 sn, cu8 (8,2 MB). İki FM yayını, bir AM, bir dar bant FM telsiz; ortadaki ince çizgi RTL-SDR'lardaki DC kaymasının taklidi. Gerçek FM bandında AM ve telsiz bulunmaz; üç demodülatörü denemek için eklendi.</li>
+    <li>Biçimler: cu8 = 8 bit işaretsiz (RTL-SDR, 127,5 sıfır), cs8 = 8 bit işaretli (HackRF), cs16 = 16 bit işaretli, cf32 = 32 bit kayan nokta (GNU Radio "complex"). gqrx dosya adlarından (gqrx_tarih_saat_frekans_hız_fc.raw) frekans ve hız okunur.</li>
+    <li>Soru gelirse: "Neden merkez frekansı bilmiyor?" Ham dosya yalnızca sayılardır; frekans ve hız kaydedenin bildiği meta veridir. SigMF tam bunun için var (sigmf.org).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="7" data-demo="yasal" id="yasal">
+  <div class="text">
+    <h2>Dinlemek serbest, yayın lisanslı</h2>
+    <p class="lead">Herkese yönelik yayınları almak çoğu yerde serbesttir. Ama size yönelik olmayan bir haberleşmeyi dinlemek, kaydetmek ya da yaymak birçok ülkede suçtur. Yayın yapmak ise belge ya da izin ister.</p>
+    <p>Türkiye'de haberleşmenin gizliliği Anayasa'nın 22. maddesiyle korunur. Türk Ceza Kanunu'nun 132. maddesi haberleşmenin gizliliğini ihlal etmeyi ve içeriği hukuka aykırı ifşa etmeyi, 133. maddesi aleni olmayan konuşmaları rıza olmadan dinlemeyi ve kaydetmeyi suç sayar. Telsiz cihazları ve frekansları BTK (Bilgi Teknolojileri ve İletişim Kurumu) düzenler.</p>
+    <p>Yayın yapmak isteyenin yolu amatör telsizcilikten geçer: sınavı Kıyı Emniyeti Genel Müdürlüğü (KEGM) yapar, geçen A, B ya da C sınıfı belge ve çağrı işareti alır. İzinsiz kullanılabilen bantlar dardır: 433 MHz kısa menzilli cihazlar, PMR446 el telsizleri gibi.</p>
+    <details class="more"><summary>Daha fazla: resmî kaynaklar</summary>
+      <ul>
+        <li><a href="https://www.btk.gov.tr/amator-telsizcilik" target="_blank" rel="noopener">BTK: amatör telsizcilik</a></li>
+        <li><a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=13769&amp;MevzuatTur=7&amp;MevzuatTertip=5" target="_blank" rel="noopener">KEGM Amatör Telsizcilik Sınav ve Belgelendirme Yönetmeliği</a> (sınav, sınıflar, çağrı işareti)</li>
+        <li><a href="https://www.trac.org.tr/" target="_blank" rel="noopener">TRAC: Türkiye Radyo Amatörleri Cemiyeti</a></li>
+        <li><a href="https://www.mevzuat.gov.tr/mevzuatmetin/1.5.5237.pdf" target="_blank" rel="noopener">Türk Ceza Kanunu</a> (md. 132–133)</li>
+      </ul>
+      <p>Bu slayt hukuki tavsiye değildir; kurallar ülkeden ülkeye ve zamanla değişir. Güncel mevzuata bakın; emin değilseniz BTK'ya, KEGM'e ya da bir amatör telsiz derneğine sorun.</p>
+    </details>
+    <p class="try">Kartlara tıklayın: önce "FM radyo dinlemek", sonra "Polis ya da acil telsizini dinleyip paylaşmak".</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Ana fikir: alma ≠ içeriği kullanma ≠ yayın. Açık yayınlar (FM, ADS-B, hava uydusu, amatör) herkese yöneliktir.</li>
+    <li>Anayasa md. 22 (Haberleşme hürriyeti): "Haberleşmenin gizliliği esastır." <a href="https://www.mevzuat.gov.tr/mevzuatmetin/1.5.2709.pdf" target="_blank" rel="noopener">Anayasa metni</a>.</li>
+    <li>TCK md. 132 (Haberleşmenin gizliliğini ihlal): ihlal kayıtla yapılırsa ceza bir kat artar; içeriği hukuka aykırı ifşa etmek ayrıca cezalı. md. 133 (Kişiler arasındaki konuşmaların dinlenmesi ve kayda alınması): aleni olmayan konuşmaları rıza olmadan bir aletle dinlemek ya da kaydetmek. <a href="https://www.mevzuat.gov.tr/mevzuatmetin/1.5.5237.pdf" target="_blank" rel="noopener">TCK metni</a>.</li>
+    <li>5809 sayılı Elektronik Haberleşme Kanunu md. 51/2: haberleşmenin, taraflarının tamamının rızası olmadan dinlenmesi, kaydedilmesi, saklanması yasaktır. md. 37/3: izin gerektirmeyen bantlarda Kurumca onaylı cihazlar izinsiz kullanılabilir. md. 39: telsizde kriptolu haberleşmeye TSK, Jandarma, Sahil Güvenlik, MİT, Emniyet ve Dışişleri yetkilidir. md. 43: amatör belgeyi KEGM'e bağlı Telsiz İşletme Müdürlüğü verir. <a href="https://www.mevzuat.gov.tr/mevzuatmetin/1.5.5809.pdf" target="_blank" rel="noopener">5809 metni</a>.</li>
+    <li>Amatör telsizcilik: sınavı ve belgeyi KEGM verir (MEB e-sınav merkezlerinde de yapılıyor; başvuru e-Devlet ya da kiyiemniyeti.gov.tr). A ve B için tek sınav: 75 ve üstü A, 60–74 B; C sınavında 60 yeter. Başvuran 12 yaşından büyük olmalı. Çağrı işareti ön eki: A sınıfına TA, B ve C'ye TB; TC özel gün istasyonlarına, YM dernek istasyonları ve aktarıcılara. Belge sahibi, sınıfının sınırları içinde ayrıca BTK izni almadan yayın yapar. Kaynak: <a href="https://www.btk.gov.tr/amator-telsizcilik" target="_blank" rel="noopener">BTK</a>, <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=13769&amp;MevzuatTur=7&amp;MevzuatTertip=5" target="_blank" rel="noopener">KEGM yönetmeliği</a>, <a href="https://www.kiyiemniyeti.gov.tr/sss" target="_blank" rel="noopener">KEGM SSS</a>.</li>
+    <li>İzinsiz cihazlar (BTK Sınıf 1 teknik ölçütleri): 433,05–434,79 MHz genel amaçlı kısa menzilli cihazlar en fazla 10 mW ERP; PMR446 446,0–446,2 MHz, en fazla 500 mW ERP, yalnızca tümleşik anten, verici en fazla 180 s açık kalır. <a href="https://www.btk.gov.tr/uploads/pages/sinif1-teknik-olcut.pdf" target="_blank" rel="noopener">BTK teknik ölçütler (PDF)</a>.</li>
+    <li>Polis telsizi: Avrupa'da acil hizmetler büyük ölçüde şifreli TETRA'ya (380–400 MHz) geçti. Türkiye'de Emniyet, ASELSAN'ın kriptolu milli DMR sistemine illere yayılarak geçiyor (<a href="https://www.trthaber.com/haber/turkiye/polise-milli-kriptolu-telsiz-379146.html" target="_blank" rel="noopener">TRT Haber, 2018</a>); bugünkü kapsamı doğrulanamadı, "tümü şifreli" denmemeli.</li>
+  </ul></aside>
+</section>
+
+<section class="slide center cover" data-chapter="7" data-demo="cover" data-variant="outro" data-title="Radyo artık bir yazılım" id="son">
+  <div class="stage bare"></div>
+  <div class="cover-text">
+    <h1>Radyo artık<br>bir yazılım</h1>
+    <p class="z7-chain num" aria-label="Dalga, örnek, IQ, spektrum, alıcı, modülasyon"><span>dalga</span><i>→</i><span>örnek</span><i>→</i><span>IQ</span><i>→</i><span>spektrum</span><i>→</i><span>alıcı</span><i>→</i><span>modülasyon</span></p>
+    <p class="sub">Dalgayı sayılara çevirdik, I ve Q ile frekansın yönünü yakaladık, bandı gördük, bir istasyonu seçip sesini geri kurduk. Eskiden lehimle yapılan her şey artık kod.</p>
+    <p>Aynı IQ verisini bir sinir ağına verirseniz, sinyalin türünü kendi kendine tanımayı öğrenir. Sinir ağlarını oynayarak öğrenmek için: <a href="https://yz.koraytoksoz.com" target="_blank" rel="noopener">yz.koraytoksoz.com</a></p>
+    <p class="z7-links">Devam etmek için: <a href="https://pysdr.org" target="_blank" rel="noopener">PySDR</a> · <a href="https://www.gnuradio.org" target="_blank" rel="noopener">GNU Radio</a> · <a href="https://www.sdrpp.org" target="_blank" rel="noopener">SDR++</a> · <a href="https://airspy.com/download/" target="_blank" rel="noopener">SDR#</a> · <a href="https://www.rtl-sdr.com" target="_blank" rel="noopener">RTL-SDR Blog</a></p>
+    <p class="byline z7-byline">Koray Toksöz</p>
+    <div class="cover-actions">
+      <a class="btn primary big" href="https://yz.koraytoksoz.com" target="_blank" rel="noopener">Sinir ağlarına geç</a>
+      <button class="btn big ghost" type="button" onclick="Deck.go(0)">Baştan başla</button>
+    </div>
+    <div class="cover-meta closing">
+      <a class="gh-link" href="https://github.com/ktoksoz/dalgadan-sayiya" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>Kaynak kodu GitHub'da</span></a>
+      <a class="lic" href="https://creativecommons.org/licenses/by/4.0/deed.tr" target="_blank" rel="license noopener" title="İçerik: Creative Commons Atıf 4.0">
+        <img src="img/cc-cc.svg" alt="Creative Commons" width="22" height="22"><img src="img/cc-by.svg" alt="Atıf" width="22" height="22">
+        <span>İçerik CC BY 4.0 · Kod MIT</span>
+      </a>
+    </div>
+    <p class="license">© 2026 Koray Toksöz · İçerik CC BY 4.0, kod MIT · Bütün sinyaller ve sesler tarayıcıda sentezlenir; "Neşeye Övgü" (Beethoven) kamu malıdır.</p>
+  </div>
+  <aside class="notes"><ul>
+    <li>Kapanış: arkadaki şelale kapaktaki gibi canlı; fareyle istasyonlara gelince sesleri duyulur.</li>
+    <li>Zincir: dalga (Bölüm 1) → örnekleme (2) → IQ (3) → spektrum (4) → alıcının içi (5) → modülasyon (6) → gerçek dünya (7).</li>
+    <li>Köprü: modülasyon tanıma (ör. RadioML veri kümeleri) IQ örneklerini doğrudan sinir ağına verir; yz.koraytoksoz.com sinir ağlarını oynayarak anlatıyor.</li>
+    <li>Kaynaklar: PySDR (Marc Lichtman, pysdr.org, ücretsiz, Python ile), GNU Radio (blok tabanlı açık kaynak SDR çatısı), SDR++ ve SDR# (alıcı programları), RTL-SDR Blog (donanım ve haberler).</li>
+    <li>Başlangıç önerisi: RTL-SDR Blog V4 ya da benzeri bir alıcı + SDR++ ile FM ve 1090 MHz'i deneyin; sonra kaydedip bu sitede açın.</li>
+  </ul></aside>
+</section>

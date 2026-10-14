@@ -1,0 +1,114 @@
+<!-- ================= 4. SPEKTRUM VE ŞELALE ================= -->
+<section class="slide" data-chapter="4" data-demo="fourier" id="fourier">
+  <div class="text">
+    <h2>Her sinyal dönen okların toplamı</h2>
+    <p class="lead">Köşeli bir kare dalga bile, farklı hızlarda dönen okların uç uca eklenmesiyle çizilebilir.</p>
+    <p>Joseph Fourier 1807'de ısının yayılmasını incelerken cesur bir fikir ortaya attı: düzenli tekrar eden her biçim, frekansları temel frekansın tam katları olan sinüslerin toplamıdır. Bu katlara <strong>harmonik</strong> denir.</p>
+    <p>Soldaki ilk ok temel frekansla döner; sonrakiler onun tam katı hızlarda ve gittikçe kısalarak. Son okun ucunun yüksekliği dalgayı çizer. Alttaki çubuklar okların boylarıdır: dalganın <strong>spektrumu</strong>.</p>
+    <details class="more"><summary>Daha fazla: Fourier serisi</summary>
+      <span class="formula">kare(t) = (4/π)·[sin ωt + sin 3ωt / 3 + sin 5ωt / 5 + …]</span>
+      <span class="formula">testere(t) = (2/π)·[sin ωt − sin 2ωt / 2 + sin 3ωt / 3 − …]</span>
+      <span class="formula">üçgen(t) = (8/π²)·[sin ωt − sin 3ωt / 9 + sin 5ωt / 25 − …]</span>
+      <p>Sıçramanın yanındaki küçük taşma, terim eklendikçe daralır ama yok olmaz: sıçramanın yaklaşık %9'u (Gibbs olayı). Üçgenin harmonikleri 1/k² ile söndüğü için çok daha çabuk yakınsar; kulağa da yumuşak gelir.</p>
+    </details>
+    <p class="try">Harmonik sayısını 1'den 50'ye çıkarın. Sonra "Dinle"yi açıp aynısını kulakla yapın: her harmonik sesi biraz daha parlatır.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Fourier, ısının katılarda yayılması üzerine çalışmasını 21 Aralık 1807'de Paris Enstitüsü'ne sundu; kitabı <em>Théorie analytique de la chaleur</em> 1822'de yayımlandı (Vikipedi: Joseph Fourier).</li>
+    <li>Gibbs olayı: sıçramada kısmi toplam, sıçramanın yaklaşık %8,95'i kadar taşar; terim sayısı artınca taşma daralır ama küçülmez. Ekrandaki "tepe aşımı" bu değeri canlı ölçer (50 terimde ≈ %8,9). İlk kez Wilbraham 1848'de fark etti.</li>
+    <li>Kulak bağlantısı: aynı notayı çalan keman ile flütün farkı harmoniklerin oranıdır (tını). Kare dalga yalnızca tek harmoniklerden oluşur, testere tümünden; bu yüzden testere daha "vızıltılı" duyulur.</li>
+    <li>Köprü: IQ'da oklar iki yöne de dönebilir (negatif frekans). FFT, bir tampondaki sinyali tam olarak bu okların toplamına ayırır; sonraki slayt.</li>
+    <li>Olası soru: "Periyodik olmayan sinyaller?" Fourier dönüşümü sürekli bir frekans yelpazesine genelleştirir; FFT ise sonlu bir parçayı periyodikmiş gibi ele alır (sızıntının kaynağı).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="4" data-demo="fft" id="fft">
+  <div class="text">
+    <h2>FFT: zamandan frekansa</h2>
+    <p class="lead">FFT (hızlı Fourier dönüşümü) N örneklik bir tamponu alır ve hangi hızda dönen okların ne kadar güçlü olduğunu N frekans kutusuna dağıtır.</p>
+    <p>Üstte zaman alanı: tamponun <span class="ci">I</span> ve <span class="cq">Q</span> bileşenleri. Altta aynı tamponun spektrumu. Her kutunun genişliği örnekleme hızının FFT boyuna bölümüdür: N büyüdükçe kutular daralır ama daha uzun bir zaman dilimi gerekir.</p>
+    <p>Tampon, akan sinyalden kesilmiş bir parçadır. Ton bir kutunun tam ortasına düşmezse kesik uçlar enerjiyi komşu kutulara saçar: <strong>spektral sızıntı</strong>. Pencere fonksiyonu uçları yumuşakça sıfıra indirerek bunu bastırır.</p>
+    <details class="more"><summary>Daha fazla: DFT ve kutu genişliği</summary>
+      <span class="formula">X[k] = Σ x[n]·e<sup>−j2πkn/N</sup>,  n = 0 … N−1</span>
+      <span class="formula">Δf = fs / N        (2,4 MS/sn, N = 1024 → 2,34 kHz)</span>
+      <p>Her X[k], sinyali k. kutunun hızında ters yöne döndürüp toplar: o hızda dönen bir ok varsa toplam büyür, yoksa birbirini götürür. Doğrudan hesap N² işlem ister; Cooley ve Tukey'in 1965 algoritması N·log₂N ile yapar: 4096 noktada yaklaşık 340 kat daha az. Hann penceresinin en yüksek yan lobu −31 dB, Blackman'ınki −58 dB; bedeli daha geniş bir tepe.</p>
+    </details>
+    <p class="try">İnce ayarı +0,5 kutuya kaydırın: dikdörtgen pencerede tonun etekleri yayılır ve zayıf ton kaybolur. Sonra Hann'a geçin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Örnekleme hızı 2,4 MS/sn (RTL-SDR'larda yaygın bir ayar). Sinyal: −3 dBFS bir ton, 420 kHz'de −70 dBFS zayıf bir ton ve −75 dBFS gürültü. Ekrandaki tüm sayılar her karede ölçülür.</li>
+    <li>Ton kutular arasına düşünce tepe de alçalır (ölçek kaybı, "scalloping"): dikdörtgende ≈ 3,9 dB, Hann'da ≈ 1,4 dB. "Tepe" okumasında görülür.</li>
+    <li>"10 kutu ötede" okuması sızıntının ölçüsüdür (N = 1024, tepeye göre, ölçülen): kutu ortasında her pencerede gürültüye iner (≈ −100 dB); kutular arasında dikdörtgende ≈ −26 dB'ye çıkar, Hann'da ≈ −70 dB, Blackman'da ≈ −78 dB kalır.</li>
+    <li>FFT boyunu iki katına çıkarmak kutu başına gürültüyü ≈ 3 dB düşürür (kutu yarıya iner); ton aynı kalır. Bu "işleme kazancı" zayıf sinyalleri FFT'de görünür kılar. Ortalama ise gürültünün dalgalanmasını azaltır, tabanı aşağı indirmez.</li>
+    <li>Olası soru: "Neden hep Hann değil?" Dikdörtgen, kutu ortasına oturan tonlarda en dar tepeyi verir; ölçüm cihazları amaca göre pencere seçer (ör. genlik ölçümü için düz tepeli pencere).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="4" data-demo="desibel" id="desibel">
+  <div class="text">
+    <h2>Desibel</h2>
+    <p class="lead">Radyoda güçlü bir istasyon, zayıf olandan milyon kat güçlü olabilir. İkisini aynı cetvelde göstermenin yolu logaritmadır.</p>
+    <p>Doğrusal ölçekte en güçlü sinyal ekranı doldurur; ondan milyon kat zayıf olan sıfırdan ayırt edilemez. Desibel ise oranları sayar: her 10 dB on kat güç demektir. Böylece 60 dB'lik fark ekranda birkaç ızgara çizgisine sığar.</p>
+    <p>SDR'da düzeyler çoğunlukla <strong>dBFS</strong> ile verilir: ADC'nin tam ölçeğine göre desibel. 0 dBFS ulaşılabilecek en yüksek düzeydir, gerisi eksidir. Hiç sinyal yokken görülen düzey <strong>gürültü tabanıdır</strong>.</p>
+    <details class="more"><summary>Daha fazla: dB hesabı</summary>
+      <span class="formula">dB = 10·log₁₀(P₁ / P₂)        genlik için: 20·log₁₀(A₁ / A₂)</span>
+      <table class="ch4-db">
+        <tr><th>Fark</th><td>+3 dB</td><td>+6 dB</td><td>+10 dB</td><td>+20 dB</td><td>+30 dB</td><td>+60 dB</td><td>−3 dB</td></tr>
+        <tr><th>Güç</th><td>≈ 2 kat</td><td>≈ 4 kat</td><td>10 kat</td><td>100 kat</td><td>1.000 kat</td><td>1 milyon kat</td><td>≈ yarısı</td></tr>
+      </table>
+      <p>Güç genliğin karesi olduğu için genlik oranında katsayı 20'dir. Bel, Alexander Graham Bell'in onuruna adlandırıldı; desibel onda biridir.</p>
+    </details>
+    <p class="try">"Desibel"e geçip zayıf istasyonun ortaya çıkışını izleyin. Sonra A ve B işaretçilerini sürükleyip aradaki farkı okuyun.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Güçlü istasyon −10 dBFS (AM, müzik), zayıf olan varsayılan −70 dBFS (dar bant FM, konuşma). Taşıyıcılar arasındaki fark ≈ 60 dB, yani ≈ milyon kat güç. İşaretçiler en yakın tepeye oturur ve değerleri ölçer.</li>
+    <li>Doğrusal ölçekte zayıf istasyon, tepesi güçlü olanın yüzde birkaçına çıkınca (≈ −35 dBFS ve üstü) bir çıkıntı olarak seçilir; dB ölçeğinde gürültü tabanının (≈ −108 dBFS, kutu başına) üstündeki her şey görünür.</li>
+    <li>"Dinle", iki istasyonun içeriğini gerçek güç oranlarıyla karıştırır: 60 dB aşağıdaki konuşma duyulmaz. Kulak da logaritmik çalışır; ses düzeyi de dB ile ölçülür.</li>
+    <li>Kaynak: Vikipedi "Decibel" (bel, Bell'in onuruna; terim 1929'da Bell System Technical Journal'da duyuruldu).</li>
+    <li>Olası soru: "dBm nedir?" 1 miliwatta göre güç. dBFS ise mutlak güç değil, ADC'nin tam ölçeğine göre orandır; aynı anten sinyali kazanç ayarına göre farklı dBFS verir.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="4" data-demo="selale" id="selale">
+  <div class="text">
+    <h2>Şelale ekranı</h2>
+    <p class="lead">Spektrum anlık bir fotoğraftır. Şelale bu fotoğrafları renge çevirip üst üste dizer ve zamanı görünür kılar.</p>
+    <p>Her satır bir FFT'dir: yatay eksen frekans, renk güç. Yeni satır en üste eklenir, eskiler aşağı akar. Sürekli istasyonlar dikey şeritler bırakır; kısa yayınlar kesik izler: telsizde biri konuşup susar, bir kumanda paket gönderir, Mors noktalı bir yol çizer.</p>
+    <p>Tek bir spektrumda gürültüye karışan zayıf bir yayın, şelalede satırlar boyunca süren bir iz olarak hemen seçilir: göz, iyi bir örüntü bulucudur.</p>
+    <details class="more"><summary>Daha fazla: zaman ve frekans takası</summary>
+      <span class="formula">Δf = fs / N        T = N / fs        Δf · T = 1</span>
+      <p>Buradaki bant saniyede 240.000 örnekle üretiliyor. N = 2048'de kutu 117 Hz genişliğinde, bir FFT 8,5 ms'lik veri kullanır. N'yi büyütmek frekansta ayrıntıyı artırır, zamanda bulanıklaştırır: kısa paketler ve Mors noktaları birbirine karışmaya başlar.</p>
+    </details>
+    <p class="try">Fareyle bir izin üzerine gelip frekansını ve gücünü okuyun. Tıklayınca kırmızı ibre oraya ayarlanır ve o yayının sesini duyarsınız.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Bant gerçek zamanlı üretilir (Signals.Band, 240 kS/sn): AM müzik −82 kHz, sürekli NFM −38 kHz, Mors +12 kHz, iki aralıklı telsiz konuşması (−60 ve +47 kHz), iki OOK paket vericisi (+86 ve +104 kHz). Frekanslar merkeze göredir.</li>
+    <li>Tıklayınca alıcı (karıştır, süz, azalt, demodüle et) o frekansa ayarlanır. Mors ve OOK için taşıyıcı 700 Hz'lik bir bip olarak duyulur (CW alıcısındaki gibi). Bu zinciri 5. bölümde açacağız.</li>
+    <li>Renk aralığı: en düşük değeri gürültü tabanının biraz altına, en yükseği güçlü istasyonun biraz üstüne koymak en çok ayrıntıyı verir. Gerçek SDR programlarında (SDR#, GQRX, SDR++) aynı iki ayar vardır.</li>
+    <li>Sağ alttaki küçük yazı ölçülen kare hızıdır (3 sn ortalama) ve kare başına harcanan işlem süresi.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="4" data-demo="sinyaliBul" id="sinyali-bul">
+  <div class="text">
+    <h2>Sinyali bul</h2>
+    <p class="lead">Sıra sizde: gürültünün içinde kısa yayınlar belirecek, her biri bir öncekinden biraz daha zayıf.</p>
+    <p>Bir yayın belirdiği anda şelalede ya da spektrumda üzerine tıklayın. Hızlı tıklamak ve zayıf yayınları yakalamak daha çok puan getirir. Baştan beri orada olan istasyonlar sayılmaz; boşa tıklamak puan götürür.</p>
+    <p>Zorluk, yayınların gürültü tabanının ne kadar üstünde başladığını, yani <strong>SNR</strong>'yi (sinyal-gürültü oranı) belirler. 0 dB'de sinyal, kutu başına gürültüyle aynı güçtedir; ancak satırlar boyunca süren bir iz olarak seçilir.</p>
+    <details class="more"><summary>Daha fazla: göz neden işe yarar?</summary>
+      <p>Tek bir satırda her kutunun gürültü gücü rastgele dalgalanır; dalgalanmanın büyüklüğü ortalamasıyla aynıdır. M satırı birlikte değerlendirmek dalgalanmayı yaklaşık √M kat azaltır. Göz şelalede bunu kendiliğinden yapar; sinyal algılayıcıları da enerjiyi bir süre toplayıp bir eşikle karşılaştırır.</p>
+    </details>
+    <p class="try">Zorluğu seçip "Oyunu başlat"a basın; ilk yayın birkaç saniye içinde belirir.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>12 yayın; SNR doğrusal olarak düşer (Kolay 16 → 6 dB, Orta 12 → 2 dB, Zor 8 → −1 dB). SNR burada kutu başına ortalama güç oranıdır. Üç tür: aç-kapa paketleri (dar), konuşma (geniş, dalgalı), veri (orta).</li>
+    <li>Puan: isabet başına 100, hız bonusu (3 sn içinde doğrusal azalan, en çok 100), zayıflık bonusu (15 dB'nin altındaki her dB için 6). Boş tıklama −20. Yayın bittikten sonra 1 sn daha tıklanabilir.</li>
+    <li>Bu şelale hız için doğrudan güç alanında üretilir (kutu başına üstel dağılımlı gürültü); önceki slayttaki gibi IQ'dan FFT ile değil. Görünüm aynıdır.</li>
+    <li>Topluluk için öneri: iki gönüllüye "Zor" seviyede yarıştırın; sonuç ekranındaki dolu/boş daireler hangi SNR'de gözün pes ettiğini gösterir.</li>
+  </ul></aside>
+</section>

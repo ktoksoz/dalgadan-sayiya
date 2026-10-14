@@ -1,0 +1,116 @@
+<!-- ================= 3. KARMAŞIK SİNYAL: I VE Q ================= -->
+<section class="slide" data-chapter="3" data-demo="phasor" data-title="Dönen ok" id="fazor">
+  <div class="text">
+    <h2>Dönen ok</h2>
+    <p class="lead">Radyodaki her sinyali sabit hızla dönen bir ok gibi düşünebiliriz. Oku doğrudan göremeyiz, ama gölgelerini ölçebiliriz.</p>
+    <p>Oka tepeden bir el feneri tutun: yere düşen gölge sağa sola gidip gelir. Bu gölgeye <span class="ci">I</span> diyoruz. Yandan tutulan ikinci fener duvara bir gölge düşürür; o da aşağı yukarı gider gelir. Bu da <span class="cq">Q</span>.</p>
+    <p>İki gölgeyi zaman içinde kaydedince iki dalga çıkar: yerdeki gölge aşağı akan mavi dalgayı, duvardaki gölge sağa akan kehribar dalgayı yazar. İkisi aynı dalgadır, yalnızca çeyrek tur kaymıştır. Okun boyu <span class="camp">genlik</span>, açısı <span class="cph">faz</span>.</p>
+    <details class="more"><summary>Daha fazla: kosinüs, sinüs ve Euler</summary>
+      <p>Okun boyu A, açısı 2πft ise iki gölge şöyle yazılır (f, saniyedeki tur sayısı, yani Hz):</p>
+      <span class="formula">I = A·cos(2πft) &nbsp;&nbsp; Q = A·sin(2πft)</span>
+      <p>Matematikte ok tek bir karmaşık sayıdır: I gerçek kısım, Q sanal kısım. Euler formülü ikisini birleştirir:</p>
+      <span class="formula">e<sup>jθ</sup> = cos θ + j·sin θ &nbsp;⇒&nbsp; x(t) = A·e<sup>j2πft</sup> = I + jQ</span>
+    </details>
+    <p class="try">Frekansı artırın: ok hızlanır, iki dalga sıklaşır. Sonra «Duraklat» ile oku durdurup gölgelerin boyuna bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>I: in-phase (eş fazlı), Q: quadrature (dik fazlı, yani 90° kaymış). Adlar alıcının iki koluna verilen geleneksel adlardır.</li>
+    <li>Gölge benzetmesi tam doğru bir izdüşümdür: I okun yatay eksene, Q dikey eksene izdüşümü.</li>
+    <li>Bu bölümden sonra mavi her yerde I, kehribar her yerde Q, fildişi genlik (okun kendisi), nane faz demektir. Takımyıldıza kadar değişmez.</li>
+    <li>«Dinle» açıkken frekans sesin perdesine eşlenir: ok hızlandıkça ses incelir. (Gerçek radyo frekansları duyulamayacak kadar yüksektir; bu yalnızca bir eşleme.)</li>
+    <li>Olası soru: «Neden tek dalga yetmiyor?» Cevap iki slayt sonra: yön bilgisi.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="3" data-demo="helix" data-title="Zamanda bir yay" id="sarmal">
+  <div class="text">
+    <h2>Zamanda bir yay</h2>
+    <p class="lead">Dönen oku zaman boyunca ilerletin: ucu havada bir yay, bir sarmal çizer. Karmaşık bir sinyal tam olarak budur.</p>
+    <p>Sarmalı fareyle ya da parmağınızla sürükleyip döndürün. Tepedeki fener zemine mavi bir gölge düşürür: <span class="ci">I</span> dalgası. Yandaki fener arka duvara kehribar bir gölge düşürür: <span class="cq">Q</span> dalgası.</p>
+    <p>Üstten bakan yalnızca I'yı, yandan bakan yalnızca Q'yu görür. Zaman ekseni boyunca önden bakınca sarmal bir çembere döner: önceki slayttaki dönen ok. Bir IQ kaydı, bu yayın art arda alınmış fotoğraflarıdır.</p>
+    <details class="more"><summary>Daha fazla: üç boyutlu bir eğri</summary>
+      <p>Sarmalın her noktası bir (zaman, I, Q) üçlüsüdür:</p>
+      <span class="formula">( t, &nbsp;A·cos 2πft, &nbsp;A·sin 2πft )</span>
+      <p>Frekans negatif olsaydı sarmal ters yöne bükülürdü; sağ ve sol vida gibi. Tek bir gölgeye bakarak bu iki vidayı ayırt edemezsiniz. Çizim kütüphanesiz bir dik izdüşümle yapılıyor: her nokta kameranın «sağ» ve «yukarı» yönlerine izdüşürülüyor.</p>
+    </details>
+    <p class="try">Sarmalı sürükleyip döndürün, sonra «Önden bak», «Üstten bak» ve «Yandan bak» düğmelerini deneyin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Zaman ekseni sağa doğru akıyor; en uçtaki ok «şimdi»yi gösterir. Sarmal vida gibi ilerler.</li>
+    <li>Zemin (mavi) üstteki fenerin, arka duvar (kehribar) yandaki fenerin gölgesi; birinci slayttaki fenerlerle aynı düzen.</li>
+    <li>Geometri gereği: Q yukarı çizildiği için üstten bakış I'yı, yandan bakış Q'yu gösterir.</li>
+    <li>Uç duvardaki kesikli fildişi çember, önden bakışın gölgesidir: genlik sabitse çember.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="3" data-demo="whyTwo" data-title="Neden iki sayı?" id="neden-iki">
+  <div class="text">
+    <h2>Neden iki sayı?</h2>
+    <p class="lead">Yalnızca yerdeki gölgeye, yani <span class="ci">I</span>'ya bakan biri okun hangi yöne döndüğünü söyleyemez.</p>
+    <p>Saat yönünün tersine dönen ok ile saat yönünde dönen ok aynı I gölgesini düşürür. Yani +f ve −f frekansları I'da birebir aynı görünür. <span class="cq">Q</span> gölgesi ise ikisinde ters yöne gider; yönü o söyler.</p>
+    <p>Sonucu spektrumda (frekans haritasında) görürsünüz: Q kapalıyken her sinyalin bir ayna görüntüsü belirir ve bandın iki yarısı üst üste katlanır. Q açıkken −f ile +f ayrı yerlerdir; aynı örnekleme hızıyla iki kat geniş bir bant ayırt edilir.</p>
+    <details class="more"><summary>Daha fazla: negatif frekans</summary>
+      <p>Gerçek bir kosinüs, zıt yönde dönen iki yarım boy okun toplamıdır; Q'ları birbirini götürür:</p>
+      <span class="formula">cos(2πft) = ½·e<sup>j2πft</sup> + ½·e<sup>−j2πft</sup></span>
+      <p>Bu yüzden Q kapalıyken spektrumda iki tepe çıkar, her biri yarım genlikte, yaklaşık −6 dB. «Dinle», sinyali 600 Hz'lik bir taşıyıcıya bindirir: x(t) = I·cos(2π·600t) − Q·sin(2π·600t). Q açıkken +f sesi inceltir, −f kalınlaştırır; Q kapalıyken ikisi birden duyulur.</p>
+    </details>
+    <p class="try">Frekansı + ile − arasında gezdirin, sonra «Q bileşeni» düğmesiyle Q'yu kapatıp spektruma bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Spektrum her karede gerçekten hesaplanıyor (512 noktalı FFT, Hann penceresi); okunan dB değerleri ölçüm.</li>
+    <li>Gerçek (tek kanallı) örnekleme yapan alıcılar bu yüzden bandın yalnızca yarısını kullanabilir: fs örnek/sn ile 0…fs/2. IQ ile −fs/2…+fs/2, toplam fs genişlik.</li>
+    <li>RTL-SDR'nin 2,4 MS/sn'si bu sayede yaklaşık 2,4 MHz'lik bir pencere demek (kenarlarda filtre kaybı var).</li>
+    <li>Dinle'de duyulan şey, karıştırıcının (mixer) tam tersi: IQ'yu bir taşıyıcıya yükseltmek. Q kapalıyken iki yan bant birden çıkar.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="3" data-demo="ampPhase" data-title="Genlik ve faz" id="genlik-faz">
+  <div class="text">
+    <h2>Genlik ve faz</h2>
+    <p class="lead">Bir IQ çifti düzlemde tek bir noktadır. Bu nokta iki şey söyler: sinyal ne kadar güçlü ve şu an hangi yöne bakıyor.</p>
+    <p>Bir döner kapı düşünün. Kanadın merkezden ne kadar uzağa uzandığı <span class="camp">genlik</span>, kanadın baktığı pusula yönü <span class="cph">faz</span>. <span class="ci">I</span> ve <span class="cq">Q</span> ise aynı bilginin «doğu–batı» ve «kuzey–güney» parçalarıdır.</p>
+    <p>Noktayı merkezden uzaklaştırınca dalga büyür. Çember boyunca çevirince dalganın boyu değişmez, yalnızca zamanda kayar. Radyonun taşıdığı her bilgi bu ikisinin oynatılmasıdır: AM genliği, FM ve dijital yayınların çoğu fazı oynatır.</p>
+    <details class="more"><summary>Daha fazla: formüller</summary>
+      <span class="formula">A = √(I² + Q²) &nbsp;&nbsp; φ = atan2(Q, I)</span>
+      <span class="formula">x(t) = I·cos(2πft) − Q·sin(2πft) = A·cos(2πft + φ)</span>
+      <p>atan2, açıyı dört çeyrekte de doğru veren arktanjanttır. Sağdaki üç dalga bu eşitliğin kendisidir: mavi ile kehribarın toplamı fildişi dalgayı verir. Tersine, alıcı havadaki x(t)'yi cos ve −sin ile çarpıp süzerek I ve Q'yu geri çıkarır.</p>
+    </details>
+    <p class="try">Noktayı sürükleyin: önce merkezden uzaklaştırıp dalganın büyüdüğüne, sonra çember boyunca çevirip kaydığına bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Fildişi ok genlik, nane yay faz. Takımyıldızlarda (QPSK, QAM) her nokta tam olarak böyle bir (genlik, faz) çiftidir.</li>
+    <li>«Döndür» noktayı sabit hızla çevirir: faz sürekli artarsa bu bir frekans kaymasıdır. FM'in ve «dönen takımyıldız»ın özü.</li>
+    <li>«Dinle»: genlik sesin gürlüğünü değiştirir; faz tek başına duyulmaz. Kulak mutlak fazı ayırt edemez, ama alıcı edebilir.</li>
+    <li>Olası soru: «Neden eksi sinüs?» Çünkü Q pozitifken (ok yukarı bakarken) dalga ileri kayar; cos(a + b) açılımından gelir.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="3" data-demo="iqFile" data-title="IQ dosyası nedir?" id="iq-dosyasi">
+  <div class="text">
+    <h2>IQ dosyası nedir?</h2>
+    <p class="lead">Bir SDR kaydı art arda dizilmiş IQ çiftlerinden ibarettir. Başlık yok, süs yok; yalnızca sayılar.</p>
+    <p>RTL-SDR'nin <code>.cu8</code> dosyasında her örnek iki bayttır: önce <span class="ci">I</span>, sonra <span class="cq">Q</span>. Her bayt 0 ile 255 arasındadır ve sıfır tam ortada, 127,5'tedir. Çözmek için ortayı çıkarıp 127,5'e bölmek yeter; sonuç −1 ile +1 arasında bir sayıdır.</p>
+    <p>Dosya kendi örnekleme hızını ve frekansını bilmez; bunları ayrıca not etmek gerekir. SigMF bunun için var: ham baytların yanına küçük bir JSON dosyası koyar.</p>
+    <details class="more"><summary>Daha fazla: biçimler ve SigMF</summary>
+      <ul>
+        <li><b>cu8</b>: 8 bit işaretsiz (RTL-SDR, <code>rtl_sdr</code>). <b>cs8</b>: 8 bit işaretli (HackRF, <code>hackrf_transfer</code>), yine 2 bayt.</li>
+        <li><b>cs16</b>: 16 bit işaretli tamsayı, 4 bayt. <b>cf32</b>: 32 bit kayan noktalı sayı, 8 bayt (GNU Radio'nun karmaşık türü).</li>
+      </ul>
+      <span class="formula">boyut = örnekleme hızı × süre × örnek başına bayt</span>
+      <p>SigMF kaydı iki dosyadır: <code>.sigmf-data</code> (ham baytlar) ve <code>.sigmf-meta</code>:</p>
+      <span class="formula">{ "global": { "core:datatype": "cu8", "core:sample_rate": 2400000,<br>&nbsp;&nbsp;"core:version": "1.2.6" },<br>&nbsp;&nbsp;"captures": [ { "core:sample_start": 0, "core:frequency": 100100000 } ] }</span>
+    </details>
+    <p class="try">«Sonraki örneği çöz»e basın ya da baytların üzerine gelin; sonra HackRF'i seçip bir saatlik kaydın boyutuna bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Baytlar gerçekten üretiliyor: dönen bir ton (örnek başına 0,043 tur, genlik 0,8) + az gürültü, cu8 olarak nicemlendi. Noktalar bu yüzden çember üzerinde döner.</li>
+    <li>RTL2832U'nun kuramsal üst sınırı 3,2 MS/sn; sıradan USB denetleyicilerde örnek kaçırmadan test edilen en yüksek hız 2,4 MS/sn (osmocom rtl-sdr wiki). HackRF One 2–20 MS/sn, 8 bit I ve 8 bit Q (Great Scott Gadgets belgeleri).</li>
+    <li>2,4 MS/sn cu8: saniyede 4,8 MB, saatte 17,28 GB. HackRF 20 MS/sn ile saatte 144 GB. Bu yüzden genellikle kısa kayıt alınır ya da hemen azaltılır (decimation).</li>
+    <li>SigMF: açık bir standart (sigmf.org, sürüm 1.2.x). Veri türü adları: cu8, ci8, ci16_le, cf32_le…</li>
+  </ul></aside>
+</section>

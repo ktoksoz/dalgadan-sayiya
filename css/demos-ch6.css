@@ -1,0 +1,39 @@
+/* Bölüm 6 (modülasyon, ilk yarı): AM, FM, dijital */
+
+/* okumalar kontrollerin sağına yaslanır, dar ekranda alta iner */
+.controls .ch6-ro { margin-left: auto; gap: 4px 16px; }
+.controls .ch6-ro .readout .k { font-size: 0.72rem; }
+.controls .ch6-ro .readout .v { font-size: 0.98rem; }
+
+/* tıklanabilir bitler: sembollere gruplanmış */
+.ch6-bits { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: flex-start; }
+.ch6-bits .grp {
+  position: relative; display: inline-flex; gap: 2px;
+  padding: 3px; border-radius: 5px;
+  border: 1px solid var(--line); background: var(--bg-deep);
+  transition: border-color .15s, background .15s;
+}
+.ch6-bits .grp.cur { border-color: var(--ink); background: rgba(239, 233, 220, 0.08); }
+.ch6-bits .bit {
+  width: 1.65em; height: 1.85em; padding: 0; border: 0; border-radius: 3px; cursor: pointer;
+  font-weight: 800; font-size: 0.92rem; font-variant-numeric: tabular-nums;
+  background: var(--panel); color: var(--ink-2);
+  transition: background .12s, color .12s;
+}
+.ch6-bits .bit[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.ch6-bits .bit:hover { outline: 1px solid var(--ink-2); }
+
+@media (max-width: 860px) {
+  .controls .ch6-ro { margin-left: 0; width: 100%; }
+  .ch6-bits { gap: 4px 5px; }
+  .ch6-bits .grp { padding: 2px; }
+  .ch6-bits .bit { width: 1.45em; height: 1.7em; font-size: 0.84rem; }
+}
+
+.ch6-grp { display: inline-flex; align-items: center; gap: 9px; }
+
+/* dar ekranda tuval yeterince uzun olsun */
+@media (max-width: 860px) {
+  .stage .fill.ch6-fill { min-height: 760px; }
+  #dijital .stage .fill.ch6-fill { min-height: 700px; }
+}

@@ -1,0 +1,83 @@
+Dalgadan Sayıya — https://sdr.koraytoksoz.com
+Copyright (c) 2026 Koray Toksöz
+
+Bu proje iki ayrı lisansla dağıtılır:
+
+  1. KAYNAK KOD (MIT Lisansı)
+     js/, css/, tools/ ve tests/ klasörlerindeki ve index.html içindeki kod.
+
+  2. İÇERİK (Creative Commons Atıf 4.0 Uluslararası, CC BY 4.0)
+     Slayt metinleri, açıklamalar, sunucu notları, sözlük tanımları,
+     anlatım metinleri (tools/narration.json) ve anlatım sesleri (audio/).
+
+Üçüncü taraf bileşenler aşağıda ayrıca belirtilmiştir.
+
+-------------------------------------------------------------------------------
+1. MIT Lisansı (kaynak kod)
+-------------------------------------------------------------------------------
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------
+2. Creative Commons Atıf 4.0 Uluslararası (içerik)
+-------------------------------------------------------------------------------
+
+İçeriği kopyalayabilir, dağıtabilir, çevirebilir, uyarlayabilir ve ticari
+amaçla dahil olmak üzere her amaçla kullanabilirsiniz. Şartlar:
+
+  - Atıf: "Koray Toksöz, Dalgadan Sayıya (https://sdr.koraytoksoz.com)"
+    şeklinde ad ve bağlantı verin.
+  - Lisansa bağlantı verin.
+  - Değişiklik yaptıysanız bunu belirtin.
+
+Lisans metninin tamamı:
+  https://creativecommons.org/licenses/by/4.0/legalcode.tr
+  https://creativecommons.org/licenses/by/4.0/legalcode
+
+-------------------------------------------------------------------------------
+3. Üçüncü taraf bileşenler
+-------------------------------------------------------------------------------
+
+Sinyaller, kayıtlar ve sesler:
+  Sitede kullanılan bütün radyo sinyalleri, IQ kayıtları ve demo sesleri
+  tarayıcıda sentezlenir; projede üçüncü taraf kayıt ya da ses dosyası
+  bulunmaz. Demolarda çalınan ezgi, Ludwig van Beethoven'ın 9. Senfonisi'ndeki
+  "Neşeye Övgü" temasıdır (1824, kamu malı); düzenleme ve sentez bu projeye
+  aittir.
+
+Anlatım sesleri (audio/):
+  ElevenLabs ücretli abonelikle "İrem" sesi kullanılarak üretilmiştir ve
+  yukarıdaki CC BY 4.0 kapsamında paylaşılmaktadır. Sesler, belirli bir
+  kişinin sesini taklit etmek ya da yanıltıcı amaçla kullanılamaz.
+
+Creative Commons simgeleri (img/cc-cc.svg, img/cc-by.svg):
+  Creative Commons basın kitinden alınmıştır
+  (https://creativecommons.org/about/downloads/); Creative Commons'ın
+  marka kullanım kurallarına tabidir ve yalnızca lisansı belirtmek için
+  kullanılır.
+
+GitHub simgesi (index.html içinde satır içi SVG):
+  GitHub Octicons "mark-github", MIT Lisansı, (c) GitHub Inc.
+  https://github.com/primer/octicons
+
+Yazı tipleri (Google Fonts üzerinden yüklenir, depoda bulunmaz):
+  Big Shoulders Display, Atkinson Hyperlegible Next — SIL Open Font License 1.1.
+
+Yazılım kütüphanesi kullanılmamıştır: FFT, filtreler, demodülatörler ve
+bütün çizimler bu projede yazılmıştır.

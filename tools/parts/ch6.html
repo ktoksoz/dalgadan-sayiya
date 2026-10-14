@@ -1,0 +1,75 @@
+<!-- ================= 6. MODÜLASYON (ilk yarı) ================= -->
+<section class="slide" data-chapter="6" data-demo="am" id="am">
+  <div class="text">
+    <h2>AM: genlik modülasyonu</h2>
+    <p class="lead">Sesi radyo dalgasına yüklemenin en eski yolu: dalgayı sesin ritmiyle büyütüp küçültmek.</p>
+    <p>Ses yükselince verici dalgası büyür, alçalınca küçülür. Dalganın tepelerini birleştiren çizgiye <span class="camp">zarf</span> denir ve zarf sesin kendisidir. IQ düzleminde bu, yerinde durup nefes alır gibi uzayıp kısalan bir oktur.</p>
+    <p>Alıcı yalnızca okun boyunu ölçer: √(<span class="ci">I</span>² + <span class="cq">Q</span>²). Okun hangi yöne baktığı önemli değildir. Bu yüzden AM alıcısı çok basittir; kristal radyodaki tek diyot bu işi yapar.</p>
+    <p>Derinlik %100'ü geçince zarf sıfırın altına inmek ister. Ama boy eksi olamaz: ok ters döner ve ses bozulur.</p>
+    <details class="more"><summary>Daha fazla: formül ve spektrum</summary>
+      <span class="formula">s(t) = [1 + m·x(t)] · cos(2π·f<sub>c</sub>·t)</span>
+      <p>IQ'da: I + jQ = [1 + m·x(t)]·e<sup>jφ</sup>. Zarf dedektörü |I + jQ| = |1 + m·x(t)| hesaplar; m·|x| ≤ 1 iken bu tam olarak 1 + m·x(t) olur ve ortalaması çıkarılınca ses geri gelir. Faz φ hiç işe karışmaz.</p>
+      <p>Spektrumda ortada taşıyıcı, iki yanında sesin aynalı iki kopyası (yan bantlar) durur. Bant genişliği sesin bant genişliğinin iki katıdır. Orta dalga yayınlarında kanallar Avrupa, Afrika ve Asya'da 9 kHz aralıklıdır.</p>
+    </details>
+    <p class="try">Modülasyon derinliğini %130'a çekin, sonra "Dinle"ye basıp çözülen sesi kaynakla karşılaştırın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Ses: "Neşeye Övgü" (Beethoven, 9. Senfoni; kamu malı), tarayıcıda sentezleniyor. Tepe değeri 1'e ölçeklendi, yani %100 derinlikte zarf tam sıfıra değiyor.</li>
+    <li>Üstteki iki panel osiloskop gibi tetikleniyor: aynı nota çalarken dalga yerinde durur. Kırmızı imleç pencereyi ağır çekimde tarar; IQ'daki ok imlecin altındaki örneği gösterir.</li>
+    <li>Alıcı vericiyle aynı fazda değil (ok çapraz duruyor): zarf dedektörü bunu umursamaz. Bir sonraki bölümün "dönen takımyıldız"ında dijitalde bunun neden sorun olduğunu göreceğiz.</li>
+    <li>"İlinti" sayısı ölçülüyor: çözülen sesin son 0,2 saniyesi kaynakla karşılaştırılıyor (1 = birebir aynı). %100'ün altında ~0,999; aşırı modülasyonda düşer.</li>
+    <li>Gerçek dünyada: orta dalga (Avrupa'da 531–1602 kHz, 9 kHz aralık), kısa dalga, havacılık telsizi (VHF'de hâlâ AM). Kaynak: Wikipedia "Mediumwave".</li>
+    <li>Olası soru: "Taşıyıcı neden boşa güç harcıyor?" Evet, gücün çoğu bilgi taşımayan taşıyıcıda. Tek yan bant (SSB) bu yüzden icat edildi.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="6" data-demo="fm" id="fm">
+  <div class="text">
+    <h2>FM: frekans modülasyonu</h2>
+    <p class="lead">FM sesi dalganın boyuyla değil hızıyla taşır: genlik hiç değişmez, frekans sesle birlikte bir artar bir azalır.</p>
+    <p>IQ düzleminde ok hep aynı boydadır; değişen, dönüş hızıdır. Ses artıya gidince ok hızlanır, eksiye gidince yavaşlar.</p>
+    <p>Alıcı art arda gelen iki örnek arasındaki açıyı ölçer (<span class="cph">nane renkli yay</span>). Açı büyükse ses yüksek, küçükse alçaktır. Buna faz farkı demodülasyonu denir.</p>
+    <p>Sapma büyüdükçe sinyal spektrumda genişler ama gürültüye de daha dayanıklı olur. Yayın FM'de sapma ±75 kHz'dir.</p>
+    <details class="more"><summary>Daha fazla: formül ve Carson kuralı</summary>
+      <span class="formula">z(t) = e<sup>jφ(t)</sup>, φ(t) = 2π·Δf·∫x(τ)dτ</span>
+      <span class="formula">x̂[n] = arg(z[n]·z*[n−1]) / (2π) · f<sub>s</sub> / Δf</span>
+      <p>Bant genişliği için Carson kuralı (1922): <b>BW ≈ 2(Δf + W)</b>; W sesin en yüksek frekansı. Mono yayın FM'de Δf = 75 kHz, W = 15 kHz: 2(75 + 15) = 180 kHz.</p>
+      <p>Buradaki sinyal saniyede 240.000 karmaşık örnekle üretiliyor, çözülüyor ve 15 kHz'lik süzgeçten geçiyor. Gürültü açıkken aynı sesi aynı tepe gücüyle taşıyan bir AM verici de aynı gürültüyle çalışır.</p>
+    </details>
+    <p class="try">Sapmayı 75 kHz'ten 5 kHz'e indirip spektrumun daralmasını izleyin; sonra gürültüyü açıp FM ile AM'i dinleyin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>IQ düzlemi ağır çekim bir çizim: gerçekte ok saniyede on binlerce tur atar. Gri noktalar ise gerçek 240 kHz örnekler: hepsi aynı çemberde, çünkü FM'in genliği sabit.</li>
+    <li>Alıcı tam taşıyıcıya ayarlı olsaydı ok ileri geri salınırdı; çizimde ok, sabit bir hızla dönerken ses onu hızlandırıp yavaşlatıyor (frekans = dönüş hızı).</li>
+    <li>Nane noktalar: ardışık iki görsel örnek arasındaki açıdan (DSP.FMDemod) çözülen değerler; ses eğrisinin üstüne oturuyorlar.</li>
+    <li>Carson için W, melodinin ölçülen %99 güç bant genişliği (flüt tınısı, ~1 kHz). "Ölçülen" değer spektrumdaki gücün %99'unu içeren genişlik. Kaynak: Wikipedia "Carson bandwidth rule" (J. R. Carson, 1922).</li>
+    <li>Gürültü karşılaştırması: orta C/N'de FM temiz, AM hışırtılı. Sapmayı küçültürseniz FM'in üstünlüğü kaybolur: dayanıklılığı bant genişliğiyle satın alır. Çok düşük C/N'de FM "eşik" altına düşer ve çıtırtılar başlar.</li>
+    <li>Armstrong geniş bant FM'i 1933'te patentledi; yayın bandı 87,5–108 MHz.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="6" data-demo="digital" id="dijital">
+  <div class="text">
+    <h2>Bitleri dalgaya yüklemek</h2>
+    <p class="lead">Bit göndermek için dalganın bir özelliğini birkaç sabit değer arasında atlatırız. Her atlayışa sembol denir.</p>
+    <p>ASK genliği açıp kapar, FSK iki frekans arasında gidip gelir, BPSK fazı 180° çevirir. Üçü de sembol başına 1 bit taşır.</p>
+    <p>QPSK dört faz kullanır, böylece her sembol 2 bit taşır. 16-QAM hem genliği hem fazı değiştirir: 16 noktalı bir ızgarada sembol başına 4 bit. Aynı sürede dört kat bilgi taşır ama noktalar birbirine yaklaştığı için gürültüye daha duyarlıdır.</p>
+    <details class="more"><summary>Daha fazla: bit hızı ve Gray kodu</summary>
+      <span class="formula">bit hızı = sembol hızı × log₂ M</span>
+      <p>M nokta sayısıdır: QPSK'da M = 4 (2 bit), 16-QAM'de M = 16 (4 bit). 16-QAM'de her eksen {−3, −1, +1, +3}/√10 değerlerini alır. Noktalar Gray koduyla adlandırılır, yani komşu iki nokta yalnızca tek bitte ayrışır; gürültü bir sembolü komşusuna kaydırırsa yalnızca 1 bit bozulur.</p>
+      <p>"Dinle" sesi ses aralığına taşır: FSK'da 1 = 1200 Hz, 0 = 2200 Hz. Bu, 1976 tarihli Bell 202 modeminin tonlarıdır ve amatör telsizcilerin APRS paketlerinde hâlâ duyulur.</p>
+    </details>
+    <p class="try">Birkaç bite tıklayıp değiştirin, sonra BPSK'dan 16-QAM'e geçip aynı 16 bitin kaç sembole sığdığına bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Sembol süresi her türde aynı tutuldu; böylece üstteki panel "aynı sürede kaç bit" sorusunu doğrudan gösteriyor. Taranmış alan, aynı sürede fazladan taşınabilecek bitler.</li>
+    <li>I ve Q, sembolün koordinatlarıdır; gönderilen dalga I·cos − Q·sin. BPSK'da yalnızca I kullanılır; QPSK ve QAM'de ikisi de.</li>
+    <li>FSK'nın takımyıldızı nokta değil, dönüş yönüdür: 1 sola, 0 sağa döner (temel bantta +f ve −f).</li>
+    <li>"1200 baud" ayarında 16 bit saniyede 75 kez tekrar eder: eski modem cızırtısı. Bell 202: 1200 bit/sn, mark 1200 Hz, space 2200 Hz (Wikipedia "Bell 202 modem").</li>
+    <li>Gerçek dünyada: GPS sinyalleri BPSK, uydu ve DVB-T QPSK/16-QAM/64-QAM, Wi-Fi 6 1024-QAM (sembol başına 10 bit) kullanır.</li>
+    <li>Sonraki slayt: gürültü bu noktaları bulutlaştırınca ne olur?</li>
+  </ul></aside>
+</section>

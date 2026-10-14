@@ -1,0 +1,44 @@
+/* Bölüm 6 (devam): takımyıldız, dönme, mesaj, sembol hızı */
+.c6-body { flex: 1; min-height: 0; display: flex; }
+.c6-body > .fill { flex: 1 1 auto; min-width: 0; }
+.c6-side {
+  flex: 0 0 clamp(230px, 36%, 330px);
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 14px 16px 12px;
+  border-left: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(10, 20, 24, 0.35), rgba(10, 20, 24, 0.15));
+  min-height: 0;
+}
+.c6-side .plot { flex: 1 1 auto; min-height: 120px; position: relative; }
+.c6-side .plot > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.c6-side .readouts { gap: 8px 20px; }
+.c6-cap { font-size: 0.76rem; color: var(--muted); margin-bottom: -8px; }
+.c6-ber { padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.readout.big .v { font-family: var(--f-display); font-size: 1.85rem; font-weight: 800; letter-spacing: 0.01em; line-height: 1.05; }
+.readout.big + .readout.big .v { color: var(--ink-2); }
+.c6-strip { padding: 8px 16px; border-top: 1px solid var(--line); background: rgba(10, 20, 24, 0.35); gap: 6px 22px; }
+.c6-strip .readout .v { font-size: 0.98rem; }
+
+/* faz renkli aç/kapa */
+.tog.cph[aria-pressed="true"]::before { background: var(--phase); box-shadow: 0 0 8px var(--phase); }
+.tog.cph[aria-pressed="true"] { border-color: var(--phase); color: var(--phase); }
+
+/* mesaj kutusu */
+.c6-msg {
+  flex: 1 1 180px; min-width: 0; max-width: 300px;
+  background: var(--bg-deep); border: 1px solid var(--line-2); border-radius: var(--r-sm);
+  padding: 0.38em 0.75em; color: var(--ink); font-weight: 700; font-size: 1rem;
+}
+.c6-msg:focus { outline: none; border-color: var(--ink-2); box-shadow: 0 0 0 3px rgba(239, 233, 220, 0.08); }
+
+@media (max-width: 860px) {
+  .c6-body { flex-direction: column; }
+  .c6-body > .fill { min-height: 340px; }
+  .c6-side { flex: none; border-left: 0; border-top: 1px solid var(--line); }
+  .c6-side .plot { flex: none; height: 190px; }
+}
+.c6-side .readout .k, .c6-strip .readout .k { font-weight: 400; }
+@media (max-width: 860px) {
+  #mesaj .stage .fill { min-height: 600px; }
+  #sembol-hizi .stage .fill { min-height: 460px; }
+}

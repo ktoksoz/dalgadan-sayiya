@@ -1,0 +1,71 @@
+<!-- ================= 1. RADYO DALGASI ================= -->
+<section class="slide" data-chapter="1" data-demo="emSpectrum" id="spektrum">
+  <div class="text">
+    <h2>Görünmeyen ışık</h2>
+    <p class="lead">Radyo dalgası ile gözünüze ulaşan ışık aynı şeydir; tek fark saniyede kaç kez salındıkları.</p>
+    <p>İkisi de elektromanyetik dalgadır ve ışık hızıyla yol alır. Frekans yükseldikçe adları değişir: radyo, mikrodalga, kızılötesi, görünür ışık, morötesi, X ışını, gama. Gözümüz bu uzun şeridin yalnızca küçücük bir penceresini görür.</p>
+    <p>Radyo kısmı ise kalabalıktır: FM yayınları, uçak telsizleri, cep telefonları, Wi-Fi, GPS uyduları. Kesik çizgili alan, birkaç yüz liralık bir <strong>RTL-SDR</strong> alıcının ayarlanabildiği aralık.</p>
+    <details class="more"><summary>Daha fazla: frekans ve dalga boyu</summary>
+      <p>Frekans ile dalga boyu ters orantılıdır; çarpımları her zaman ışık hızıdır:</p>
+      <span class="formula">c = f · λ ≈ 3 · 10⁸ m/sn</span>
+      <p>Bu yüzden şeridin altındaki dalga boyu skalası üsttekinin tersine akar. 100 MHz'lik FM dalgası yaklaşık 3 m, 600 THz'lik yeşil ışık yaklaşık 500 nm uzunluğundadır. Radyo alt bantlarının adları (LF, MF, HF, VHF, UHF, SHF) ITU'nun on katlık dilimleridir.</p>
+    </details>
+    <p class="try"><b>FM</b> düğmesine basın ve FM bandına dokunun. Sonra şeridi sürükleyip ışığa kadar gidin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Şerit logaritmik: her çentik on kat. Sürükle = kaydır, tekerlek / iki parmak = yakınlaştır. Düğmeler: Tümü, Radyo, RTL-SDR, FM.</li>
+    <li>Bölge sınırları keskin değil (Wikipedia "Electromagnetic spectrum"): kızılötesi 300 GHz–400 THz, görünür ≈ 400–790 THz (380–750 nm), morötesi 10–400 nm, X ışını ile gama örtüşür.</li>
+    <li>Bantlar: FM 87,5–108 MHz; havacılık 108–137 MHz (108–117,975 seyrüsefer, 118–137 AM ses); GSM 900 880–915/925–960; DCS 1800 1710–1785/1805–1880; Wi-Fi 2400–2483,5 MHz ve Avrupa'da 5150–5350 + 5470–5725 MHz; GPS L1 1575,42 MHz; ADS-B 1090 MHz; ISM 433,05–434,79 MHz; Ku uydu TV 10,7–12,75 GHz; hidrojen çizgisi 1420,405 MHz; Iridium 1616–1626,5 MHz; 5G n78 3,3–3,8 GHz.</li>
+    <li>NOAA-18 6 Haziran, NOAA-19 13 Ağustos, NOAA-15 19 Ağustos 2025'te kapatıldı; 137 MHz'de Meteor-M (LRPT) sürüyor.</li>
+    <li>RTL-SDR kapsamı R820T/R820T2 ayarlayıcıya göre ≈ 24–1766 MHz (rtl-sdr.com). V3'ün doğrudan örnekleme modu ve V4'ün dahili yukarı çeviricisi HF'yi de (≈ 0,5–28,8 MHz) açar.</li>
+    <li>Olası soru: "Işık da radyo mu?" Fiziksel olarak evet, aynı Maxwell denklemleri. Ama algılama yöntemi farklı: radyoda anten + akım, ışıkta foton dedektörü.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="1" data-demo="wavelength" id="dalga-boyu">
+  <div class="text">
+    <h2>Frekans, dalga boyu ve anten</h2>
+    <p class="lead">Bir dalganın frekansını bilirseniz, boyunu ve onu yakalayacak antenin boyunu da bilirsiniz.</p>
+    <p>Dalga bir salınımı bitirene kadar ışık hızıyla yol alır; bu yol dalga boyudur. Frekans arttıkça bir salınım kısalır, dalga da kısalır: FM dalgası bir oda boyunda, Wi-Fi dalgası bir avuç içinde.</p>
+    <p>Anten, dalganın boyuyla uyumlu olduğunda en iyi çalışır. En basit anten, dalga boyunun dörtte biri uzunluğunda bir teldir: <strong>çeyrek dalga</strong> anten. Telefonunuzun içindeki antenler bu yüzden küçük, eski uzun dalga istasyonlarının direkleri bu yüzden devdir.</p>
+    <details class="more"><summary>Daha fazla: hesap</summary>
+      <span class="formula">λ = c / f &nbsp;&nbsp; anten ≈ λ / 4</span>
+      <p>100 MHz için λ = 299.792.458 / 100.000.000 ≈ 3,0 m, çeyrek dalga anten ≈ 75 cm. Gerçek antenler, telin kalınlığı ve uç etkisi yüzünden genellikle yüzde birkaç daha kısa kesilir.</p>
+      <p>"Dinle" bir benzetmedir: radyo dalgalarını duyamayız. Kaydırıcıyı sağa çektikçe ton, frekansla aynı oranda olmasa da tizleşir.</p>
+    </details>
+    <p class="try">Frekansı en sola, orta dalgaya çekin: dalga boyu yüzlerce metre olur. Sonra <b>Wi-Fi</b>'ye basın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Her şey gerçek ölçekte: cetvel, dalga, anten ve karşılaştırma nesnesi aynı metre/piksel oranıyla çiziliyor. Görünüm genişliği dalga boyuna göre 1-2-5 adımlarla değişir.</li>
+    <li>Örnek değerler: 999 kHz → 300 m (anten 75 m); 100 MHz → 3,0 m (75 cm); 1090 MHz → 27,5 cm (6,9 cm); 1575,42 MHz → 19,0 cm (4,8 cm); 2,44 GHz → 12,3 cm (3,1 cm).</li>
+    <li>Ölçek nesneleri yaklaşık: kalem ≈ 14 cm, telefon ≈ 15 cm, insan 1,75 m, otobüs 12 m, futbol sahası 105 m, Eyfel Kulesi 330 m.</li>
+    <li>Ses benzetmesi: 100 kHz → 110 Hz, 6 GHz → 1760 Hz, logaritmik (4 oktav). Ekrandaki "kat" oranı gerçek frekansın duyulan tona bölümüdür.</li>
+    <li>Olası soru: "Telefonum 900 MHz'de 8 cm'lik anten mi taşıyor?" Yaklaşık evet; telefonlarda antenler kıvrılmış, gövdeyi toprak düzlemi olarak kullanan çok bantlı yapılardır.</li>
+  </ul></aside>
+</section>
+
+<section class="slide wide" data-chapter="1" data-demo="timeline" id="tarih">
+  <div class="text">
+    <h2>Kıvılcımdan yazılıma</h2>
+    <p class="lead">160 yılda radyo bir kıvılcım aralığından cebinizdeki bir yazılıma dönüştü.</p>
+    <p>Önce kuram geldi, sonra deney, sonra telsiz telgraf. Radyonun her büyük adımı bir parçayı ucuzlattı ya da küçülttü; son adımda radyonun kendisi bir programa dönüştü. Olaylara dokunun ya da ibreyi skalada sürükleyin.</p>
+    <details class="more"><summary>Daha fazla: "yazılım tanımlı" ne demek?</summary>
+      <p>Klasik alıcıda ayar, süzme ve demodülasyon bobin, kondansatör ve diyotla yapılır. SDR'da anten sinyali olabildiğince erken sayılara çevrilir; gerisi program olur: <span class="formula">anten → (ayarlayıcı) → ADC → IQ sayıları → yazılım</span></p>
+    </details>
+    <p class="try"><b>Sonraki</b> düğmesiyle Hertz'in kıvılcımına geçin; odanın öbür ucundaki halkada çakan kıvılcıma bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Maxwell: "A Dynamical Theory of the Electromagnetic Field", Royal Society'de 8 Aralık 1864'te okundu, 1865'te yayımlandı.</li>
+    <li>Hertz: Karlsruhe, 1886–1889; anahtar kıvılcım gözlemi 1886 sonbaharı, makaleler 1887 ve 1888 (Annalen der Physik). İlk dipolü ≈ 50 MHz, parabolik ayna deneyleri ≈ 450 MHz (66 cm).</li>
+    <li>Marconi: denemeler 1894, İngiliz patenti başvurusu 2 Haziran 1896 (No. 12.039, kabul 1897). 12 Aralık 1901 Poldhu → Signal Hill, ≈ 3.500 km; "S" harfi kulakla duyuldu, kayıt yok, bazı tarihçiler hâlâ şüpheli. Frekans ölçülmedi, tahminen ≈ 500 kHz. Nobel 1909 (Braun ile).</li>
+    <li>Armstrong: süperheterodin 1918, ABD patenti 1.342.885 (8 Haziran 1920); Lévy'nin Fransız patenti 1917, Schottky 1918. FM patentleri 26 Aralık 1933, IRE sunumu Kasım 1935; W2XMN 1939'da tam güce çıktı (42,8 MHz, eski FM bandı).</li>
+    <li>Transistör: 16 Aralık 1947 ilk yükseltme, 23 Aralık yönetime gösterim; Nobel 1956. Regency TR-1: 18 Ekim 1954 duyuru, 1 Kasım 1954 satış, 49,95 $.</li>
+    <li>SpeakEasy I. aşama 1990–1995 (DARPA + ABD Hava Kuvvetleri, 2 MHz–2 GHz); II. aşama 4–400 MHz. Mitola: terim 1991, ilk IEEE makalesi 1992; "software radio" E-Systems'te 1984'te de geçer, "software defined radio" (Blust) 1995.</li>
+    <li>GNU Radio: Eric Blossom, John Gilmore'un 320 bin dolarlık desteği, 2001. USRP: Matt Ettus, Ettus Research 2004.</li>
+    <li>RTL-SDR: Eric Fry, Antti Palosaari ve Osmocom (Steve Markgraf), 2012 başı. 8 bit ADC; kararlı ≈ 2,4 MS/sn (2,56'ya kadar kayıpsız, 3,2 en üst ama kararsız).</li>
+    <li>Kaynaklar: en.wikipedia.org (Maxwell'in makalesi, Heinrich Hertz, Guglielmo Marconi, Edwin Howard Armstrong, Superheterodyne receiver, Regency TR-1, Software-defined radio, GNU Radio), computerhistory.org (point-contact transistor), rtl-sdr.com/about-rtl-sdr.</li>
+  </ul></aside>
+</section>

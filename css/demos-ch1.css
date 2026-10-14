@@ -1,0 +1,52 @@
+/* Bölüm 1: radyo dalgası */
+
+/* spektrum şeridi: seçilen bandın açıklaması (tuvalin altında, kadran camının etiketi gibi) */
+.em-info {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px;
+  min-height: 4.6em; padding: 10px 16px 11px;
+  border-top: 1px solid var(--line);
+  font-size: 0.9rem; line-height: 1.45; color: var(--ink-2);
+}
+.em-info b { font-family: var(--f-display); font-size: 1.2rem; font-weight: 800; color: var(--ink); letter-spacing: 0.01em; }
+.em-info .em-range { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); }
+.em-info .em-desc { flex-basis: 100%; }
+.em-fill canvas { cursor: grab; }
+.em-fill canvas:active { cursor: grabbing; }
+
+/* dalga boyu */
+.wl-reads { gap: 6px 26px; }
+.wl-reads .readout .v { font-size: 1.25rem; font-family: var(--f-display); font-weight: 800; letter-spacing: 0.01em; }
+.wl-reads .readout:nth-child(2) .v { color: var(--needle); }
+.wl-sound { flex-basis: 100%; min-height: 1.2em; }
+.wl-sound:empty { display: none; }
+
+/* zaman çizelgesi */
+.tl-wrap { display: flex; flex-direction: column; }
+.tl-dialwrap { position: relative; height: 92px; flex: none; border-bottom: 1px solid var(--line); }
+.tl-dialwrap > canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: pointer; }
+.tl-card { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(240px, 1fr) minmax(0, 1.15fr); }
+.tl-art { position: relative; min-height: 0; border-right: 1px solid var(--line); }
+.tl-art > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.tl-body { padding: clamp(14px, 2.4vh, 26px) clamp(16px, 2.4vw, 34px); overflow-y: auto; align-self: center; }
+.tl-year { font-family: var(--f-display); font-weight: 800; font-size: 1.05rem; color: var(--needle); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
+.tl-title { font-size: clamp(1.6rem, 2.4vw, 2.3rem); margin: 0.15rem 0 0.6rem; }
+.tl-text { margin: 0; color: var(--ink-2); max-width: 62ch; }
+.tl-in .tl-body { animation: tlIn 0.45s cubic-bezier(.2,.7,.2,1); }
+@keyframes tlIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.tl-count { margin-left: auto; font-variant-numeric: tabular-nums; }
+@media (max-width: 860px) {
+  .tl-card { grid-template-columns: 1fr; grid-template-rows: 210px auto; }
+  .tl-art { border-right: 0; border-bottom: 1px solid var(--line); }
+  .tl-body { align-self: start; }
+}
+@media (prefers-reduced-motion: reduce) { .tl-in .tl-body { animation: none; } }
+
+/* geniş slaytta metin iki sütun: sahne daha çok yer alsın */
+@media (min-width: 861px) {
+  #tarih .text { max-width: none; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); column-gap: 44px; align-items: start; }
+  #tarih .text > * { grid-column: 1 / -1; }
+  #tarih .text > p:not(.lead):not(.try):not(.chapter-tag) { grid-column: 1; grid-row: 4; }
+  #tarih .text > details.more { grid-column: 1; grid-row: 5; margin-top: 0; }
+  #tarih .text > .try { grid-column: 2; grid-row: 4 / span 2; margin-top: 0; }
+  #tarih .text p.lead { margin-bottom: 0.6em; }
+}

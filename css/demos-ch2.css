@@ -1,0 +1,12 @@
+/* Bölüm 2: örnekleme */
+.chip.ny-state, .chip.ww-state { align-self: center; font-weight: 700; transition: color .2s, border-color .2s, background .2s; }
+.chip.ny-state.on, .chip.ww-state.on { color: #1b1430; background: #c7a6ff; border-color: #c7a6ff; }
+.readout.ny-alias .v { color: #c7a6ff; }
+.readout.bad .v { color: var(--needle); }
+.alias-c { color: #c7a6ff; font-weight: 700; }
+.slide[data-chapter="2"] label.sl .lab { white-space: nowrap; }
+@media (max-width: 860px) {
+  [id="100mhz"] .stage { min-height: 900px; }
+  [id="vagon-tekerlegi"] .stage { min-height: 780px; }
+  .slide[data-chapter="2"] input[type="range"] { width: 30vw !important; }
+}

@@ -1,0 +1,55 @@
+/* Bölüm 3: I ve Q */
+
+/* sarmal: görünüm açıklaması */
+.ch3-cap { max-width: min(360px, 70%); line-height: 1.4; }
+
+/* genlik ve faz: düzlem + dalgalar */
+.ch3-ap { position: absolute; inset: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
+.ch3-ap canvas { width: 100%; height: 100%; display: block; min-height: 0; }
+.ch3-ap canvas + canvas { border-left: 1px solid var(--line); }
+.readout.camp .v { color: var(--amp); }
+
+/* IQ dosyası */
+.stage .fill.ch3-iqf { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(200px, 1fr); gap: 0; min-height: 0; }
+.ch3-hexwrap { padding: 14px 4px 10px 16px; overflow: auto; min-width: 0; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.ch3-hexhead { display: flex; gap: 12px; align-items: baseline; margin-bottom: 8px; font-size: 0.8rem; color: var(--muted); }
+.ch3-hexhead b { font-family: var(--f-display); font-weight: 800; font-size: 1.05rem; color: var(--ink); letter-spacing: 0.02em; }
+.ch3-hex {
+  font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: clamp(12.5px, 1.1vw, 16px); line-height: 1.8; font-variant-numeric: tabular-nums;
+  width: max-content; max-width: 100%;
+}
+.ch3-hex .row { display: flex; gap: 0.15em; white-space: nowrap; }
+.ch3-hex .off { color: var(--muted); margin-right: 0.9em; opacity: 0.8; }
+.ch3-hex .b { padding: 0 0.28em; border-radius: 3px; cursor: pointer; transition: background .12s, color .12s; }
+.ch3-hex .b:nth-of-type(2n+3) { margin-right: 0.45em; }
+.ch3-hex .bi { color: rgba(77, 187, 255, 0.45); }
+.ch3-hex .bq { color: rgba(255, 178, 63, 0.45); }
+.ch3-hex .bi.done { color: var(--i); }
+.ch3-hex .bq.done { color: var(--q); }
+.ch3-hex .bi.cur { background: rgba(77, 187, 255, 0.22); color: #fff; box-shadow: inset 0 -2px 0 var(--i); }
+.ch3-hex .bq.cur { background: rgba(255, 178, 63, 0.22); color: #fff; box-shadow: inset 0 -2px 0 var(--q); }
+.ch3-hex .b:hover { outline: 1px solid var(--ink-2); }
+.ch3-plane { position: relative; min-width: 0; min-height: 0; border-left: 1px solid var(--line); }
+.ch3-plane canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ch3-dec {
+  padding: 9px 16px; border-top: 1px solid var(--line); font-size: 0.86rem; color: var(--ink-2);
+  font-variant-numeric: tabular-nums; min-height: 2.6em; line-height: 1.5;
+}
+.ch3-dec code { font-family: ui-monospace, "SF Mono", Menlo, monospace; background: rgba(255,255,255,.05); padding: 0 .3em; border-radius: 3px; color: var(--ink); }
+.ch3-dec .lab { font-family: var(--f-display); font-weight: 800; color: var(--ink); margin-right: 0.5em; font-size: 1.02rem; }
+.ch3-dec .sep { color: var(--muted); margin: 0 0.4em; }
+.ch3-dec .muted { color: var(--muted); }
+.controls.ch3-size { border-top: 1px dashed var(--line); }
+
+@media (max-width: 860px) {
+  .ch3-ap { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+  .ch3-ap canvas + canvas { border-left: 0; border-top: 1px solid var(--line); }
+  .stage .fill.ch3-iqf { grid-template-columns: 1fr; grid-template-rows: auto 300px; }
+  .ch3-plane { border-left: 0; border-top: 1px solid var(--line); }
+  .ch3-hexwrap { padding-right: 16px; }
+  .ch3-hex { margin: 0 auto; }
+}
+@media (max-width: 860px) {
+  #genlik-faz .stage, #neden-iki .stage, #fazor .stage { min-height: 86vh; }
+}

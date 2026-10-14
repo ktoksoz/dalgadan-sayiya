@@ -1,0 +1,58 @@
+/* Bölüm 4: spektrum ve şelale */
+
+/* kontrollerin sonundaki okumalar: sağa yaslı, sarılınca alt satıra iner */
+.controls .ch4-ro { margin-left: auto; gap: 4px 16px; }
+.controls .ch4-ro .readout .v { font-size: 0.95rem; }
+.controls .ch4-lvl { flex-basis: 100%; margin-top: -4px; }
+
+/* ölçülen kare hızı: sağ alt köşede küçük yazı */
+.ch4-fps {
+  position: absolute; right: 8px; bottom: 6px; z-index: 2; pointer-events: none;
+  padding: 1px 7px; border-radius: 3px; background: rgba(10, 20, 24, 0.7);
+  font-size: 0.7rem; color: var(--ink-2); font-variant-numeric: tabular-nums;
+}
+
+/* desibel tablosu (Daha fazla) */
+table.ch4-db { border-collapse: collapse; margin: 0.4rem 0 0.7rem; font-size: 0.82em; font-variant-numeric: tabular-nums; }
+table.ch4-db th, table.ch4-db td { padding: 3px 7px; border-bottom: 1px solid var(--line); text-align: center; white-space: nowrap; }
+table.ch4-db th { color: var(--muted); font-weight: 700; text-align: left; }
+table.ch4-db tr:first-child td { color: var(--ink); font-weight: 700; }
+details.more table.ch4-db { display: block; overflow-x: auto; max-width: 100%; }
+
+/* oyun: giriş ve sonuç kaplaması */
+.ch4-over {
+  position: absolute; inset: 0; z-index: 3;
+  display: grid; place-items: center; padding: 16px;
+  background: radial-gradient(70% 70% at 50% 50%, rgba(10, 20, 24, 0.55), rgba(10, 20, 24, 0.2));
+}
+.ch4-over[hidden] { display: none; }
+.ch4-card {
+  width: min(420px, 100%); max-height: 100%; overflow: auto;
+  padding: 20px 24px 22px; border-radius: var(--r-md);
+  background: rgba(14, 26, 31, 0.93); border: 1px solid var(--line-2);
+  border-top: 2px solid var(--ink);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  color: var(--ink-2); font-size: 0.92rem;
+}
+.ch4-card h3 { margin: 0 0 0.5rem; font-size: 2rem; color: var(--ink); }
+.ch4-card p { margin: 0 0 0.8rem; }
+.ch4-card .btn { margin-top: 0.3rem; }
+.ch4-score { font-family: var(--f-display); font-weight: 900; font-size: 3.6rem; line-height: 0.9; color: var(--ink); margin: 0.2rem 0 0.8rem; font-variant-numeric: tabular-nums; }
+.ch4-score small { font-size: 1.3rem; font-weight: 700; color: var(--ink-2); }
+.ch4-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; margin-bottom: 0.9rem; }
+.ch4-stats div { display: flex; flex-direction: column; line-height: 1.15; }
+.ch4-stats span { font-size: 0.76rem; color: var(--muted); }
+.ch4-stats b { color: var(--ink); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.ch4-strip { display: block; width: 100%; height: auto; margin: -0.3rem 0 0.6rem; }
+.ch4-strip text { fill: var(--muted); font-size: 10px; font-family: var(--f-body); }
+
+/* dar ekran: tuval kontrollerin altında ezilmesin */
+@media (max-width: 860px) {
+  #fourier .stage .fill { flex: none; height: 360px; }
+  #fft .stage .fill { flex: none; height: 460px; }
+  #desibel .stage .fill { flex: none; height: 380px; }
+  #selale .stage .fill { flex: none; height: 480px; }
+  #sinyali-bul .stage .fill { flex: none; height: 460px; }
+  .controls .ch4-ro { margin-left: 0; }
+}

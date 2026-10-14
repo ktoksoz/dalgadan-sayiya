@@ -1,0 +1,62 @@
+/* Ortak demo bileşenleri */
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.84rem; color: var(--ink-2); }
+.legend i { display: inline-block; width: 16px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+
+/* sayısal göstergeler: kadran camının köşesindeki küçük okumalar */
+.readouts { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.readout { display: inline-flex; flex-direction: column; line-height: 1.1; }
+.readout .k { font-size: 0.76rem; color: var(--muted); }
+.readout .v { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.05rem; color: var(--ink); white-space: nowrap; }
+.readout.ci .v { color: var(--i); } .readout.cq .v { color: var(--q); }
+.readout.cph .v { color: var(--phase); } .readout.cn .v { color: var(--noise); } .readout.cr .v { color: var(--needle); }
+
+/* tuvalin üstünde yüzen bilgi kutusu */
+.float {
+  position: absolute; z-index: 2; pointer-events: none;
+  padding: 8px 12px; border-radius: var(--r-sm);
+  background: rgba(10, 20, 24, 0.78); border: 1px solid var(--line);
+  backdrop-filter: blur(4px);
+  font-size: 0.86rem; color: var(--ink-2);
+}
+.float.tl { left: 12px; top: 12px; } .float.tr { right: 12px; top: 12px; }
+.float.bl { left: 12px; bottom: 12px; } .float.br { right: 12px; bottom: 12px; }
+.float b { color: var(--ink); }
+
+.chip {
+  display: inline-block; padding: 1px 9px; border-radius: 3px; font-size: 0.8rem; font-weight: 700;
+  border: 1px solid var(--line-2); color: var(--ink-2);
+}
+.note-small { font-size: 0.8rem; color: var(--muted); }
+
+/* kapak */
+.cover .stage::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(14,26,31,.92) 0%, rgba(14,26,31,.7) 30%, rgba(14,26,31,0) 62%),
+    linear-gradient(0deg, rgba(14,26,31,.85) 0%, rgba(14,26,31,0) 45%);
+}
+@media (max-width: 860px) {
+  .cover .stage::after { background: linear-gradient(0deg, rgba(14,26,31,.95) 0%, rgba(14,26,31,.75) 55%, rgba(14,26,31,.2) 100%); }
+}
+/* renkli okumalarda etiket kalın olmasın (.ci/.cq/.cph metin sınıfları kalınlaştırır) */
+.readout .k { font-weight: 400; }
+
+/* kapak ve kapanış: kaynak kodu ve lisans bağlantıları (ikincil bilgi) */
+.cover-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 0.4rem; pointer-events: auto; }
+.cover-meta a {
+  display: inline-flex; align-items: center; gap: 7px; text-decoration: none;
+  font-size: 0.8rem; color: var(--ink-2);
+  padding: 4px 10px 4px 7px; border-radius: var(--r-sm); border: 1px solid var(--line); background: rgba(14, 26, 31, 0.6);
+  transition: border-color .15s, color .15s;
+}
+.cover-meta a:hover, .cover-meta a:focus-visible { color: var(--ink); border-color: var(--ink-2); }
+.cover-meta svg { width: 17px; height: 17px; }
+.cover-meta img { width: 18px; height: 18px; display: block; filter: invert(1) brightness(0.85); }
+.cover-meta .lic img + img { margin-left: -3px; }
+.cover-meta .lic span { margin-left: 3px; }
+.cover .license { margin: 0.6rem 0 0; font-size: 0.8rem; color: var(--muted); }
+/* dar ekranda kapak yazısı spektrum şeridinin altından başlasın */
+@media (max-width: 860px) {
+  .cover .cover-text { padding-top: max(170px, 22svh); }
+  .cover .stage { position: fixed; inset: 0 0 var(--bar-h) 0; }
+}

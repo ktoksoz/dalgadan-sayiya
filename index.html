@@ -1,0 +1,909 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dalgadan Sayıya</title>
+<meta name="author" content="Koray Toksöz">
+<meta name="description" content="Yazılım tanımlı radyo (SDR) ve IQ verisi, oynayarak: radyo dalgasından örneklemeye, I ve Q'dan spektruma, alıcının içinden modülasyona.">
+<meta name="theme-color" content="#0e1a1f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500..900&family=Atkinson+Hyperlegible+Next:ital,wght@0,400..800;1,400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=202610141823">
+<link rel="stylesheet" href="css/demos.css?v=202610141823">
+<link rel="stylesheet" href="css/demos-ch1.css?v=202610141823">
+<link rel="stylesheet" href="css/demos-ch2.css?v=202610141823">
+<link rel="stylesheet" href="css/demos-ch3.css?v=202610141823">
+<link rel="stylesheet" href="css/demos-ch4.css?v=202610141823">
+<link rel="stylesheet" href="css/demos-ch5.css?v=202610141823">
+<link rel="stylesheet" href="css/demos-ch6.css?v=202610141823">
+<link rel="stylesheet" href="css/demos-ch6b.css?v=202610141823">
+<link rel="stylesheet" href="css/demos-ch7.css?v=202610141823">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230e1a1f'/%3E%3Cpath d='M4 22h24' stroke='%23efe9dc' stroke-width='2'/%3E%3Cpath d='M8 22v-4M12 22v-6M16 22v-4M20 22v-6M24 22v-4' stroke='%23efe9dc' stroke-width='1.5'/%3E%3Cpath d='M17 6v20' stroke='%23ff4a3d' stroke-width='2.5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<main id="deck">
+<!-- ================= 0. KAPAK ================= -->
+<section class="slide center cover" data-chapter="0" data-demo="cover" data-title="Kapak" id="kapak">
+  <div class="stage bare"></div>
+  <div class="cover-text">
+    <h1>Dalgadan<br>sayıya</h1>
+    <p class="sub">Yazılım tanımlı radyo ve IQ verisi, oynayarak.</p>
+    <p>Arkada akan şey bir şelale ekranı: radyo bandının canlı haritası. Fareyi üzerinde gezdirin; bir istasyona gelince sesini duyarsınız. Bu yolculukta o istasyonun sesinin nasıl sayılara dönüştüğünü ve sayılardan yeniden sese nasıl döndüğünü adım adım göreceğiz.</p>
+    <p class="byline">Koray Toksöz</p>
+    <div class="cover-actions">
+      <button class="btn primary big" type="button" onclick="Narrator.start()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Sesli anlatımla başla
+      </button>
+      <button class="btn big ghost" type="button" onclick="Deck.next()">Kendi hızımda gez</button>
+    </div>
+    <p class="hint">Anlatımlı tur yaklaşık 18 dakika sürer ve slaytlar kendiliğinden ilerler; istediğiniz an durup deneylerle oynayabilirsiniz. Kendi hızınızda gezerken <kbd>→</kbd> ile ilerleyin.</p>
+    <div class="cover-meta">
+      <a class="gh-link" href="https://github.com/ktoksoz/dalgadan-sayiya" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>Kaynak kodu GitHub'da</span></a>
+      <a class="lic" href="https://creativecommons.org/licenses/by/4.0/deed.tr" target="_blank" rel="license noopener" title="İçerik: Creative Commons Atıf 4.0">
+        <img src="img/cc-cc.svg" alt="Creative Commons" width="22" height="22"><img src="img/cc-by.svg" alt="Atıf" width="22" height="22">
+        <span>İçerik CC BY 4.0 · Kod MIT</span>
+      </a>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>Arka plan canlı: 87,5–108 MHz FM bandı, hayalî istasyonlar. Fareyle bir istasyona gelince sesi çıkar (önce bir kez tıklamak gerekebilir: tarayıcılar sesi ancak bir dokunuştan sonra açar).</li>
+    <li>Yol haritası: dalga → örnekleme → IQ → spektrum → alıcının içi → modülasyon → gerçek dünya.</li>
+    <li>Kısayollar: N notlar, T metni gizle, O tüm slaytlar, F tam ekran, M sesi kapat, A anlatım.</li>
+  </ul></aside>
+</section>
+
+<!-- ================= 1. RADYO DALGASI ================= -->
+<section class="slide" data-chapter="1" data-demo="emSpectrum" id="spektrum">
+  <div class="text">
+    <h2>Görünmeyen ışık</h2>
+    <p class="lead">Radyo dalgası ile gözünüze ulaşan ışık aynı şeydir; tek fark saniyede kaç kez salındıkları.</p>
+    <p>İkisi de elektromanyetik dalgadır ve ışık hızıyla yol alır. Frekans yükseldikçe adları değişir: radyo, mikrodalga, kızılötesi, görünür ışık, morötesi, X ışını, gama. Gözümüz bu uzun şeridin yalnızca küçücük bir penceresini görür.</p>
+    <p>Radyo kısmı ise kalabalıktır: FM yayınları, uçak telsizleri, cep telefonları, Wi-Fi, GPS uyduları. Kesik çizgili alan, birkaç yüz liralık bir <strong>RTL-SDR</strong> alıcının ayarlanabildiği aralık.</p>
+    <details class="more"><summary>Daha fazla: frekans ve dalga boyu</summary>
+      <p>Frekans ile dalga boyu ters orantılıdır; çarpımları her zaman ışık hızıdır:</p>
+      <span class="formula">c = f · λ ≈ 3 · 10⁸ m/sn</span>
+      <p>Bu yüzden şeridin altındaki dalga boyu skalası üsttekinin tersine akar. 100 MHz'lik FM dalgası yaklaşık 3 m, 600 THz'lik yeşil ışık yaklaşık 500 nm uzunluğundadır. Radyo alt bantlarının adları (LF, MF, HF, VHF, UHF, SHF) ITU'nun on katlık dilimleridir.</p>
+    </details>
+    <p class="try"><b>FM</b> düğmesine basın ve FM bandına dokunun. Sonra şeridi sürükleyip ışığa kadar gidin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Şerit logaritmik: her çentik on kat. Sürükle = kaydır, tekerlek / iki parmak = yakınlaştır. Düğmeler: Tümü, Radyo, RTL-SDR, FM.</li>
+    <li>Bölge sınırları keskin değil (Wikipedia "Electromagnetic spectrum"): kızılötesi 300 GHz–400 THz, görünür ≈ 400–790 THz (380–750 nm), morötesi 10–400 nm, X ışını ile gama örtüşür.</li>
+    <li>Bantlar: FM 87,5–108 MHz; havacılık 108–137 MHz (108–117,975 seyrüsefer, 118–137 AM ses); GSM 900 880–915/925–960; DCS 1800 1710–1785/1805–1880; Wi-Fi 2400–2483,5 MHz ve Avrupa'da 5150–5350 + 5470–5725 MHz; GPS L1 1575,42 MHz; ADS-B 1090 MHz; ISM 433,05–434,79 MHz; Ku uydu TV 10,7–12,75 GHz; hidrojen çizgisi 1420,405 MHz; Iridium 1616–1626,5 MHz; 5G n78 3,3–3,8 GHz.</li>
+    <li>NOAA-18 6 Haziran, NOAA-19 13 Ağustos, NOAA-15 19 Ağustos 2025'te kapatıldı; 137 MHz'de Meteor-M (LRPT) sürüyor.</li>
+    <li>RTL-SDR kapsamı R820T/R820T2 ayarlayıcıya göre ≈ 24–1766 MHz (rtl-sdr.com). V3'ün doğrudan örnekleme modu ve V4'ün dahili yukarı çeviricisi HF'yi de (≈ 0,5–28,8 MHz) açar.</li>
+    <li>Olası soru: "Işık da radyo mu?" Fiziksel olarak evet, aynı Maxwell denklemleri. Ama algılama yöntemi farklı: radyoda anten + akım, ışıkta foton dedektörü.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="1" data-demo="wavelength" id="dalga-boyu">
+  <div class="text">
+    <h2>Frekans, dalga boyu ve anten</h2>
+    <p class="lead">Bir dalganın frekansını bilirseniz, boyunu ve onu yakalayacak antenin boyunu da bilirsiniz.</p>
+    <p>Dalga bir salınımı bitirene kadar ışık hızıyla yol alır; bu yol dalga boyudur. Frekans arttıkça bir salınım kısalır, dalga da kısalır: FM dalgası bir oda boyunda, Wi-Fi dalgası bir avuç içinde.</p>
+    <p>Anten, dalganın boyuyla uyumlu olduğunda en iyi çalışır. En basit anten, dalga boyunun dörtte biri uzunluğunda bir teldir: <strong>çeyrek dalga</strong> anten. Telefonunuzun içindeki antenler bu yüzden küçük, eski uzun dalga istasyonlarının direkleri bu yüzden devdir.</p>
+    <details class="more"><summary>Daha fazla: hesap</summary>
+      <span class="formula">λ = c / f &nbsp;&nbsp; anten ≈ λ / 4</span>
+      <p>100 MHz için λ = 299.792.458 / 100.000.000 ≈ 3,0 m, çeyrek dalga anten ≈ 75 cm. Gerçek antenler, telin kalınlığı ve uç etkisi yüzünden genellikle yüzde birkaç daha kısa kesilir.</p>
+      <p>"Dinle" bir benzetmedir: radyo dalgalarını duyamayız. Kaydırıcıyı sağa çektikçe ton, frekansla aynı oranda olmasa da tizleşir.</p>
+    </details>
+    <p class="try">Frekansı en sola, orta dalgaya çekin: dalga boyu yüzlerce metre olur. Sonra <b>Wi-Fi</b>'ye basın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Her şey gerçek ölçekte: cetvel, dalga, anten ve karşılaştırma nesnesi aynı metre/piksel oranıyla çiziliyor. Görünüm genişliği dalga boyuna göre 1-2-5 adımlarla değişir.</li>
+    <li>Örnek değerler: 999 kHz → 300 m (anten 75 m); 100 MHz → 3,0 m (75 cm); 1090 MHz → 27,5 cm (6,9 cm); 1575,42 MHz → 19,0 cm (4,8 cm); 2,44 GHz → 12,3 cm (3,1 cm).</li>
+    <li>Ölçek nesneleri yaklaşık: kalem ≈ 14 cm, telefon ≈ 15 cm, insan 1,75 m, otobüs 12 m, futbol sahası 105 m, Eyfel Kulesi 330 m.</li>
+    <li>Ses benzetmesi: 100 kHz → 110 Hz, 6 GHz → 1760 Hz, logaritmik (4 oktav). Ekrandaki "kat" oranı gerçek frekansın duyulan tona bölümüdür.</li>
+    <li>Olası soru: "Telefonum 900 MHz'de 8 cm'lik anten mi taşıyor?" Yaklaşık evet; telefonlarda antenler kıvrılmış, gövdeyi toprak düzlemi olarak kullanan çok bantlı yapılardır.</li>
+  </ul></aside>
+</section>
+
+<section class="slide wide" data-chapter="1" data-demo="timeline" id="tarih">
+  <div class="text">
+    <h2>Kıvılcımdan yazılıma</h2>
+    <p class="lead">160 yılda radyo bir kıvılcım aralığından cebinizdeki bir yazılıma dönüştü.</p>
+    <p>Önce kuram geldi, sonra deney, sonra telsiz telgraf. Radyonun her büyük adımı bir parçayı ucuzlattı ya da küçülttü; son adımda radyonun kendisi bir programa dönüştü. Olaylara dokunun ya da ibreyi skalada sürükleyin.</p>
+    <details class="more"><summary>Daha fazla: "yazılım tanımlı" ne demek?</summary>
+      <p>Klasik alıcıda ayar, süzme ve demodülasyon bobin, kondansatör ve diyotla yapılır. SDR'da anten sinyali olabildiğince erken sayılara çevrilir; gerisi program olur: <span class="formula">anten → (ayarlayıcı) → ADC → IQ sayıları → yazılım</span></p>
+    </details>
+    <p class="try"><b>Sonraki</b> düğmesiyle Hertz'in kıvılcımına geçin; odanın öbür ucundaki halkada çakan kıvılcıma bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Maxwell: "A Dynamical Theory of the Electromagnetic Field", Royal Society'de 8 Aralık 1864'te okundu, 1865'te yayımlandı.</li>
+    <li>Hertz: Karlsruhe, 1886–1889; anahtar kıvılcım gözlemi 1886 sonbaharı, makaleler 1887 ve 1888 (Annalen der Physik). İlk dipolü ≈ 50 MHz, parabolik ayna deneyleri ≈ 450 MHz (66 cm).</li>
+    <li>Marconi: denemeler 1894, İngiliz patenti başvurusu 2 Haziran 1896 (No. 12.039, kabul 1897). 12 Aralık 1901 Poldhu → Signal Hill, ≈ 3.500 km; "S" harfi kulakla duyuldu, kayıt yok, bazı tarihçiler hâlâ şüpheli. Frekans ölçülmedi, tahminen ≈ 500 kHz. Nobel 1909 (Braun ile).</li>
+    <li>Armstrong: süperheterodin 1918, ABD patenti 1.342.885 (8 Haziran 1920); Lévy'nin Fransız patenti 1917, Schottky 1918. FM patentleri 26 Aralık 1933, IRE sunumu Kasım 1935; W2XMN 1939'da tam güce çıktı (42,8 MHz, eski FM bandı).</li>
+    <li>Transistör: 16 Aralık 1947 ilk yükseltme, 23 Aralık yönetime gösterim; Nobel 1956. Regency TR-1: 18 Ekim 1954 duyuru, 1 Kasım 1954 satış, 49,95 $.</li>
+    <li>SpeakEasy I. aşama 1990–1995 (DARPA + ABD Hava Kuvvetleri, 2 MHz–2 GHz); II. aşama 4–400 MHz. Mitola: terim 1991, ilk IEEE makalesi 1992; "software radio" E-Systems'te 1984'te de geçer, "software defined radio" (Blust) 1995.</li>
+    <li>GNU Radio: Eric Blossom, John Gilmore'un 320 bin dolarlık desteği, 2001. USRP: Matt Ettus, Ettus Research 2004.</li>
+    <li>RTL-SDR: Eric Fry, Antti Palosaari ve Osmocom (Steve Markgraf), 2012 başı. 8 bit ADC; kararlı ≈ 2,4 MS/sn (2,56'ya kadar kayıpsız, 3,2 en üst ama kararsız).</li>
+    <li>Kaynaklar: en.wikipedia.org (Maxwell'in makalesi, Heinrich Hertz, Guglielmo Marconi, Edwin Howard Armstrong, Superheterodyne receiver, Regency TR-1, Software-defined radio, GNU Radio), computerhistory.org (point-contact transistor), rtl-sdr.com/about-rtl-sdr.</li>
+  </ul></aside>
+</section>
+
+<!-- ================= 2. ÖRNEKLEME ================= -->
+<section class="slide" data-chapter="2" data-demo="adc" id="adc">
+  <div class="text">
+    <h2>Dalgayı ölçmek: ADC</h2>
+    <p class="lead">Bilgisayar dalgayı göremez; yalnızca belli aralıklarla ölçülmüş sayıları görür.</p>
+    <p>Bu ölçümü <strong>ADC</strong> (analog-sayısal dönüştürücü) yapar. İki ayarı vardır: saniyede kaç kez ölçtüğü (örnekleme hızı) ve her ölçümü kaç basamakla yazdığı (bit derinliği).</p>
+    <p>Bit az olunca ölçüm en yakın basamağa yuvarlanır. Gerçek değerle yazılan değer arasındaki fark, yani <span class="cn">nicemleme hatası</span>, sinyale eklenmiş bir gürültü gibi davranır. Bit derinliğini düşürüp "Dinle"ye basın: o gürültüyü cızırtı olarak duyarsınız.</p>
+    <details class="more"><summary>Daha fazla: her bit 6 dB</summary>
+      <p>N bitlik bir ADC 2<sup>N</sup> seviye verir. Tam ölçekli bir sinüs için sinyal ile nicemleme gürültüsünün oranı:</p>
+      <span class="formula">SQNR ≈ 6,02 · N + 1,76 dB</span>
+      <p>Ekrandaki "ölçülen" değer, 65.536 örneklik bir sinüs gerçekten nicemlenip hatanın gücü ölçülerek hesaplanır. 1–2 bitte formül tutmaz, çünkü hata artık rastgele bir gürültü gibi değil, sinyale bağlı bir bozulma gibi davranır. RTL-SDR 8 bitlik bir ADC kullanır: kuramsal üst sınır yaklaşık 50 dB.</p>
+    </details>
+    <p class="try">Bit derinliğini 1'e indirin, sonra yavaşça 8'e çıkarın; gri hata çubuklarının küçülüşüne bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Ekranda 440 Hz'lik ton, iki periyot. İnce fildişi çizgi gerçek dalga, kalın merdiven ADC'nin verdiği değerler (tut-bekle), gri çizgiler her örneğin nicemleme hatası.</li>
+    <li>Nicemleyici orta-yükselen (mid-rise), −1…+1 aralığı 2<sup>N</sup> eşit dilim. 8 seviyeye kadar her seviyenin ikili kodu yazılır.</li>
+    <li>Ölçülen SQNR (demonun hesapladığı): 1 bit 6,4 dB, 2 bit 12,8 dB, 4 bit 25,3 dB, 8 bit 49,8 dB, 12 bit 74,0 dB, 16 bit 98,1 dB; formül 7,8 / 13,8 / 25,8 / 49,9 / 74,0 / 98,1 dB.</li>
+    <li>"Dinle": kaynak (ton ya da Neşeye Övgü melodisi) seçilen hızda tutulur ve nicemlenir. Düşük örnekleme hızında ses boğuklaşır ve madenîleşir: basit DAC'ın (tut-bekle) imgeleri. Sonraki slayt örtüşmeyi ayrıca gösterir.</li>
+    <li>Olası soru: "CD kaç bit?" 16 bit, 44,1 kHz: ≈ 98 dB.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="2" data-demo="nyquist" id="nyquist">
+  <div class="text">
+    <h2>Nyquist sınırı ve örtüşme</h2>
+    <p class="lead">Çok seyrek ölçerseniz, hızlı bir dalga size yavaş bir dalga gibi görünür.</p>
+    <p>Bir dalgayı tanımak için her salınımda en az iki kez ölçmek gerekir. Bu yüzden örnekleme hızının yarısı bir sınırdır: <strong>Nyquist sınırı</strong>.</p>
+    <p>Sinyal bu sınırı geçince noktalar <span class="alias-c">sahte, daha yavaş bir dalga</span> çizmeye başlar. Buna <strong>örtüşme</strong> denir. Alttaki diyagram frekansın sınıra çarpıp geri katlandığını gösterir: sinyal ne kadar hızlanırsa hızlansın, görünen frekans hep sıfır ile sınır arasında kalır.</p>
+    <details class="more"><summary>Daha fazla: görünen frekans</summary>
+      <span class="formula">f<sub>görünen</sub> = | f − k · f<sub>s</sub> |, &nbsp; k = en yakın tam sayı (f / f<sub>s</sub>)</span>
+      <p>8 kHz örneklemede 7 kHz'lik ton 1 kHz gibi, 9 kHz'lik ton da yine 1 kHz gibi görünür. Örneklerden bakarak ikisini ayırmanın yolu yoktur. Bu yüzden ADC'nin önüne, sınırın üstünü kesen bir örtüşme önleyici filtre konur.</p>
+    </details>
+    <p class="try">"Dinle"yi açıp <b>Süpür</b>'e basın: ton tizleşirken 4 kHz'de geri dönüp pesleşir.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>İnce fildişi: gerçek dalga. Noktalar: örnekler. Pirinç rengi: örneklerden geri kurulabilecek tek dalga (ideal DAC'ın çıkışı). Sınırın altında ikisi üst üste biner.</li>
+    <li>"Dinle" ideal geri kurulumu çalar: örnekleri ideal bir DAC'tan geçirseydik duyacağımız ton. Süpürme 200 Hz'den 2,2 × fs'ye 7 saniyede gider.</li>
+    <li>Katlanma diyagramındaki üçgen dalga, spektrumun fs/2 çizgisinde "akordeon gibi" katlanmasıdır. IQ ile örneklemede (sonraki bölüm) pencere −fs/2…+fs/2 olur ve işaret de korunur.</li>
+    <li>Olası soru: "Tam fs/2'de ne olur?" Örnekler fazına göre ya tepe ya sıfır yakalar; güvenilir değildir. Pratikte sınırın biraz altında kalınır.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="2" data-demo="wagonWheel" id="vagon-tekerlegi">
+  <div class="text">
+    <h2>Geriye dönen tekerlek</h2>
+    <p class="lead">Filmlerde arabanın tekerleği bazen durur, bazen geriye döner. Bu da örtüşmedir.</p>
+    <p>Kamera saniyede belli sayıda kare çeker: tekerleği <em>örnekler</em>. İki kare arasında bir kol tam bir kol aralığı kadar dönerse, her karede kollar aynı yerde görünür ve tekerlek durmuş sanılır. Biraz eksik dönerse kollar her karede biraz geride yakalanır: tekerlek geriye döner gibi görünür.</p>
+    <p>Sağdaki kamera görüntüsü ile alttaki grafik, önceki slayttaki katlanmanın aynısıdır; yalnızca bu sefer gözle görülür.</p>
+    <details class="more"><summary>Daha fazla: görünen hız</summary>
+      <span class="formula">adım = tur/sn ÷ kare/sn; &nbsp; görünen adım = adım − k · (1/K)</span>
+      <p>K kollu tekerlek her 1/K turda kendine benzer; k, adımı −1/(2K)…+1/(2K) aralığına getiren tam sayıdır. 24 kare/sn ve 6 kolda tekerlek 4 tur/sn'de durur gibi görünür. Grafikte işaretin korunduğuna dikkat: kamera dönüş yönünü görebiliyor. IQ verisi de radyoda aynı şeyi sağlar.</p>
+    </details>
+    <p class="try">Tekerlek hızını 4 tur/sn'ye çıkarın, sonra biraz geri çekin: kameradaki tekerlek geriye dönsün.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Soldaki tekerlek "göz": ekranın her karesinde o sürede taranan açı bulanık çizilir; sağdaki yalnızca kameranın kare anlarını gösterir. Film şeridi son kareleri sıralar.</li>
+    <li>24 kare/sn, 6 kol: 4 tur/sn'de durur, 3,8'de geri (−0,2 tur/sn), 4,2'de yavaş ileri. 1 kol seçilirse 24 tur/sn'ye kadar yön doğru görünür (grafik sınırı 10).</li>
+    <li>"Dinle": her kol tepeden geçerken bir tık (tiz), kamera her kare çektiğinde bir deklanşör tıkı (pes). Tekerlek durmuş göründüğünde iki ritim aynı hızda çalar.</li>
+    <li>Gerçek dünyada: floresan lambalı ortamda dönen pervaneler, helikopter pervanesi videoları. Ekranınızın tazeleme hızı da bir örnekleme; çok hızlı tekerleği burada da bulanık çiziyoruz ki ekranın kendi örtüşmesi karışmasın.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="2" data-demo="hundredMHz" id="100mhz">
+  <div class="text">
+    <h2>100 MHz'i nasıl örnekleriz?</h2>
+    <p class="lead">100 MHz'lik bir FM yayınını doğrudan örneklemek için saniyede 200 milyondan fazla ölçüm gerekir.</p>
+    <p>Bu, 8 bitle bile saniyede yüzlerce megabayt demek: bir dakikalık kayıt onlarca gigabayt. Oysa ucuz bir <strong>RTL-SDR</strong> saniyede yalnızca yaklaşık 2,4 milyon örnek alır. Örnekleme hızını o değere çekin: noktalar 100 MHz'i çok uzaktan, sahte bir dalga olarak görür.</p>
+    <p>Hile şu: bütün banda değil, yalnızca dinlemek istediğimiz dar şeride ihtiyacımız var. Radyo önce o şeridi 0 Hz'e kaydırır, sonra örnekler. Bunun için her ölçümde iki sayı gerekir: <span class="ci">I</span> ve <span class="cq">Q</span>. Bir sonraki bölümün konusu tam olarak bu.</p>
+    <details class="more"><summary>Daha fazla: veri hızı</summary>
+      <span class="formula">veri hızı = f<sub>s</sub> × bit ÷ 8 &nbsp; bayt/sn</span>
+      <p>250 MS/sn × 8 bit = 250 MB/sn; bir dakika 15 GB. IQ ile 2,4 MS/sn × 2 sayı × 8 bit = 4,8 MB/sn; USB 2.0'ın kuramsal 480 Mbit/sn (60 MB/sn) sınırının rahatça altında.</p>
+    </details>
+    <p class="try"><b>RTL-SDR hızı</b>'na basın, sonra <b>İpucu</b>'yu açıp istasyonun 0 Hz'e kaymasını izleyin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Göstergeler hesaplanır: veri hızı = örnekleme hızı × bit ÷ 8 (tek gerçek kanal, sıkıştırmasız); 1 dakika = 60 ×.</li>
+    <li>RTL-SDR: 8 bit ADC, kararlı ≈ 2,4 MS/sn (rtl-sdr.com: 2,56 MS/sn'ye kadar örnek kaybı yok, en çok 3,2 MS/sn ama kararsız). IQ çifti başına 2 bayt → 4,8 MB/sn.</li>
+    <li>USB 2.0: 480 Mbit/sn kuramsal (60 MB/sn), pratikte daha az. USB 3.0: 5 Gbit/sn (625 MB/sn).</li>
+    <li>"Dinle": örneklerin çizdiği dalga 100.000 kat yavaşlatılmış (100 MHz → 1000 Hz). Örnekleme hızını düşürdükçe ton, örtüşmenin keyfine göre zıplar.</li>
+    <li>Doğrudan örnekleme yapan cihazlar da var (ör. yüksek hızlı ADC'li alıcılar, RTL-SDR V3'ün HF modu), ama uygun fiyatlı alıcıların çoğu önce aşağı kaydırır (süperheterodin fikri!).</li>
+    <li>Köprü cümlesi: "Peki 0 Hz'e kaydırınca neden iki sayı gerekiyor? Çünkü artık +f ile −f'i ayırmamız lazım; tıpkı tekerleğin yönü gibi."</li>
+  </ul></aside>
+</section>
+
+<!-- ================= 3. KARMAŞIK SİNYAL: I VE Q ================= -->
+<section class="slide" data-chapter="3" data-demo="phasor" data-title="Dönen ok" id="fazor">
+  <div class="text">
+    <h2>Dönen ok</h2>
+    <p class="lead">Radyodaki her sinyali sabit hızla dönen bir ok gibi düşünebiliriz. Oku doğrudan göremeyiz, ama gölgelerini ölçebiliriz.</p>
+    <p>Oka tepeden bir el feneri tutun: yere düşen gölge sağa sola gidip gelir. Bu gölgeye <span class="ci">I</span> diyoruz. Yandan tutulan ikinci fener duvara bir gölge düşürür; o da aşağı yukarı gider gelir. Bu da <span class="cq">Q</span>.</p>
+    <p>İki gölgeyi zaman içinde kaydedince iki dalga çıkar: yerdeki gölge aşağı akan mavi dalgayı, duvardaki gölge sağa akan kehribar dalgayı yazar. İkisi aynı dalgadır, yalnızca çeyrek tur kaymıştır. Okun boyu <span class="camp">genlik</span>, açısı <span class="cph">faz</span>.</p>
+    <details class="more"><summary>Daha fazla: kosinüs, sinüs ve Euler</summary>
+      <p>Okun boyu A, açısı 2πft ise iki gölge şöyle yazılır (f, saniyedeki tur sayısı, yani Hz):</p>
+      <span class="formula">I = A·cos(2πft) &nbsp;&nbsp; Q = A·sin(2πft)</span>
+      <p>Matematikte ok tek bir karmaşık sayıdır: I gerçek kısım, Q sanal kısım. Euler formülü ikisini birleştirir:</p>
+      <span class="formula">e<sup>jθ</sup> = cos θ + j·sin θ &nbsp;⇒&nbsp; x(t) = A·e<sup>j2πft</sup> = I + jQ</span>
+    </details>
+    <p class="try">Frekansı artırın: ok hızlanır, iki dalga sıklaşır. Sonra «Duraklat» ile oku durdurup gölgelerin boyuna bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>I: in-phase (eş fazlı), Q: quadrature (dik fazlı, yani 90° kaymış). Adlar alıcının iki koluna verilen geleneksel adlardır.</li>
+    <li>Gölge benzetmesi tam doğru bir izdüşümdür: I okun yatay eksene, Q dikey eksene izdüşümü.</li>
+    <li>Bu bölümden sonra mavi her yerde I, kehribar her yerde Q, fildişi genlik (okun kendisi), nane faz demektir. Takımyıldıza kadar değişmez.</li>
+    <li>«Dinle» açıkken frekans sesin perdesine eşlenir: ok hızlandıkça ses incelir. (Gerçek radyo frekansları duyulamayacak kadar yüksektir; bu yalnızca bir eşleme.)</li>
+    <li>Olası soru: «Neden tek dalga yetmiyor?» Cevap iki slayt sonra: yön bilgisi.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="3" data-demo="helix" data-title="Zamanda bir yay" id="sarmal">
+  <div class="text">
+    <h2>Zamanda bir yay</h2>
+    <p class="lead">Dönen oku zaman boyunca ilerletin: ucu havada bir yay, bir sarmal çizer. Karmaşık bir sinyal tam olarak budur.</p>
+    <p>Sarmalı fareyle ya da parmağınızla sürükleyip döndürün. Tepedeki fener zemine mavi bir gölge düşürür: <span class="ci">I</span> dalgası. Yandaki fener arka duvara kehribar bir gölge düşürür: <span class="cq">Q</span> dalgası.</p>
+    <p>Üstten bakan yalnızca I'yı, yandan bakan yalnızca Q'yu görür. Zaman ekseni boyunca önden bakınca sarmal bir çembere döner: önceki slayttaki dönen ok. Bir IQ kaydı, bu yayın art arda alınmış fotoğraflarıdır.</p>
+    <details class="more"><summary>Daha fazla: üç boyutlu bir eğri</summary>
+      <p>Sarmalın her noktası bir (zaman, I, Q) üçlüsüdür:</p>
+      <span class="formula">( t, &nbsp;A·cos 2πft, &nbsp;A·sin 2πft )</span>
+      <p>Frekans negatif olsaydı sarmal ters yöne bükülürdü; sağ ve sol vida gibi. Tek bir gölgeye bakarak bu iki vidayı ayırt edemezsiniz. Çizim kütüphanesiz bir dik izdüşümle yapılıyor: her nokta kameranın «sağ» ve «yukarı» yönlerine izdüşürülüyor.</p>
+    </details>
+    <p class="try">Sarmalı sürükleyip döndürün, sonra «Önden bak», «Üstten bak» ve «Yandan bak» düğmelerini deneyin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Zaman ekseni sağa doğru akıyor; en uçtaki ok «şimdi»yi gösterir. Sarmal vida gibi ilerler.</li>
+    <li>Zemin (mavi) üstteki fenerin, arka duvar (kehribar) yandaki fenerin gölgesi; birinci slayttaki fenerlerle aynı düzen.</li>
+    <li>Geometri gereği: Q yukarı çizildiği için üstten bakış I'yı, yandan bakış Q'yu gösterir.</li>
+    <li>Uç duvardaki kesikli fildişi çember, önden bakışın gölgesidir: genlik sabitse çember.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="3" data-demo="whyTwo" data-title="Neden iki sayı?" id="neden-iki">
+  <div class="text">
+    <h2>Neden iki sayı?</h2>
+    <p class="lead">Yalnızca yerdeki gölgeye, yani <span class="ci">I</span>'ya bakan biri okun hangi yöne döndüğünü söyleyemez.</p>
+    <p>Saat yönünün tersine dönen ok ile saat yönünde dönen ok aynı I gölgesini düşürür. Yani +f ve −f frekansları I'da birebir aynı görünür. <span class="cq">Q</span> gölgesi ise ikisinde ters yöne gider; yönü o söyler.</p>
+    <p>Sonucu spektrumda (frekans haritasında) görürsünüz: Q kapalıyken her sinyalin bir ayna görüntüsü belirir ve bandın iki yarısı üst üste katlanır. Q açıkken −f ile +f ayrı yerlerdir; aynı örnekleme hızıyla iki kat geniş bir bant ayırt edilir.</p>
+    <details class="more"><summary>Daha fazla: negatif frekans</summary>
+      <p>Gerçek bir kosinüs, zıt yönde dönen iki yarım boy okun toplamıdır; Q'ları birbirini götürür:</p>
+      <span class="formula">cos(2πft) = ½·e<sup>j2πft</sup> + ½·e<sup>−j2πft</sup></span>
+      <p>Bu yüzden Q kapalıyken spektrumda iki tepe çıkar, her biri yarım genlikte, yaklaşık −6 dB. «Dinle», sinyali 600 Hz'lik bir taşıyıcıya bindirir: x(t) = I·cos(2π·600t) − Q·sin(2π·600t). Q açıkken +f sesi inceltir, −f kalınlaştırır; Q kapalıyken ikisi birden duyulur.</p>
+    </details>
+    <p class="try">Frekansı + ile − arasında gezdirin, sonra «Q bileşeni» düğmesiyle Q'yu kapatıp spektruma bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Spektrum her karede gerçekten hesaplanıyor (512 noktalı FFT, Hann penceresi); okunan dB değerleri ölçüm.</li>
+    <li>Gerçek (tek kanallı) örnekleme yapan alıcılar bu yüzden bandın yalnızca yarısını kullanabilir: fs örnek/sn ile 0…fs/2. IQ ile −fs/2…+fs/2, toplam fs genişlik.</li>
+    <li>RTL-SDR'nin 2,4 MS/sn'si bu sayede yaklaşık 2,4 MHz'lik bir pencere demek (kenarlarda filtre kaybı var).</li>
+    <li>Dinle'de duyulan şey, karıştırıcının (mixer) tam tersi: IQ'yu bir taşıyıcıya yükseltmek. Q kapalıyken iki yan bant birden çıkar.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="3" data-demo="ampPhase" data-title="Genlik ve faz" id="genlik-faz">
+  <div class="text">
+    <h2>Genlik ve faz</h2>
+    <p class="lead">Bir IQ çifti düzlemde tek bir noktadır. Bu nokta iki şey söyler: sinyal ne kadar güçlü ve şu an hangi yöne bakıyor.</p>
+    <p>Bir döner kapı düşünün. Kanadın merkezden ne kadar uzağa uzandığı <span class="camp">genlik</span>, kanadın baktığı pusula yönü <span class="cph">faz</span>. <span class="ci">I</span> ve <span class="cq">Q</span> ise aynı bilginin «doğu–batı» ve «kuzey–güney» parçalarıdır.</p>
+    <p>Noktayı merkezden uzaklaştırınca dalga büyür. Çember boyunca çevirince dalganın boyu değişmez, yalnızca zamanda kayar. Radyonun taşıdığı her bilgi bu ikisinin oynatılmasıdır: AM genliği, FM ve dijital yayınların çoğu fazı oynatır.</p>
+    <details class="more"><summary>Daha fazla: formüller</summary>
+      <span class="formula">A = √(I² + Q²) &nbsp;&nbsp; φ = atan2(Q, I)</span>
+      <span class="formula">x(t) = I·cos(2πft) − Q·sin(2πft) = A·cos(2πft + φ)</span>
+      <p>atan2, açıyı dört çeyrekte de doğru veren arktanjanttır. Sağdaki üç dalga bu eşitliğin kendisidir: mavi ile kehribarın toplamı fildişi dalgayı verir. Tersine, alıcı havadaki x(t)'yi cos ve −sin ile çarpıp süzerek I ve Q'yu geri çıkarır.</p>
+    </details>
+    <p class="try">Noktayı sürükleyin: önce merkezden uzaklaştırıp dalganın büyüdüğüne, sonra çember boyunca çevirip kaydığına bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Fildişi ok genlik, nane yay faz. Takımyıldızlarda (QPSK, QAM) her nokta tam olarak böyle bir (genlik, faz) çiftidir.</li>
+    <li>«Döndür» noktayı sabit hızla çevirir: faz sürekli artarsa bu bir frekans kaymasıdır. FM'in ve «dönen takımyıldız»ın özü.</li>
+    <li>«Dinle»: genlik sesin gürlüğünü değiştirir; faz tek başına duyulmaz. Kulak mutlak fazı ayırt edemez, ama alıcı edebilir.</li>
+    <li>Olası soru: «Neden eksi sinüs?» Çünkü Q pozitifken (ok yukarı bakarken) dalga ileri kayar; cos(a + b) açılımından gelir.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="3" data-demo="iqFile" data-title="IQ dosyası nedir?" id="iq-dosyasi">
+  <div class="text">
+    <h2>IQ dosyası nedir?</h2>
+    <p class="lead">Bir SDR kaydı art arda dizilmiş IQ çiftlerinden ibarettir. Başlık yok, süs yok; yalnızca sayılar.</p>
+    <p>RTL-SDR'nin <code>.cu8</code> dosyasında her örnek iki bayttır: önce <span class="ci">I</span>, sonra <span class="cq">Q</span>. Her bayt 0 ile 255 arasındadır ve sıfır tam ortada, 127,5'tedir. Çözmek için ortayı çıkarıp 127,5'e bölmek yeter; sonuç −1 ile +1 arasında bir sayıdır.</p>
+    <p>Dosya kendi örnekleme hızını ve frekansını bilmez; bunları ayrıca not etmek gerekir. SigMF bunun için var: ham baytların yanına küçük bir JSON dosyası koyar.</p>
+    <details class="more"><summary>Daha fazla: biçimler ve SigMF</summary>
+      <ul>
+        <li><b>cu8</b>: 8 bit işaretsiz (RTL-SDR, <code>rtl_sdr</code>). <b>cs8</b>: 8 bit işaretli (HackRF, <code>hackrf_transfer</code>), yine 2 bayt.</li>
+        <li><b>cs16</b>: 16 bit işaretli tamsayı, 4 bayt. <b>cf32</b>: 32 bit kayan noktalı sayı, 8 bayt (GNU Radio'nun karmaşık türü).</li>
+      </ul>
+      <span class="formula">boyut = örnekleme hızı × süre × örnek başına bayt</span>
+      <p>SigMF kaydı iki dosyadır: <code>.sigmf-data</code> (ham baytlar) ve <code>.sigmf-meta</code>:</p>
+      <span class="formula">{ "global": { "core:datatype": "cu8", "core:sample_rate": 2400000,<br>&nbsp;&nbsp;"core:version": "1.2.6" },<br>&nbsp;&nbsp;"captures": [ { "core:sample_start": 0, "core:frequency": 100100000 } ] }</span>
+    </details>
+    <p class="try">«Sonraki örneği çöz»e basın ya da baytların üzerine gelin; sonra HackRF'i seçip bir saatlik kaydın boyutuna bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Baytlar gerçekten üretiliyor: dönen bir ton (örnek başına 0,043 tur, genlik 0,8) + az gürültü, cu8 olarak nicemlendi. Noktalar bu yüzden çember üzerinde döner.</li>
+    <li>RTL2832U'nun kuramsal üst sınırı 3,2 MS/sn; sıradan USB denetleyicilerde örnek kaçırmadan test edilen en yüksek hız 2,4 MS/sn (osmocom rtl-sdr wiki). HackRF One 2–20 MS/sn, 8 bit I ve 8 bit Q (Great Scott Gadgets belgeleri).</li>
+    <li>2,4 MS/sn cu8: saniyede 4,8 MB, saatte 17,28 GB. HackRF 20 MS/sn ile saatte 144 GB. Bu yüzden genellikle kısa kayıt alınır ya da hemen azaltılır (decimation).</li>
+    <li>SigMF: açık bir standart (sigmf.org, sürüm 1.2.x). Veri türü adları: cu8, ci8, ci16_le, cf32_le…</li>
+  </ul></aside>
+</section>
+
+<!-- ================= 4. SPEKTRUM VE ŞELALE ================= -->
+<section class="slide" data-chapter="4" data-demo="fourier" id="fourier">
+  <div class="text">
+    <h2>Her sinyal dönen okların toplamı</h2>
+    <p class="lead">Köşeli bir kare dalga bile, farklı hızlarda dönen okların uç uca eklenmesiyle çizilebilir.</p>
+    <p>Joseph Fourier 1807'de ısının yayılmasını incelerken cesur bir fikir ortaya attı: düzenli tekrar eden her biçim, frekansları temel frekansın tam katları olan sinüslerin toplamıdır. Bu katlara <strong>harmonik</strong> denir.</p>
+    <p>Soldaki ilk ok temel frekansla döner; sonrakiler onun tam katı hızlarda ve gittikçe kısalarak. Son okun ucunun yüksekliği dalgayı çizer. Alttaki çubuklar okların boylarıdır: dalganın <strong>spektrumu</strong>.</p>
+    <details class="more"><summary>Daha fazla: Fourier serisi</summary>
+      <span class="formula">kare(t) = (4/π)·[sin ωt + sin 3ωt / 3 + sin 5ωt / 5 + …]</span>
+      <span class="formula">testere(t) = (2/π)·[sin ωt − sin 2ωt / 2 + sin 3ωt / 3 − …]</span>
+      <span class="formula">üçgen(t) = (8/π²)·[sin ωt − sin 3ωt / 9 + sin 5ωt / 25 − …]</span>
+      <p>Sıçramanın yanındaki küçük taşma, terim eklendikçe daralır ama yok olmaz: sıçramanın yaklaşık %9'u (Gibbs olayı). Üçgenin harmonikleri 1/k² ile söndüğü için çok daha çabuk yakınsar; kulağa da yumuşak gelir.</p>
+    </details>
+    <p class="try">Harmonik sayısını 1'den 50'ye çıkarın. Sonra "Dinle"yi açıp aynısını kulakla yapın: her harmonik sesi biraz daha parlatır.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Fourier, ısının katılarda yayılması üzerine çalışmasını 21 Aralık 1807'de Paris Enstitüsü'ne sundu; kitabı <em>Théorie analytique de la chaleur</em> 1822'de yayımlandı (Vikipedi: Joseph Fourier).</li>
+    <li>Gibbs olayı: sıçramada kısmi toplam, sıçramanın yaklaşık %8,95'i kadar taşar; terim sayısı artınca taşma daralır ama küçülmez. Ekrandaki "tepe aşımı" bu değeri canlı ölçer (50 terimde ≈ %8,9). İlk kez Wilbraham 1848'de fark etti.</li>
+    <li>Kulak bağlantısı: aynı notayı çalan keman ile flütün farkı harmoniklerin oranıdır (tını). Kare dalga yalnızca tek harmoniklerden oluşur, testere tümünden; bu yüzden testere daha "vızıltılı" duyulur.</li>
+    <li>Köprü: IQ'da oklar iki yöne de dönebilir (negatif frekans). FFT, bir tampondaki sinyali tam olarak bu okların toplamına ayırır; sonraki slayt.</li>
+    <li>Olası soru: "Periyodik olmayan sinyaller?" Fourier dönüşümü sürekli bir frekans yelpazesine genelleştirir; FFT ise sonlu bir parçayı periyodikmiş gibi ele alır (sızıntının kaynağı).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="4" data-demo="fft" id="fft">
+  <div class="text">
+    <h2>FFT: zamandan frekansa</h2>
+    <p class="lead">FFT (hızlı Fourier dönüşümü) N örneklik bir tamponu alır ve hangi hızda dönen okların ne kadar güçlü olduğunu N frekans kutusuna dağıtır.</p>
+    <p>Üstte zaman alanı: tamponun <span class="ci">I</span> ve <span class="cq">Q</span> bileşenleri. Altta aynı tamponun spektrumu. Her kutunun genişliği örnekleme hızının FFT boyuna bölümüdür: N büyüdükçe kutular daralır ama daha uzun bir zaman dilimi gerekir.</p>
+    <p>Tampon, akan sinyalden kesilmiş bir parçadır. Ton bir kutunun tam ortasına düşmezse kesik uçlar enerjiyi komşu kutulara saçar: <strong>spektral sızıntı</strong>. Pencere fonksiyonu uçları yumuşakça sıfıra indirerek bunu bastırır.</p>
+    <details class="more"><summary>Daha fazla: DFT ve kutu genişliği</summary>
+      <span class="formula">X[k] = Σ x[n]·e<sup>−j2πkn/N</sup>,  n = 0 … N−1</span>
+      <span class="formula">Δf = fs / N        (2,4 MS/sn, N = 1024 → 2,34 kHz)</span>
+      <p>Her X[k], sinyali k. kutunun hızında ters yöne döndürüp toplar: o hızda dönen bir ok varsa toplam büyür, yoksa birbirini götürür. Doğrudan hesap N² işlem ister; Cooley ve Tukey'in 1965 algoritması N·log₂N ile yapar: 4096 noktada yaklaşık 340 kat daha az. Hann penceresinin en yüksek yan lobu −31 dB, Blackman'ınki −58 dB; bedeli daha geniş bir tepe.</p>
+    </details>
+    <p class="try">İnce ayarı +0,5 kutuya kaydırın: dikdörtgen pencerede tonun etekleri yayılır ve zayıf ton kaybolur. Sonra Hann'a geçin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Örnekleme hızı 2,4 MS/sn (RTL-SDR'larda yaygın bir ayar). Sinyal: −3 dBFS bir ton, 420 kHz'de −70 dBFS zayıf bir ton ve −75 dBFS gürültü. Ekrandaki tüm sayılar her karede ölçülür.</li>
+    <li>Ton kutular arasına düşünce tepe de alçalır (ölçek kaybı, "scalloping"): dikdörtgende ≈ 3,9 dB, Hann'da ≈ 1,4 dB. "Tepe" okumasında görülür.</li>
+    <li>"10 kutu ötede" okuması sızıntının ölçüsüdür (N = 1024, tepeye göre, ölçülen): kutu ortasında her pencerede gürültüye iner (≈ −100 dB); kutular arasında dikdörtgende ≈ −26 dB'ye çıkar, Hann'da ≈ −70 dB, Blackman'da ≈ −78 dB kalır.</li>
+    <li>FFT boyunu iki katına çıkarmak kutu başına gürültüyü ≈ 3 dB düşürür (kutu yarıya iner); ton aynı kalır. Bu "işleme kazancı" zayıf sinyalleri FFT'de görünür kılar. Ortalama ise gürültünün dalgalanmasını azaltır, tabanı aşağı indirmez.</li>
+    <li>Olası soru: "Neden hep Hann değil?" Dikdörtgen, kutu ortasına oturan tonlarda en dar tepeyi verir; ölçüm cihazları amaca göre pencere seçer (ör. genlik ölçümü için düz tepeli pencere).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="4" data-demo="desibel" id="desibel">
+  <div class="text">
+    <h2>Desibel</h2>
+    <p class="lead">Radyoda güçlü bir istasyon, zayıf olandan milyon kat güçlü olabilir. İkisini aynı cetvelde göstermenin yolu logaritmadır.</p>
+    <p>Doğrusal ölçekte en güçlü sinyal ekranı doldurur; ondan milyon kat zayıf olan sıfırdan ayırt edilemez. Desibel ise oranları sayar: her 10 dB on kat güç demektir. Böylece 60 dB'lik fark ekranda birkaç ızgara çizgisine sığar.</p>
+    <p>SDR'da düzeyler çoğunlukla <strong>dBFS</strong> ile verilir: ADC'nin tam ölçeğine göre desibel. 0 dBFS ulaşılabilecek en yüksek düzeydir, gerisi eksidir. Hiç sinyal yokken görülen düzey <strong>gürültü tabanıdır</strong>.</p>
+    <details class="more"><summary>Daha fazla: dB hesabı</summary>
+      <span class="formula">dB = 10·log₁₀(P₁ / P₂)        genlik için: 20·log₁₀(A₁ / A₂)</span>
+      <table class="ch4-db">
+        <tr><th>Fark</th><td>+3 dB</td><td>+6 dB</td><td>+10 dB</td><td>+20 dB</td><td>+30 dB</td><td>+60 dB</td><td>−3 dB</td></tr>
+        <tr><th>Güç</th><td>≈ 2 kat</td><td>≈ 4 kat</td><td>10 kat</td><td>100 kat</td><td>1.000 kat</td><td>1 milyon kat</td><td>≈ yarısı</td></tr>
+      </table>
+      <p>Güç genliğin karesi olduğu için genlik oranında katsayı 20'dir. Bel, Alexander Graham Bell'in onuruna adlandırıldı; desibel onda biridir.</p>
+    </details>
+    <p class="try">"Desibel"e geçip zayıf istasyonun ortaya çıkışını izleyin. Sonra A ve B işaretçilerini sürükleyip aradaki farkı okuyun.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Güçlü istasyon −10 dBFS (AM, müzik), zayıf olan varsayılan −70 dBFS (dar bant FM, konuşma). Taşıyıcılar arasındaki fark ≈ 60 dB, yani ≈ milyon kat güç. İşaretçiler en yakın tepeye oturur ve değerleri ölçer.</li>
+    <li>Doğrusal ölçekte zayıf istasyon, tepesi güçlü olanın yüzde birkaçına çıkınca (≈ −35 dBFS ve üstü) bir çıkıntı olarak seçilir; dB ölçeğinde gürültü tabanının (≈ −108 dBFS, kutu başına) üstündeki her şey görünür.</li>
+    <li>"Dinle", iki istasyonun içeriğini gerçek güç oranlarıyla karıştırır: 60 dB aşağıdaki konuşma duyulmaz. Kulak da logaritmik çalışır; ses düzeyi de dB ile ölçülür.</li>
+    <li>Kaynak: Vikipedi "Decibel" (bel, Bell'in onuruna; terim 1929'da Bell System Technical Journal'da duyuruldu).</li>
+    <li>Olası soru: "dBm nedir?" 1 miliwatta göre güç. dBFS ise mutlak güç değil, ADC'nin tam ölçeğine göre orandır; aynı anten sinyali kazanç ayarına göre farklı dBFS verir.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="4" data-demo="selale" id="selale">
+  <div class="text">
+    <h2>Şelale ekranı</h2>
+    <p class="lead">Spektrum anlık bir fotoğraftır. Şelale bu fotoğrafları renge çevirip üst üste dizer ve zamanı görünür kılar.</p>
+    <p>Her satır bir FFT'dir: yatay eksen frekans, renk güç. Yeni satır en üste eklenir, eskiler aşağı akar. Sürekli istasyonlar dikey şeritler bırakır; kısa yayınlar kesik izler: telsizde biri konuşup susar, bir kumanda paket gönderir, Mors noktalı bir yol çizer.</p>
+    <p>Tek bir spektrumda gürültüye karışan zayıf bir yayın, şelalede satırlar boyunca süren bir iz olarak hemen seçilir: göz, iyi bir örüntü bulucudur.</p>
+    <details class="more"><summary>Daha fazla: zaman ve frekans takası</summary>
+      <span class="formula">Δf = fs / N        T = N / fs        Δf · T = 1</span>
+      <p>Buradaki bant saniyede 240.000 örnekle üretiliyor. N = 2048'de kutu 117 Hz genişliğinde, bir FFT 8,5 ms'lik veri kullanır. N'yi büyütmek frekansta ayrıntıyı artırır, zamanda bulanıklaştırır: kısa paketler ve Mors noktaları birbirine karışmaya başlar.</p>
+    </details>
+    <p class="try">Fareyle bir izin üzerine gelip frekansını ve gücünü okuyun. Tıklayınca kırmızı ibre oraya ayarlanır ve o yayının sesini duyarsınız.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Bant gerçek zamanlı üretilir (Signals.Band, 240 kS/sn): AM müzik −82 kHz, sürekli NFM −38 kHz, Mors +12 kHz, iki aralıklı telsiz konuşması (−60 ve +47 kHz), iki OOK paket vericisi (+86 ve +104 kHz). Frekanslar merkeze göredir.</li>
+    <li>Tıklayınca alıcı (karıştır, süz, azalt, demodüle et) o frekansa ayarlanır. Mors ve OOK için taşıyıcı 700 Hz'lik bir bip olarak duyulur (CW alıcısındaki gibi). Bu zinciri 5. bölümde açacağız.</li>
+    <li>Renk aralığı: en düşük değeri gürültü tabanının biraz altına, en yükseği güçlü istasyonun biraz üstüne koymak en çok ayrıntıyı verir. Gerçek SDR programlarında (SDR#, GQRX, SDR++) aynı iki ayar vardır.</li>
+    <li>Sağ alttaki küçük yazı ölçülen kare hızıdır (3 sn ortalama) ve kare başına harcanan işlem süresi.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="4" data-demo="sinyaliBul" id="sinyali-bul">
+  <div class="text">
+    <h2>Sinyali bul</h2>
+    <p class="lead">Sıra sizde: gürültünün içinde kısa yayınlar belirecek, her biri bir öncekinden biraz daha zayıf.</p>
+    <p>Bir yayın belirdiği anda şelalede ya da spektrumda üzerine tıklayın. Hızlı tıklamak ve zayıf yayınları yakalamak daha çok puan getirir. Baştan beri orada olan istasyonlar sayılmaz; boşa tıklamak puan götürür.</p>
+    <p>Zorluk, yayınların gürültü tabanının ne kadar üstünde başladığını, yani <strong>SNR</strong>'yi (sinyal-gürültü oranı) belirler. 0 dB'de sinyal, kutu başına gürültüyle aynı güçtedir; ancak satırlar boyunca süren bir iz olarak seçilir.</p>
+    <details class="more"><summary>Daha fazla: göz neden işe yarar?</summary>
+      <p>Tek bir satırda her kutunun gürültü gücü rastgele dalgalanır; dalgalanmanın büyüklüğü ortalamasıyla aynıdır. M satırı birlikte değerlendirmek dalgalanmayı yaklaşık √M kat azaltır. Göz şelalede bunu kendiliğinden yapar; sinyal algılayıcıları da enerjiyi bir süre toplayıp bir eşikle karşılaştırır.</p>
+    </details>
+    <p class="try">Zorluğu seçip "Oyunu başlat"a basın; ilk yayın birkaç saniye içinde belirir.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>12 yayın; SNR doğrusal olarak düşer (Kolay 16 → 6 dB, Orta 12 → 2 dB, Zor 8 → −1 dB). SNR burada kutu başına ortalama güç oranıdır. Üç tür: aç-kapa paketleri (dar), konuşma (geniş, dalgalı), veri (orta).</li>
+    <li>Puan: isabet başına 100, hız bonusu (3 sn içinde doğrusal azalan, en çok 100), zayıflık bonusu (15 dB'nin altındaki her dB için 6). Boş tıklama −20. Yayın bittikten sonra 1 sn daha tıklanabilir.</li>
+    <li>Bu şelale hız için doğrudan güç alanında üretilir (kutu başına üstel dağılımlı gürültü); önceki slayttaki gibi IQ'dan FFT ile değil. Görünüm aynıdır.</li>
+    <li>Topluluk için öneri: iki gönüllüye "Zor" seviyede yarıştırın; sonuç ekranındaki dolu/boş daireler hangi SNR'de gözün pes ettiğini gösterir.</li>
+  </ul></aside>
+</section>
+
+<!-- ================= 5. ALICININ İÇİ ================= -->
+<section class="slide" data-chapter="5" data-demo="rxChain" id="blok-diyagram">
+  <div class="text">
+    <h2>Alıcının içi</h2>
+    <p class="lead">Antenden bilgisayara giden yol altı kutudan geçer. Her kutu sinyale tek bir şey yapar.</p>
+    <p>Anten havadaki her şeyi toplar, LNA yükseltir. Asıl numara karıştırıcıda: sinyal, yerel osilatörün (LO) dalgasıyla çarpılır ve bütün spektrum aşağı kayar. Ayarladığınız istasyon 0 Hz'e oturur.</p>
+    <p>Sonra filtre yalnızca merkezin çevresini bırakır, ADC bu dar dilimi <span class="ci">I</span> ve <span class="cq">Q</span> olarak saniyede milyonlarca kez ölçer. Bilgisayara artık radyo dalgası değil, sayı akar.</p>
+    <details class="more"><summary>Daha fazla: doğrudan dönüşüm ve süperheterodin</summary>
+      <p>Burada gösterilen yapı doğrudan dönüşüm (sıfır IF): LO tam istasyonun frekansında, karıştırıcı iki kollu (0° ve 90°) ve çıkış doğrudan I ve Q. PlutoSDR ve USRP B210'daki AD936x çipleri böyle çalışır.</p>
+      <p>Klasik süperheterodin alıcı sinyali önce sabit bir ara frekansa (IF) indirir. RTL-SDR ikisinin karışımıdır: R820T/R828D ayarlayıcısı sinyali yaklaşık 3,57 MHz'lik düşük bir IF'ye indirir; RTL2832U bu IF'yi 28,8 MHz'de 8 bitle örnekler ve I/Q'ya dönüşümü sayısal olarak yapar.</p>
+    </details>
+    <p class="try">Kutulara tıklayın: sinyalin her noktadaki spektrumunu görün. Sonra LO'yu kaydırın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Spektrumlar tutarlı bir modelden hesaplanıyor: antende FM istasyonları (−50 ile −92 dBm arası), LNA +20 dB kazanç ve 3 dB gürültü katsayısı, 5. dereceden alçak geçiren filtre (kesim 1 MHz), 2,4 MS/sn ve 8 bit ideal ADC. ADC'de ±1,2 MHz'in dışındaki her şey içeri katlanır (filtre bu yüzden var).</li>
+    <li>8 bit ideal ADC: SNR = 6,02 × 8 + 1,76 ≈ 49,9 dB (Analog Devices MT-001). Zayıf istasyonların ADC görünümünde nicemleme gürültüsünün altında kaybolduğunu gösterin: kazanç ile aşırı yükleme arasındaki çekişme "Gerçek alıcının izleri" slaytında.</li>
+    <li>RTL-SDR: R820T/R820T2 düşük IF kullanır (ölçülen IF ≈ 3,57 MHz; qsl.net/py4zbz/r820.htm), eski E4000 ayarlayıcı sıfır IF'ydi ve merkezde belirgin bir DC tümseği verirdi (osmocom-sdr e-posta listesi, 2013). RTL2832U 28,8 MHz kristalle çalışır; IF'yi 8 bitle örnekleyip sayısal olarak I/Q'ya indirir ve 2,4 MS/sn gibi hızlara azaltır (ayrıntı yaklaşık, linuxtv.org/wiki RealTek RTL2832U). Blog V4'te ayarlayıcı R828D.</li>
+    <li>Olası soru: "Neden iki karıştırıcı?" Tek karıştırıcı +f ile −f'yi ayıramaz (IQ bölümündeki ayna). 90° kaydırılmış ikinci kol Q'yu verir; ikisi birlikte frekansın işaretini taşır.</li>
+    <li>Olası soru: "LO tam istasyonun üstündeyse merkezde ne olur?" LO'nun bir kısmı girişe sızar ve kendisiyle karışıp 0 Hz'de sabit bir gerilim (DC) bırakır. Sonraki slaytlarda göreceğimiz DC sivrisi budur.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="5" data-demo="mixTune" id="karistirma">
+  <div class="text">
+    <h2>Karıştırma: spektrumu kaydırmak</h2>
+    <p class="lead">Radyonun ayar düğmesini çevirmek aslında bütün spektrumu yana kaydırmaktır.</p>
+    <p>IQ akışını dönen bir okla (sayısal osilatör, NCO) çarpınca her frekans aynı miktarda kayar. Düğmeyi çevirdikçe alttaki spektrum ve şelale kayıyor; istediğiniz istasyon ortadaki kırmızı ibreye gelince alıcı onu duyar.</p>
+    <p>İbre iki istasyonun arasındaysa duyduğunuz şey gürültü: eski radyolardaki "istasyon arası" hışırtı.</p>
+    <details class="more"><summary>Daha fazla: neden çarpma kaydırır?</summary>
+      <p>Frekansı f olan bir ses e<sup>j2πft</sup> gibi döner. Bunu e<sup>−j2πf<sub>0</sub>t</sub></sup> ile çarpınca açılar toplanır: dönüş hızı f − f<sub>0</sub> olur. Her bileşen aynı f<sub>0</sub> kadar yer değiştirir.</p>
+      <span class="formula">y[n] = x[n] · e^(−j2π·f₀·n / fs)</span>
+      <p>Sayısal sinyalde frekans ±fs/2'de "sarar": kenardan taşan istasyon öbür kenardan girer. Düğmeyi sona kadar çevirip bakın.</p>
+    </details>
+    <p class="try">Büyük düğmeyi çevirin, bir istasyonu kırmızı ibreye getirin ve "Dinle"ye basın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Bant 240 kHz genişliğinde, beş hayalî istasyon: AM müzik (−85 kHz), telsiz konuşması NFM (−45 kHz), NFM müzik (+20 kHz), Mors (+55 kHz), AM konuşma (+90 kHz). İstasyonlar ve ses tarayıcıda sentezleniyor.</li>
+    <li>Ses, Signals.Receiver ile gerçekten demodüle ediliyor: NCO → alçak geçiren filtre → 5 kat azaltma (48 kHz) → AM zarfı ya da FM faz farkı. Mors için ibreden 700 Hz uzağa ayarlanıp gerçek kısım dinleniyor (BFO), bu yüzden bip sesi çıkıyor.</li>
+    <li>Düğmeyi bırakınca, bir istasyonun 2,5 kHz yakınındaysanız ibre ona kilitlenir (otomatik frekans kontrolü, AFC). Kaydırıcı ve ok tuşları da çalışır.</li>
+    <li>FM istasyonunu biraz kaçırınca ses bozulur; AM daha hoşgörülüdür. Telsiz kanallarının neden tam frekansa ayarlandığını buradan anlatın.</li>
+    <li>Gerçek SDR programlarında (SDR#, GQRX, SDR++) şelaleye tıklayınca olan da budur: donanım LO'su yerinde kalır, ince ayarı yazılımdaki NCO yapar.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="5" data-demo="filterDecim" id="filtre">
+  <div class="text">
+    <h2>Filtrele ve azalt</h2>
+    <p class="lead">İstasyon ortada, ama komşuları hâlâ orada. Önce süz, sonra gereksiz örnekleri at.</p>
+    <p>Alçak geçiren filtre yalnızca merkezin çevresini bırakır. Kesimi geniş açarsanız 14 kHz ötedeki komşu da içeri sızar: seste ıslık ve araya karışan bir konuşma duyulur. Çok daraltırsanız müziğin tınısı kesilir, ses boğuklaşır.</p>
+    <p>Süzdükten sonra bant artık dar; saniyede 240 bin örneğe gerek yok. Her M örnekten birini tutmak (azaltma) hesap yükünü M kat düşürür.</p>
+    <details class="more"><summary>Daha fazla: katsayı sayısı ve örtüşme</summary>
+      <p>FIR filtre son T örneğin ağırlıklı toplamıdır. T büyüdükçe kenar dikleşir (geçiş bandı daralır) ama her çıkış örneği T çarpma ister. Burada yük, yalnızca tutulan örnekler hesaplanarak ölçülüyor: 2 × T × fs / M.</p>
+      <p>Azaltmadan sonra görülebilen bant ±fs/(2M) olur. Kesim bundan genişse dışarıdaki istasyonlar içeri katlanır: Nyquist sınırındaki örtüşmenin aynısı.</p>
+    </details>
+    <p class="try">"Dinle"ye basın ve kesimi 30 kHz'e açın: komşu sızar. Sonra 1 kHz'e kısın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Dinlenen istasyon AM (org tınısı), komşu 14 kHz ötede bir AM konuşma. Komşu filtreden geçince AM zarf dedektörü iki taşıyıcının farkını, 14 kHz'lik bir ıslığı üretir. Avrupa'da orta dalga istasyonları 9 kHz arayla dizilir; eski radyolarda duyulan ıslık budur.</li>
+    <li>Filtre pencereli sinc (Blackman), DSP.firLowpass ile tasarlanıyor; yanıt DSP.freqResponse ile çiziliyor. Ekrandaki kesim, geçiş bandı ve komşuya bastırma bu yanıttan ölçülüyor.</li>
+    <li>M = 20'de kalan bant ±6 kHz. Kesim 6 kHz'in üstündeyse uyarı çıkar: dışarıdaki her şey içeri katlanır.</li>
+    <li>Hesap yükü örneği: 63 katsayı, M = 5 → 2 × 63 × 48.000 ≈ 6 milyon çarpma/sn. Azaltmasız (M = 1) ≈ 30 milyon. Gerçek alıcılar bunu basamaklı yapar (önce kaba, ucuz azaltma; sonra keskin filtre).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="5" data-demo="bandWindow" id="bant-geciren">
+  <div class="text">
+    <h2>Bant geçiren filtre: yalnızca bir pencere</h2>
+    <p class="lead">Filtre bir penceredir: içinden bakılan yeri siz seçersiniz, gerisi kararır.</p>
+    <p>Alçak geçiren pencere hep 0 Hz'in çevresindedir. Bant geçiren pencere istediğiniz yere taşınır; bant durduran (çentik) ise tersini yapar: yalnızca pencerenin içini söndürür.</p>
+    <p><strong>Gerçek</strong> katsayılı filtre IQ'da hem +f hem −f'de pencere açar: IQ bölümündeki aynanın aynısı. <strong>Karmaşık</strong> katsayılı filtre yalnızca seçtiğiniz tarafı görür.</p>
+    <details class="more"><summary>Daha fazla: güçlü istasyonu bastırmak</summary>
+      <p>Bant durduranı güçlü yayının üstüne koyun: ekran ölçeği bir sonraki en güçlü sinyale iner ve dibindeki zayıf istasyon ortaya çıkar.</p>
+      <p>Gerçek hayatta SDR'cılar bunun için anten ile alıcı arasına 88–108 MHz'i 50 dB'den fazla bastıran FM bant durduran filtreler takar. Filtre ADC'den <em>önce</em> olmalıdır: güçlü yayın ADC'nin sınırlı dinamik aralığını bir kez doldurduysa, sonradan yazılımla süzmek zayıf sinyali geri getirmez.</p>
+    </details>
+    <p class="try">Pencereyi ortasından tutup sürükleyin, kenarlarından genişletin; sonra "Karmaşık"ı seçin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Katsayılar DSP.firBandpass (karmaşık: alçak geçireni e^(j2πf₀n) ile kaydırmak), DSP.firBandpassReal (gerçek: 2·h·cos, iki yanlı) ve DSP.firBandstop ile tasarlanıyor; çıkış DSP.CFIR ile gerçekten süzülüyor. Yanıt, DSP.freqResponseC ile aynı tanımla sıfır dolgulu FFT'den hesaplanıyor (sürüklerken akıcı kalsın diye).</li>
+    <li>Ekrandaki geçiş bandı (−3 dB), geçiş eğimi (−3 → −60 dB), durdurma bandı ve çentik derinliği yanıttan ölçülüyor. 95 katsayılı Blackman pencerede durdurma bandı −70 dB civarındadır.</li>
+    <li>"Dinle", pencere merkezindeki istasyonu süzülmüş sinyalden demodüle eder. Bant durdurana geçince dinlenen istasyon kaybolur (FM'de hışırtıya döner).</li>
+    <li>FM bant durduran filtre örnekleri: RTL-SDR Blog FM bandstop (88–108 MHz'de >50 dB, 7. dereceden Chebyshev; rtl-sdr.com/product/rtl-sdr-blog-broadcast-fm-band-stop-filter), Nooelec Flamingo FM (dağıtıcıya göre ortalama >60 dB; yaklaşık). Uçak bandının alt ucunu (118–124 MHz) da biraz zayıflatabilir.</li>
+    <li>Ölçeğin "en güçlü sinyale uyması" çoğu SDR programındaki otomatik aralığa benzer; zayıf istasyonun görünür olmasının buradaki nedeni bu. Gerçek donanımda asıl sorun ADC'nin dinamik aralığıdır (8 bit ≈ 50 dB).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="5" data-demo="rxFlaws" id="kusurlar">
+  <div class="text">
+    <h2>Gerçek alıcının izleri</h2>
+    <p class="lead">Ucuz bir alıcının spektrumunda olmayan şeyler görürsünüz. Çoğu donanımın imzasıdır.</p>
+    <ul>
+      <li><span class="cr">DC sivrisi:</span> LO'nun sızıntısı ve devredeki küçük kaymalar merkezde sabit bir tepe bırakır.</li>
+      <li><span class="cq">IQ dengesizliği:</span> I ve Q kolları tam eş değilse her istasyonun −f'de soluk bir aynası belirir.</li>
+      <li><span class="cr">Aşırı yükleme:</span> kazanç fazlaysa ADC tepeleri kırpar; spektrumda olmayan istasyonlar ve yükselen bir taban çıkar.</li>
+    </ul>
+    <details class="more"><summary>Daha fazla: görüntü bastırma oranı</summary>
+      <p>Kazanç oranı g ve faz hatası φ ise istasyon ile aynası arasındaki fark:</p>
+      <span class="formula">IRR = 10·log₁₀[(1 + 2g·cos φ + g²) / (1 − 2g·cos φ + g²)]</span>
+      <p>1 dB ve 6° hatada yaklaşık 22 dB. "IQ dengeleme" I ile Q'nun ilişkisini ölçüp Q'yu yeniden diker: önce I'ya benzeyen kısmı çıkarır, sonra iki kolun gücünü eşitler.</p>
+    </details>
+    <p class="try">Faz hatasını artırın, aynaları izleyin; "IQ dengeleme"ye basın. Sonra RF kazancını yükseltin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Kusurlar IQ akışına gerçekten uygulanıyor: Q' = g·(Q·cos φ + I·sin φ), I ve Q'ya sabit eklenti (DC), ardından ±1'de kırpma ve 8 bit nicemleme. Düzeltmeler de gerçek: DC giderme blok ortalamasını izleyip çıkarır; IQ dengeleme E[I·Q], E[I²], E[Q²] istatistikleriyle Gram–Schmidt dikleştirmesi yapar.</li>
+    <li>Görüntü bastırma iki yoldan gösteriliyor: formülden (kuramsal) ve spektrumda +30 kHz istasyonu ile −30 kHz aynasının farkından (ölçülen). İkisi birkaç dB içinde örtüşmeli.</li>
+    <li>Aşırı yüklemeyi IQ düzleminde gösterin: noktalar kesik çizgili karenin (ADC sınırı) kenarına yapışıyor. RTL-SDR'da "RF gain" ayarını sonuna kadar açmak tam olarak bunu yapar.</li>
+    <li>DC sivrisinden kaçmanın eski yolu: donanımı istasyonun biraz yanına ayarlayıp (ör. 250 kHz) istasyonu yazılımda NCO ile merkeze getirmek. Birçok SDR programında "offset tuning" adıyla bulunur.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="5" data-demo="hwCompare" id="donanim">
+  <div class="text">
+    <h2>Gerçek donanım</h2>
+    <p class="lead">Aynı fikir, dört fiyat sınıfı: 30 dolarlık USB çubuktan laboratuvar cihazına.</p>
+    <p>Bir SDR'ı dört soru tanımlar: hangi frekansları duyar, bir anda ne kadar genişliği görür, kaç bitle ölçer ve gönderebilir mi.</p>
+    <p>Bit sayısı dinamik aralığı belirler: her bit yaklaşık 6 dB ekler. 8 bitlik bir RTL-SDR'da güçlü ve zayıf sinyal arasında ≈ 50 dB, 12 bitlik bir PlutoSDR'da ≈ 74 dB yer vardır.</p>
+    <details class="more"><summary>Daha fazla: gönderme yeteneği</summary>
+      <p>RTL-SDR yalnızca alır. HackRF One gönderebilir ama aynı anda alamaz (yarı çift yönlü). PlutoSDR ve USRP B210 aynı anda alıp gönderir (tam çift yönlü).</p>
+      <p>Göndermek için amatör telsizcilik belgesi ya da izin gerekir; bu, sunumun sonundaki yasal bölümün konusu.</p>
+    </details>
+    <p class="try">Bir hedef seçin: hangi cihazların alabildiğine ve nedenine bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>RTL-SDR (R820T2): 24–1766 MHz, 8 bit (ENOB ≈ 7), en çok 3,2 MS/sn ama örnek kaçırır; kayıpsız en yüksek 2,56 MS/sn, alışılmış güvenli değer 2,4 MS/sn; gönderme yok; ≈ 30 $. Kaynak: rtl-sdr.com/about-rtl-sdr.</li>
+    <li>RTL-SDR Blog V4: R828D ayarlayıcı, dahili HF yukarı çeviriciyle yaklaşık 500 kHz–1,766 GHz; 29,95 $ (antenli set 39,95 $). Kaynak: rtl-sdr.com/rtl-sdr-blog-v4-dongle-initial-release.</li>
+    <li>HackRF One: 1 MHz–6 GHz, 2–20 MS/sn, 8 bit, yarı çift yönlü. Kaynak: hackrf.readthedocs.io (HackRF One). Fiyat resmî değil, satıcılarda ≈ 300–350 $ (yaklaşık).</li>
+    <li>ADALM-PLUTO: AD9363, 325–3800 MHz, 12 bit, 61,44 MS/sn, 20 MHz anlık bant, 1 alma + 1 gönderme (tam çift yönlü). Yazılımla AD9364 gibi tanıtılarak 70 MHz–6 GHz ve 56 MHz'e açılabiliyor; garanti değil. Kaynak: rtl-sdr.com ADALM-PLUTO duyurusu ve "70 MHz to 6 GHz hack" yazısı. Fiyat ilk çıkışta 149 $, bugün dağıtıcılarda ≈ 220 $ (yaklaşık).</li>
+    <li>USRP B210: 70 MHz–6 GHz, AD9361 (12 bit), 61,44 MS/sn ile 56 MHz'e kadar anlık bant, 2×2 MIMO, tam çift yönlü; Ettus sayfasında 2.387 $ (yalnızca kart). Kaynak: ettus.com/all-products/ub210-kit.</li>
+    <li>Hedefler: kısa dalga 40 m amatör bandı (7,0–7,2 MHz), FM yayın 87,5–108 MHz (Bölge 1), ADS-B 1090 MHz, GPS L1 1575,42 MHz (≈ 2 MHz genişlik), Wi-Fi 2,4 GHz kanal 1 (2401–2423 MHz), Wi-Fi 5 GHz kanal 36 (5170–5190 MHz). "Tüm FM bandı" 20,5 MHz genişlik ister: yalnızca B210 tek seferde görür.</li>
+    <li>Dinamik aralık: ideal ADC için 6,02·N + 1,76 dB (Analog Devices MT-001). Gerçekte etkin bit sayısı (ENOB) daha düşüktür; ayrıca azaltma ile işlem kazancı elde edilir.</li>
+  </ul></aside>
+</section>
+
+<!-- ================= 6. MODÜLASYON (ilk yarı) ================= -->
+<section class="slide" data-chapter="6" data-demo="am" id="am">
+  <div class="text">
+    <h2>AM: genlik modülasyonu</h2>
+    <p class="lead">Sesi radyo dalgasına yüklemenin en eski yolu: dalgayı sesin ritmiyle büyütüp küçültmek.</p>
+    <p>Ses yükselince verici dalgası büyür, alçalınca küçülür. Dalganın tepelerini birleştiren çizgiye <span class="camp">zarf</span> denir ve zarf sesin kendisidir. IQ düzleminde bu, yerinde durup nefes alır gibi uzayıp kısalan bir oktur.</p>
+    <p>Alıcı yalnızca okun boyunu ölçer: √(<span class="ci">I</span>² + <span class="cq">Q</span>²). Okun hangi yöne baktığı önemli değildir. Bu yüzden AM alıcısı çok basittir; kristal radyodaki tek diyot bu işi yapar.</p>
+    <p>Derinlik %100'ü geçince zarf sıfırın altına inmek ister. Ama boy eksi olamaz: ok ters döner ve ses bozulur.</p>
+    <details class="more"><summary>Daha fazla: formül ve spektrum</summary>
+      <span class="formula">s(t) = [1 + m·x(t)] · cos(2π·f<sub>c</sub>·t)</span>
+      <p>IQ'da: I + jQ = [1 + m·x(t)]·e<sup>jφ</sup>. Zarf dedektörü |I + jQ| = |1 + m·x(t)| hesaplar; m·|x| ≤ 1 iken bu tam olarak 1 + m·x(t) olur ve ortalaması çıkarılınca ses geri gelir. Faz φ hiç işe karışmaz.</p>
+      <p>Spektrumda ortada taşıyıcı, iki yanında sesin aynalı iki kopyası (yan bantlar) durur. Bant genişliği sesin bant genişliğinin iki katıdır. Orta dalga yayınlarında kanallar Avrupa, Afrika ve Asya'da 9 kHz aralıklıdır.</p>
+    </details>
+    <p class="try">Modülasyon derinliğini %130'a çekin, sonra "Dinle"ye basıp çözülen sesi kaynakla karşılaştırın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Ses: "Neşeye Övgü" (Beethoven, 9. Senfoni; kamu malı), tarayıcıda sentezleniyor. Tepe değeri 1'e ölçeklendi, yani %100 derinlikte zarf tam sıfıra değiyor.</li>
+    <li>Üstteki iki panel osiloskop gibi tetikleniyor: aynı nota çalarken dalga yerinde durur. Kırmızı imleç pencereyi ağır çekimde tarar; IQ'daki ok imlecin altındaki örneği gösterir.</li>
+    <li>Alıcı vericiyle aynı fazda değil (ok çapraz duruyor): zarf dedektörü bunu umursamaz. Bir sonraki bölümün "dönen takımyıldız"ında dijitalde bunun neden sorun olduğunu göreceğiz.</li>
+    <li>"İlinti" sayısı ölçülüyor: çözülen sesin son 0,2 saniyesi kaynakla karşılaştırılıyor (1 = birebir aynı). %100'ün altında ~0,999; aşırı modülasyonda düşer.</li>
+    <li>Gerçek dünyada: orta dalga (Avrupa'da 531–1602 kHz, 9 kHz aralık), kısa dalga, havacılık telsizi (VHF'de hâlâ AM). Kaynak: Wikipedia "Mediumwave".</li>
+    <li>Olası soru: "Taşıyıcı neden boşa güç harcıyor?" Evet, gücün çoğu bilgi taşımayan taşıyıcıda. Tek yan bant (SSB) bu yüzden icat edildi.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="6" data-demo="fm" id="fm">
+  <div class="text">
+    <h2>FM: frekans modülasyonu</h2>
+    <p class="lead">FM sesi dalganın boyuyla değil hızıyla taşır: genlik hiç değişmez, frekans sesle birlikte bir artar bir azalır.</p>
+    <p>IQ düzleminde ok hep aynı boydadır; değişen, dönüş hızıdır. Ses artıya gidince ok hızlanır, eksiye gidince yavaşlar.</p>
+    <p>Alıcı art arda gelen iki örnek arasındaki açıyı ölçer (<span class="cph">nane renkli yay</span>). Açı büyükse ses yüksek, küçükse alçaktır. Buna faz farkı demodülasyonu denir.</p>
+    <p>Sapma büyüdükçe sinyal spektrumda genişler ama gürültüye de daha dayanıklı olur. Yayın FM'de sapma ±75 kHz'dir.</p>
+    <details class="more"><summary>Daha fazla: formül ve Carson kuralı</summary>
+      <span class="formula">z(t) = e<sup>jφ(t)</sup>, φ(t) = 2π·Δf·∫x(τ)dτ</span>
+      <span class="formula">x̂[n] = arg(z[n]·z*[n−1]) / (2π) · f<sub>s</sub> / Δf</span>
+      <p>Bant genişliği için Carson kuralı (1922): <b>BW ≈ 2(Δf + W)</b>; W sesin en yüksek frekansı. Mono yayın FM'de Δf = 75 kHz, W = 15 kHz: 2(75 + 15) = 180 kHz.</p>
+      <p>Buradaki sinyal saniyede 240.000 karmaşık örnekle üretiliyor, çözülüyor ve 15 kHz'lik süzgeçten geçiyor. Gürültü açıkken aynı sesi aynı tepe gücüyle taşıyan bir AM verici de aynı gürültüyle çalışır.</p>
+    </details>
+    <p class="try">Sapmayı 75 kHz'ten 5 kHz'e indirip spektrumun daralmasını izleyin; sonra gürültüyü açıp FM ile AM'i dinleyin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>IQ düzlemi ağır çekim bir çizim: gerçekte ok saniyede on binlerce tur atar. Gri noktalar ise gerçek 240 kHz örnekler: hepsi aynı çemberde, çünkü FM'in genliği sabit.</li>
+    <li>Alıcı tam taşıyıcıya ayarlı olsaydı ok ileri geri salınırdı; çizimde ok, sabit bir hızla dönerken ses onu hızlandırıp yavaşlatıyor (frekans = dönüş hızı).</li>
+    <li>Nane noktalar: ardışık iki görsel örnek arasındaki açıdan (DSP.FMDemod) çözülen değerler; ses eğrisinin üstüne oturuyorlar.</li>
+    <li>Carson için W, melodinin ölçülen %99 güç bant genişliği (flüt tınısı, ~1 kHz). "Ölçülen" değer spektrumdaki gücün %99'unu içeren genişlik. Kaynak: Wikipedia "Carson bandwidth rule" (J. R. Carson, 1922).</li>
+    <li>Gürültü karşılaştırması: orta C/N'de FM temiz, AM hışırtılı. Sapmayı küçültürseniz FM'in üstünlüğü kaybolur: dayanıklılığı bant genişliğiyle satın alır. Çok düşük C/N'de FM "eşik" altına düşer ve çıtırtılar başlar.</li>
+    <li>Armstrong geniş bant FM'i 1933'te patentledi; yayın bandı 87,5–108 MHz.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="6" data-demo="digital" id="dijital">
+  <div class="text">
+    <h2>Bitleri dalgaya yüklemek</h2>
+    <p class="lead">Bit göndermek için dalganın bir özelliğini birkaç sabit değer arasında atlatırız. Her atlayışa sembol denir.</p>
+    <p>ASK genliği açıp kapar, FSK iki frekans arasında gidip gelir, BPSK fazı 180° çevirir. Üçü de sembol başına 1 bit taşır.</p>
+    <p>QPSK dört faz kullanır, böylece her sembol 2 bit taşır. 16-QAM hem genliği hem fazı değiştirir: 16 noktalı bir ızgarada sembol başına 4 bit. Aynı sürede dört kat bilgi taşır ama noktalar birbirine yaklaştığı için gürültüye daha duyarlıdır.</p>
+    <details class="more"><summary>Daha fazla: bit hızı ve Gray kodu</summary>
+      <span class="formula">bit hızı = sembol hızı × log₂ M</span>
+      <p>M nokta sayısıdır: QPSK'da M = 4 (2 bit), 16-QAM'de M = 16 (4 bit). 16-QAM'de her eksen {−3, −1, +1, +3}/√10 değerlerini alır. Noktalar Gray koduyla adlandırılır, yani komşu iki nokta yalnızca tek bitte ayrışır; gürültü bir sembolü komşusuna kaydırırsa yalnızca 1 bit bozulur.</p>
+      <p>"Dinle" sesi ses aralığına taşır: FSK'da 1 = 1200 Hz, 0 = 2200 Hz. Bu, 1976 tarihli Bell 202 modeminin tonlarıdır ve amatör telsizcilerin APRS paketlerinde hâlâ duyulur.</p>
+    </details>
+    <p class="try">Birkaç bite tıklayıp değiştirin, sonra BPSK'dan 16-QAM'e geçip aynı 16 bitin kaç sembole sığdığına bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Sembol süresi her türde aynı tutuldu; böylece üstteki panel "aynı sürede kaç bit" sorusunu doğrudan gösteriyor. Taranmış alan, aynı sürede fazladan taşınabilecek bitler.</li>
+    <li>I ve Q, sembolün koordinatlarıdır; gönderilen dalga I·cos − Q·sin. BPSK'da yalnızca I kullanılır; QPSK ve QAM'de ikisi de.</li>
+    <li>FSK'nın takımyıldızı nokta değil, dönüş yönüdür: 1 sola, 0 sağa döner (temel bantta +f ve −f).</li>
+    <li>"1200 baud" ayarında 16 bit saniyede 75 kez tekrar eder: eski modem cızırtısı. Bell 202: 1200 bit/sn, mark 1200 Hz, space 2200 Hz (Wikipedia "Bell 202 modem").</li>
+    <li>Gerçek dünyada: GPS sinyalleri BPSK, uydu ve DVB-T QPSK/16-QAM/64-QAM, Wi-Fi 6 1024-QAM (sembol başına 10 bit) kullanır.</li>
+    <li>Sonraki slayt: gürültü bu noktaları bulutlaştırınca ne olur?</li>
+  </ul></aside>
+</section>
+
+<!-- ================= 6. MODÜLASYON (devam): takımyıldız, dönme, mesaj, sembol hızı ================= -->
+<section class="slide" data-chapter="6" data-demo="constellation" id="takimyildiz">
+  <div class="text">
+    <h2>Takımyıldız ve gürültü</h2>
+    <p class="lead">Her sembol düzlemde bir yıldızdır. Gürültü onu yerinden oynatır; yıldız komşusunun bölgesine kayarsa bit yanlış okunur.</p>
+    <p>Alıcı gelen her sembolü <span class="ci">I</span>/<span class="cq">Q</span> düzleminde bir nokta olarak görür. Gürültü olmasaydı noktalar tam ideal yerlerine düşerdi; gerçekte her biri <span class="cn">kırçıl gri</span> bir bulutun içinde rastgele sapar.</p>
+    <p>İnce kesikli çizgiler karar sınırlarıdır: nokta hangi bölgeye düşerse alıcı o sembole karar verir. Sınırı aşan noktalar <span class="cr">kırmızı halkayla</span> işaretli.</p>
+    <p>Sağdaki sayaç hataları gerçekten sayar ve kuramla karşılaştırır. Sembol başına çok bit taşıyan takımyıldızlarda noktalar birbirine yakındır; aynı gürültüde daha çok hata yaparlar.</p>
+    <details class="more"><summary>Daha fazla: SNR ve hata oranı</summary>
+      <p>SNR burada Es/N0: sembol başına enerjinin gürültü yoğunluğuna oranı. Bit başına oran Eb/N0 = Es/N0 − 10·log₁₀(k), k sembol başına bit. Komşu noktalar tek bitte farklı olacak biçimde (Gray kodu) etiketlendiği için çoğu sembol hatası tek bit hatasıdır.</p>
+      <span class="formula">BPSK: Pb = Q(√(2·Es/N0))   QPSK: Pb = Q(√(Es/N0))</span>
+      <span class="formula">16-QAM: Pb ≈ ¾·Q(√(Es/(5·N0)))   8-PSK: Pb ≈ ⅔·Q(√(2·Es/N0)·sin(π/8))</span>
+      <p>Q(x), standart normal dağılımın x'ten büyük olma olasılığıdır. 8-PSK ve 16-QAM ifadeleri en yakın komşu yaklaşımıdır; çok düşük SNR'da ölçülen değer biraz daha yüksek çıkar.</p>
+    </details>
+    <p class="try">SNR'ı 4 dB'e indirin, sonra 16-QAM'e geçin: bulutlar birbirine karışır, hata sayacı hızlanır.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Ölçüm canlı: her karede ~6.000 rastgele bit modüle edilir, Es/N0'a göre beyaz Gauss gürültüsü (AWGN) eklenir, en yakın noktaya karar verilir ve hatalar sayılır. Ekranda bunların yalnızca saniyede 150'si çizilir.</li>
+    <li>Sayaç her (modülasyon, SNR) çifti için ayrı tutulur; aynı ayara dönünce saymaya devam eder. Eğrideki dolu noktalar ölçülen değerler, üçgenler "hiç hata yok, en fazla 1/bit sayısı" üst sınırı.</li>
+    <li>Kural: güvenilir bir BER için ~100 hata saymak gerekir. 10⁻⁶ ölçmek için yaklaşık 10⁸ bit gerekir; bu yüzden yüksek SNR'da sayaç uzun süre 0 kalır.</li>
+    <li>Betikle doğrulandı (2·10⁵–2·10⁶ bit): QPSK 8 dB'de ölçülen 5,9·10⁻³ / kuram 6,0·10⁻³; 16-QAM 12 dB'de 2,83·10⁻² / 2,81·10⁻². 8-PSK ve 16-QAM 0 dB'de ölçülen kuramdan %18–23 yüksek (yaklaşık formül).</li>
+    <li>Olası soru: "Gerçek sistemler bu kadar hatayla nasıl çalışıyor?" Hata düzeltme kodları (FEC) ekledikleri fazla bitlerle 10⁻³ gibi ham hata oranlarını neredeyse sıfıra indirir.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="6" data-demo="rotation" id="donme">
+  <div class="text">
+    <h2>Dönen takımyıldız</h2>
+    <p class="lead">Vericinin ve alıcının osilatörleri hiçbir zaman tıpatıp aynı değildir. Takımyıldız bu yüzden döner.</p>
+    <p><span class="cph">Faz kayması</span> bütün noktaları sabit bir açıyla çevirir: karar sınırları yerinde kalır, noktalar komşu bölgeye taşar. <span class="cph">Frekans hatası</span> daha sinsidir: alıcının osilatörü biraz hızlı ya da yavaşsa takımyıldız durmadan döner ve noktalar bir halkaya yayılır.</p>
+    <p>Alıcı bunu kendisi düzeltir. Her sembolde noktanın en yakın ideal noktaya göre ne kadar döndüğünü ölçer ve kendi osilatörünü o kadar geri çevirir. Bu geri besleme, <em>faz kilitli döngü</em>, birkaç yüz sembolde dönmeyi durdurur.</p>
+    <details class="more"><summary>Daha fazla: döngünün denklemi</summary>
+      <p>Düzeltilmiş nokta y, karar verilen ideal nokta d. Faz hatası e ölçülür, döngü hem fazı hem frekansı izler (ikinci derece döngü):</p>
+      <span class="formula">e = arg(y · d*)   φ̂ ← φ̂ + ω̂ + Kp·e   ω̂ ← ω̂ + Ki·e</span>
+      <p>QPSK 90° döndürülünce kendisiyle çakışır; döngü 0°, 90°, 180° ya da 270° kaymış kilitlenebilir. Görüntü düzgündür ama bitler yanlıştır. Bu belirsizliği bilinen öncü (pilot) semboller ya da farksal kodlama çözer; burada her 16. sembol öncüdür.</p>
+    </details>
+    <p class="try">Frekans hatasını 1,5 Hz'e çekin; takımyıldız halka olunca "Dönmeyi düzelt"e basın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Sembol hızı bilerek düşük: 200 Bd, ekranda gerçek zamanlı. 1,5 Hz frekans hatası sembol başına 360·1,5/200 = 2,7° dönme demektir; saniyede 1,5 tur.</li>
+    <li>"Dinle" iki ton çalar: biri sabit, biri takımyıldızla birlikte dönen. Dönme varsa vuru (vuv vuv) duyulur, vuru hızı ekrandaki tur hızıdır; döngü kilitlenince vuru durur. Faz kayması 180° iken iki ton birbirini söndürür.</li>
+    <li>Döngü karar yönlendirmeli (decision-directed). BPSK/QPSK için klasik biçimi Costas döngüsüdür (John P. Costas, "Synchronous Communications", Proc. IRE, 1956).</li>
+    <li>Döngü bant genişliği Bn·T = 0,04, sönüm 0,707. ±3 Hz içinde dört modülasyonda da kilitlenir; 16-QAM ve 8-PSK'da yüksek frekans hatasında kilitlenme daha uzun sürer. Gerçek alıcılar önce kaba bir frekans düzeltmesi (FLL) yapar.</li>
+    <li>"Öncü sembollerle düzeltilen" okuması döngünün hangi açıda kilitlendiğini gösterir (ör. 90°). Öncüler olmasa BER bu durumda ~0,5 olurdu.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="6" data-demo="message" id="mesaj">
+  <div class="text">
+    <h2>Mesajını gönder</h2>
+    <p class="lead">Hepsini birleştirelim: yazdığınız metin bitlere, bitler sembollere, semboller dalgaya dönüşüyor; gürültülü kanaldan geçip yeniden metin oluyor.</p>
+    <p>Her harf UTF-8 ile bir ya da birkaç bayta, yani 8'li bit gruplarına çevrilir; ş, ğ, ı gibi Türkçe harfler iki bayt tutar. Bitler sembol başına taşınan sayıda gruplanır ve her grup bir <span class="ci">I</span>/<span class="cq">Q</span> değeri olur.</p>
+    <p>Alıcı her sembol boyunca gelen örneklerin ortalamasını alır ve en yakın takımyıldız noktasına karar verir. Yanlış kararlar <span class="cr">kırmızı bitlere</span>, kırmızı bitler bozuk harflere dönüşür. Tek bir bit hatası bir harfi bambaşka bir harfe çevirebilir.</p>
+    <details class="more"><summary>Daha fazla: harf hatası ve hata düzeltme</summary>
+      <p>Bit hata oranı p ise 8 bitlik bir baytın sağlam gelme olasılığı (1 − p)⁸'dir:</p>
+      <span class="formula">P(bayt bozuk) = 1 − (1 − p)⁸ ≈ 8·p</span>
+      <p>p = 10⁻² iken her 12–13 bayttan biri bozulur. Gerçek sistemler bitlere fazlalık ekler (hata düzeltme kodu, FEC) ve sonuna bir sağlama (CRC) koyar; alıcı hataları düzeltir ya da en azından fark eder.</p>
+    </details>
+    <p class="try">Kendi mesajınızı yazıp Gönder'e basın, sonra SNR'ı yavaşça düşürüp harflerin bozulmasını izleyin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Kanal modeli: her sembol 8 örnek boyunca sabit (dikdörtgen darbe), her örneğe Gauss gürültüsü eklenir. Alıcı 8 örneğin ortalamasını alır; bu dikdörtgen darbenin uyumlu süzgecidir ve gürültüyü √8 kat azaltır. 4. şeritteki kısa fildişi çizgiler bu ortalamalardır.</li>
+    <li>SNR kaydırıcısı aynı gürültü örneğini ölçekler: kaydırınca hangi bitin önce bozulduğu görülür. Gönder her basışta yeni bir gürültü örneği çeker.</li>
+    <li>"Dinle" bitleri Bell 202 modem tonlarıyla çalar: 1 için 1.200 Hz, 0 için 2.200 Hz. Gerçek Bell 202 saniyede 1.200 bit gönderir; burada şerit hızına uyacak kadar yavaşlatılmış.</li>
+    <li>8-PSK'da 8'in katı bit 3'e bölünmeyebilir; son sembole dolgu biti eklenir (gri).</li>
+    <li>Bozuk bir bayt geçerli bir UTF-8 karakteri oluşturmazsa "�" görünür. Mesaj en fazla 20 bayt olabilir (ş, ğ, ü gibi harfler 2 bayt sayılır), yoksa şeritler okunmayacak kadar incelir.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="6" data-demo="symbolrate" id="sembol-hizi">
+  <div class="text">
+    <h2>Sembol hızı ve bant genişliği</h2>
+    <p class="lead">Saniyede ne kadar çok sembol gönderirseniz sinyal spektrumda o kadar geniş yer kaplar.</p>
+    <p>Sembolleri keskin basamaklarla göndermek spektrumu gereksiz yere yayar. Bu yüzden her sembol yumuşak bir darbeye dönüştürülür: yükseltilmiş kosinüs kökü. Roll-off (β) bu yumuşaklığı ayarlar. β = 0'da spektrum dik kenarlı bir dikdörtgendir ama darbenin kuyrukları çok uzundur; β = 1'de darbe kısalır, bant iki katına çıkar.</p>
+    <p>Kaplanan bant genişliği yaklaşık Rs·(1+β)'dır. Bit hızı ise sembol hızı çarpı sembol başına bittir: aynı bantta 16-QAM, QPSK'nın iki katı bit taşır ama önceki deneyde gördüğümüz gibi aynı hata oranı için daha yüksek <span class="cn">SNR</span> ister.</p>
+    <details class="more"><summary>Daha fazla: formüller</summary>
+      <span class="formula">B ≈ Rs·(1 + β)   Rb = Rs·log₂M   η = log₂M / (1 + β) bit/sn/Hz</span>
+      <p>Verici ve alıcıdaki iki kök süzgeç birlikte yükseltilmiş kosinüs olur. Bu darbe komşu sembollerin örnekleme anlarında tam sıfırdan geçer; semboller birbirine karışmaz. Uydu yayını DVB-S2 β = 0,35, 0,25 ya da 0,20 kullanır; DVB-S2X 0,05'e kadar iner.</p>
+    </details>
+    <p class="try">β'yı 0'a çekin: spektrum dikdörtgenleşir, darbenin kuyrukları uzar. Sonra sembol hızını artırın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Spektrum gerçekten hesaplanır: rastgele semboller sembol başına en az 8 örnekle seyreltilir, DSP.rrc (10 sembol uzunluğunda) ile süzülür, 2.048 noktalı Hann pencereli FFT'lerin ortalaması alınır. 0 dB bant ortasının ortalama gücüdür.</li>
+    <li>"Ölçülen %99 güç bandı" toplam gücün %99'unu içeren aralık. Rs·(1+β) spektrumun sıfıra indiği kenardır; kenarlara yakın güç az olduğu için %99 bandı biraz daha dardır (ölçüm: 250 kBd, β = 0,35'te 292 kHz'e karşı 338 kHz; β = 1'de 409 kHz'e karşı 500 kHz). β = 0'da darbe 10 sembolde kesildiği için kenarlarda küçük dalgalanma görülür.</li>
+    <li>Modülasyonu değiştirmek spektrumu değiştirmez (aynı Rs ve β): yalnızca bit hızı ve gereken SNR değişir. "BER 10⁻³ için Es/N0" kuramsal formülden hesaplanır.</li>
+    <li>Örnek: RTL-SDR'ın 2,4 MHz'lik penceresine β = 0,35 ile en fazla ~1,78 MBd sığar.</li>
+    <li>"Dinle": aynı takımyıldız ve darbe, 1.800 Hz'lik bir ses taşıyıcısında, sembol hızının binde biriyle (ör. 250 kBd → 250 Bd). Hızlandıkça ses cızırtılı bir vızıltıya döner.</li>
+    <li>Kaynak: DVB-S2 roll-off değerleri ETSI EN 302 307-1 §5.6; DVB-S2X EN 302 307-2 (Rohde &amp; Schwarz DVB-S2 teknoloji sayfası).</li>
+  </ul></aside>
+</section>
+
+<!-- ================= 7. GERÇEK DÜNYADA ================= -->
+<section class="slide" data-chapter="7" data-demo="galeri" id="galeri">
+  <div class="text">
+    <h2>Havada neler var?</h2>
+    <p class="lead">Bir SDR'ı açıp bandı gezdiğinizde her sinyalin şelalede kendine özgü bir izi olduğunu görürsünüz. Beşini burada, gerçek biçimlerine sadık kalarak tarayıcıda ürettik.</p>
+    <p>FM yayın geniş ve kesintisiz bir şerittir. Uçakların ADS-B paketleri yalnızca 120 mikrosaniye sürer ve ince yatay çizgiler bırakır. Kumanda kısa patlamalar hâlinde, Mors noktalı-çizgili bir izle görünür.</p>
+    <p>Alttaki panelde her sinyalin çözücüsü çalışır: FM'in içindeki 19 kHz pilot, uçak paketinin bitleri ve CRC denetimi, uydunun satır satır beliren görüntüsü, Mors metni, kumandanın 24 bitlik kodu.</p>
+    <details class="more"><summary>Daha fazla: ADS-B ve APT'nin içi</summary>
+      <p><strong>ADS-B:</strong> Her paket 8 µs'lik bir başlangıçla açılır (0; 1; 3,5 ve 4,5 µs'de birer darbe). Ardından saniyede bir milyon bitle 56 ya da 112 bit gelir. Her bit 1 µs sürer; 0,5 µs'lik darbe ilk yarıdaysa 1, ikinci yarıdaysa 0 demektir (darbe konum modülasyonu). Son 24 bit, paketin bozulmadığını gösteren CRC'dir.</p>
+      <p><strong>NOAA APT:</strong> Uydu her yarım saniyede bir satır gönderir: 2080 kelime, yani saniyede 4160 kelime. Kelimeler 2400 Hz'lik bir tonun genliğine yazılır (AM); bu ton da 137 MHz'lik taşıyıcıya FM ile biner. Satır başlarındaki 1040 Hz'lik senk A ile 832 darbe/sn'lik senk B, o tanıdık "tik-tak" sesini çıkarır.</p>
+    </details>
+    <p class="try">ADS-B'yi seçin ve paketlerin şelalede bıraktığı kısa çizgilere bakın. Sonra NOAA APT'ye geçip Dinle'ye basın: tik-tak sesini duyup görüntünün satır satır belirmesini izleyin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Hepsi sentetik: sinyaller tarayıcıda gerçek zamanlı IQ olarak üretilir; şelale, çözücü ve ses aynı IQ'dan çıkar. Gerçek bir kayıtla çalışmak için sonraki slayt.</li>
+    <li>FM: Avrupa'da 87,5–108 MHz, ±75 kHz sapma, 200 kHz'e yakın kanal. Stereo pilot 19 kHz, L−R 38 kHz'lik alt taşıyıcıda, RDS 57 kHz'te (burada RDS yok). Ses mono çözülür.</li>
+    <li>ADS-B: 1090 MHz, 1 Mbit/sn PPM. Paketler gerçek Mode S CRC-24 algoritmasıyla (üreteç 0x1FFF409) üretilip denetlenir. Çağrı adları (DALGA1, IQ2048…) hayalî. Zayıf uçakların paketlerinde CRC hatası görülmesi gerçekçi: gürültü bit bozar.</li>
+    <li>NOAA APT: NOAA-15, 18 ve 19 2025'te hizmetten çıkarıldı (NOAA-18: 6 Haziran, NOAA-19: 13 Ağustos, NOAA-15: 19 Ağustos 2025; kaynak: <a href="https://www.nesdis.noaa.gov/news/suspension-of-poes-data-users-after-june-16-2025-and-decommissioning" target="_blank" rel="noopener">NOAA NESDIS duyurusu</a>). 137 MHz'de bugün Rus Meteor-M N2-3 ve N2-4 uydularının sayısal LRPT yayını (OQPSK, 137,9 MHz) alınabiliyor; N2-3'ün anteni tam açılmadığı için sinyali daha zayıf. SatDump gibi programlar çözer (durum: <a href="https://space.oscar.wmo.int/satellites/view/meteor_m_n2_4" target="_blank" rel="noopener">WMO OSCAR</a>).</li>
+    <li>Amatör telsiz: 2 m bandında konuşma dar bant FM (12,5 kHz kanal), Mors (CW) bandın alt ucunda. Şelaleye tıklayıp başka istasyona geçilir; CW'de en yakın tepeye oturur, NFM'de 12,5 kHz kanal ızgarasına.</li>
+    <li>433 MHz: PT2262/EV1527 benzeri kod: kısa darbe ~350 µs, uzun = 3 kısa, 24 bit; her basışta çerçeve sekiz kez tekrarlanır. "Kumandaya bas" düğmesi yeni bir paket gönderir.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="7" data-demo="iqfile" id="kendi-kaydin">
+  <div class="text">
+    <h2>Kendi kaydınızı açın</h2>
+    <p class="lead">Bir RTL-SDR ya da HackRF ile kaydettiğiniz IQ dosyasını buraya bırakın: tüm kaydın şelalesini görür, bir istasyona tıklayıp dinlersiniz.</p>
+    <p><strong>Dosyanız yalnızca bu tarayıcıda işlenir, hiçbir yere yüklenmez.</strong> Büyük dosyalar parça parça okunur; yüzlerce megabaytlık bir kayıt da belleği doldurmaz.</p>
+    <p>Ham IQ dosyasında başlık yoktur: biçim, örnekleme hızı ve merkez frekans dosyanın içinde yazmaz. Biçimi dosya adının uzantısından tahmin ederiz; hızı ve frekansı siz girersiniz. SigMF bu bilgileri yanındaki .sigmf-meta dosyasında taşır.</p>
+    <details class="more"><summary>Daha fazla: kayıt nasıl alınır?</summary>
+      <p>RTL-SDR ile 100 MHz'te, 2,048 MS/sn'de 10 saniye (20.480.000 örnek, 41 MB):</p>
+      <span class="formula">rtl_sdr -f 100000000 -s 2048000 -n 20480000 kayit.cu8</span>
+      <p>HackRF ile (8 bit işaretli, 10 MS/sn'de 10 saniye, 200 MB):</p>
+      <span class="formula">hackrf_transfer -r kayit.cs8 -f 100000000 -s 10000000 -n 100000000</span>
+      <p>Her örnek iki sayıdır (I ve Q): cu8 ve cs8'de örnek başına 2 bayt, cs16'da 4, cf32'de 8 bayt. SDR++ ve SDR# gibi programların WAV biçimli kayıtlarını bu görüntüleyici okumaz.</p>
+    </details>
+    <p class="try">Dosyanız yoksa "Örnek kayıt üret"e basın. Şelalede bir istasyona tıklayın, kipi (AM, NFM, WFM) seçip Dinle'ye basın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Gizlilik: dosya File API ile okunur, ağ isteği yoktur. Sayfa internetsiz (file://) açıldığında da çalışır.</li>
+    <li>Büyük dosya: şelalenin her satırı için File.slice ile yalnızca küçük bir dilim (en fazla 16 FFT çerçevesi) okunur; en fazla 600 satır. Dinlerken dosya 50 ms'lik parçalar hâlinde, sesin hemen önünden okunur.</li>
+    <li>Alıcı zinciri: NCO ile seçilen frekansı 0'a kaydır → en fazla 8'lik basamaklarla ~240 kHz'e azalt → süz, demodüle et (AM/NFM/WFM) → ses.</li>
+    <li>Örnek kayıt: 100 MHz merkezli, 1,024 MS/sn, 4 sn, cu8 (8,2 MB). İki FM yayını, bir AM, bir dar bant FM telsiz; ortadaki ince çizgi RTL-SDR'lardaki DC kaymasının taklidi. Gerçek FM bandında AM ve telsiz bulunmaz; üç demodülatörü denemek için eklendi.</li>
+    <li>Biçimler: cu8 = 8 bit işaretsiz (RTL-SDR, 127,5 sıfır), cs8 = 8 bit işaretli (HackRF), cs16 = 16 bit işaretli, cf32 = 32 bit kayan nokta (GNU Radio "complex"). gqrx dosya adlarından (gqrx_tarih_saat_frekans_hız_fc.raw) frekans ve hız okunur.</li>
+    <li>Soru gelirse: "Neden merkez frekansı bilmiyor?" Ham dosya yalnızca sayılardır; frekans ve hız kaydedenin bildiği meta veridir. SigMF tam bunun için var (sigmf.org).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="7" data-demo="yasal" id="yasal">
+  <div class="text">
+    <h2>Dinlemek serbest, yayın lisanslı</h2>
+    <p class="lead">Herkese yönelik yayınları almak çoğu yerde serbesttir. Ama size yönelik olmayan bir haberleşmeyi dinlemek, kaydetmek ya da yaymak birçok ülkede suçtur. Yayın yapmak ise belge ya da izin ister.</p>
+    <p>Türkiye'de haberleşmenin gizliliği Anayasa'nın 22. maddesiyle korunur. Türk Ceza Kanunu'nun 132. maddesi haberleşmenin gizliliğini ihlal etmeyi ve içeriği hukuka aykırı ifşa etmeyi, 133. maddesi aleni olmayan konuşmaları rıza olmadan dinlemeyi ve kaydetmeyi suç sayar. Telsiz cihazları ve frekansları BTK (Bilgi Teknolojileri ve İletişim Kurumu) düzenler.</p>
+    <p>Yayın yapmak isteyenin yolu amatör telsizcilikten geçer: sınavı Kıyı Emniyeti Genel Müdürlüğü (KEGM) yapar, geçen A, B ya da C sınıfı belge ve çağrı işareti alır. İzinsiz kullanılabilen bantlar dardır: 433 MHz kısa menzilli cihazlar, PMR446 el telsizleri gibi.</p>
+    <details class="more"><summary>Daha fazla: resmî kaynaklar</summary>
+      <ul>
+        <li><a href="https://www.btk.gov.tr/amator-telsizcilik" target="_blank" rel="noopener">BTK: amatör telsizcilik</a></li>
+        <li><a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=13769&amp;MevzuatTur=7&amp;MevzuatTertip=5" target="_blank" rel="noopener">KEGM Amatör Telsizcilik Sınav ve Belgelendirme Yönetmeliği</a> (sınav, sınıflar, çağrı işareti)</li>
+        <li><a href="https://www.trac.org.tr/" target="_blank" rel="noopener">TRAC: Türkiye Radyo Amatörleri Cemiyeti</a></li>
+        <li><a href="https://www.mevzuat.gov.tr/mevzuatmetin/1.5.5237.pdf" target="_blank" rel="noopener">Türk Ceza Kanunu</a> (md. 132–133)</li>
+      </ul>
+      <p>Bu slayt hukuki tavsiye değildir; kurallar ülkeden ülkeye ve zamanla değişir. Güncel mevzuata bakın; emin değilseniz BTK'ya, KEGM'e ya da bir amatör telsiz derneğine sorun.</p>
+    </details>
+    <p class="try">Kartlara tıklayın: önce "FM radyo dinlemek", sonra "Polis ya da acil telsizini dinleyip paylaşmak".</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Ana fikir: alma ≠ içeriği kullanma ≠ yayın. Açık yayınlar (FM, ADS-B, hava uydusu, amatör) herkese yöneliktir.</li>
+    <li>Anayasa md. 22 (Haberleşme hürriyeti): "Haberleşmenin gizliliği esastır." <a href="https://www.mevzuat.gov.tr/mevzuatmetin/1.5.2709.pdf" target="_blank" rel="noopener">Anayasa metni</a>.</li>
+    <li>TCK md. 132 (Haberleşmenin gizliliğini ihlal): ihlal kayıtla yapılırsa ceza bir kat artar; içeriği hukuka aykırı ifşa etmek ayrıca cezalı. md. 133 (Kişiler arasındaki konuşmaların dinlenmesi ve kayda alınması): aleni olmayan konuşmaları rıza olmadan bir aletle dinlemek ya da kaydetmek. <a href="https://www.mevzuat.gov.tr/mevzuatmetin/1.5.5237.pdf" target="_blank" rel="noopener">TCK metni</a>.</li>
+    <li>5809 sayılı Elektronik Haberleşme Kanunu md. 51/2: haberleşmenin, taraflarının tamamının rızası olmadan dinlenmesi, kaydedilmesi, saklanması yasaktır. md. 37/3: izin gerektirmeyen bantlarda Kurumca onaylı cihazlar izinsiz kullanılabilir. md. 39: telsizde kriptolu haberleşmeye TSK, Jandarma, Sahil Güvenlik, MİT, Emniyet ve Dışişleri yetkilidir. md. 43: amatör belgeyi KEGM'e bağlı Telsiz İşletme Müdürlüğü verir. <a href="https://www.mevzuat.gov.tr/mevzuatmetin/1.5.5809.pdf" target="_blank" rel="noopener">5809 metni</a>.</li>
+    <li>Amatör telsizcilik: sınavı ve belgeyi KEGM verir (MEB e-sınav merkezlerinde de yapılıyor; başvuru e-Devlet ya da kiyiemniyeti.gov.tr). A ve B için tek sınav: 75 ve üstü A, 60–74 B; C sınavında 60 yeter. Başvuran 12 yaşından büyük olmalı. Çağrı işareti ön eki: A sınıfına TA, B ve C'ye TB; TC özel gün istasyonlarına, YM dernek istasyonları ve aktarıcılara. Belge sahibi, sınıfının sınırları içinde ayrıca BTK izni almadan yayın yapar. Kaynak: <a href="https://www.btk.gov.tr/amator-telsizcilik" target="_blank" rel="noopener">BTK</a>, <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=13769&amp;MevzuatTur=7&amp;MevzuatTertip=5" target="_blank" rel="noopener">KEGM yönetmeliği</a>, <a href="https://www.kiyiemniyeti.gov.tr/sss" target="_blank" rel="noopener">KEGM SSS</a>.</li>
+    <li>İzinsiz cihazlar (BTK Sınıf 1 teknik ölçütleri): 433,05–434,79 MHz genel amaçlı kısa menzilli cihazlar en fazla 10 mW ERP; PMR446 446,0–446,2 MHz, en fazla 500 mW ERP, yalnızca tümleşik anten, verici en fazla 180 s açık kalır. <a href="https://www.btk.gov.tr/uploads/pages/sinif1-teknik-olcut.pdf" target="_blank" rel="noopener">BTK teknik ölçütler (PDF)</a>.</li>
+    <li>Polis telsizi: Avrupa'da acil hizmetler büyük ölçüde şifreli TETRA'ya (380–400 MHz) geçti. Türkiye'de Emniyet, ASELSAN'ın kriptolu milli DMR sistemine illere yayılarak geçiyor (<a href="https://www.trthaber.com/haber/turkiye/polise-milli-kriptolu-telsiz-379146.html" target="_blank" rel="noopener">TRT Haber, 2018</a>); bugünkü kapsamı doğrulanamadı, "tümü şifreli" denmemeli.</li>
+  </ul></aside>
+</section>
+
+<section class="slide center cover" data-chapter="7" data-demo="cover" data-variant="outro" data-title="Radyo artık bir yazılım" id="son">
+  <div class="stage bare"></div>
+  <div class="cover-text">
+    <h1>Radyo artık<br>bir yazılım</h1>
+    <p class="z7-chain num" aria-label="Dalga, örnek, IQ, spektrum, alıcı, modülasyon"><span>dalga</span><i>→</i><span>örnek</span><i>→</i><span>IQ</span><i>→</i><span>spektrum</span><i>→</i><span>alıcı</span><i>→</i><span>modülasyon</span></p>
+    <p class="sub">Dalgayı sayılara çevirdik, I ve Q ile frekansın yönünü yakaladık, bandı gördük, bir istasyonu seçip sesini geri kurduk. Eskiden lehimle yapılan her şey artık kod.</p>
+    <p>Aynı IQ verisini bir sinir ağına verirseniz, sinyalin türünü kendi kendine tanımayı öğrenir. Sinir ağlarını oynayarak öğrenmek için: <a href="https://yz.koraytoksoz.com" target="_blank" rel="noopener">yz.koraytoksoz.com</a></p>
+    <p class="z7-links">Devam etmek için: <a href="https://pysdr.org" target="_blank" rel="noopener">PySDR</a> · <a href="https://www.gnuradio.org" target="_blank" rel="noopener">GNU Radio</a> · <a href="https://www.sdrpp.org" target="_blank" rel="noopener">SDR++</a> · <a href="https://airspy.com/download/" target="_blank" rel="noopener">SDR#</a> · <a href="https://www.rtl-sdr.com" target="_blank" rel="noopener">RTL-SDR Blog</a></p>
+    <p class="byline z7-byline">Koray Toksöz</p>
+    <div class="cover-actions">
+      <a class="btn primary big" href="https://yz.koraytoksoz.com" target="_blank" rel="noopener">Sinir ağlarına geç</a>
+      <button class="btn big ghost" type="button" onclick="Deck.go(0)">Baştan başla</button>
+    </div>
+    <div class="cover-meta closing">
+      <a class="gh-link" href="https://github.com/ktoksoz/dalgadan-sayiya" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>Kaynak kodu GitHub'da</span></a>
+      <a class="lic" href="https://creativecommons.org/licenses/by/4.0/deed.tr" target="_blank" rel="license noopener" title="İçerik: Creative Commons Atıf 4.0">
+        <img src="img/cc-cc.svg" alt="Creative Commons" width="22" height="22"><img src="img/cc-by.svg" alt="Atıf" width="22" height="22">
+        <span>İçerik CC BY 4.0 · Kod MIT</span>
+      </a>
+    </div>
+    <p class="license">© 2026 Koray Toksöz · İçerik CC BY 4.0, kod MIT · Bütün sinyaller ve sesler tarayıcıda sentezlenir; "Neşeye Övgü" (Beethoven) kamu malıdır.</p>
+  </div>
+  <aside class="notes"><ul>
+    <li>Kapanış: arkadaki şelale kapaktaki gibi canlı; fareyle istasyonlara gelince sesleri duyulur.</li>
+    <li>Zincir: dalga (Bölüm 1) → örnekleme (2) → IQ (3) → spektrum (4) → alıcının içi (5) → modülasyon (6) → gerçek dünya (7).</li>
+    <li>Köprü: modülasyon tanıma (ör. RadioML veri kümeleri) IQ örneklerini doğrudan sinir ağına verir; yz.koraytoksoz.com sinir ağlarını oynayarak anlatıyor.</li>
+    <li>Kaynaklar: PySDR (Marc Lichtman, pysdr.org, ücretsiz, Python ile), GNU Radio (blok tabanlı açık kaynak SDR çatısı), SDR++ ve SDR# (alıcı programları), RTL-SDR Blog (donanım ve haberler).</li>
+    <li>Başlangıç önerisi: RTL-SDR Blog V4 ya da benzeri bir alıcı + SDR++ ile FM ve 1090 MHz'i deneyin; sonra kaydedip bu sitede açın.</li>
+  </ul></aside>
+</section>
+
+</main>
+
+<div id="notes" role="dialog" aria-label="Sunucu notları"></div>
+<div id="overview" role="dialog" aria-label="Tüm slaytlar"></div>
+
+<nav id="bar" aria-label="Slayt gezinmesi">
+  <div class="chapter-name"></div>
+  <button class="iconbtn" id="btn-prev" aria-label="Önceki slayt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+  <div id="progress"></div>
+  <button class="iconbtn" id="btn-next" aria-label="Sonraki slayt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+  <span class="counter"></span>
+  <button class="iconbtn" id="btn-voice" aria-label="Sesli anlatım (A)" title="Sesli anlatım (A)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+  <span id="sound-slot"></span>
+  <button class="iconbtn" id="btn-text" aria-label="Açıklama metnini gizle (T)" title="Metni gizle (T)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h10M4 10h10M4 14h7M18 5v14"/></svg></button>
+  <button class="iconbtn" id="btn-notes" aria-label="Sunucu notları (N)" title="Sunucu notları (N)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l3 3v15H6z"/><path d="M9 11h6M9 15h6"/></svg></button>
+  <button class="iconbtn" id="btn-overview" aria-label="Tüm slaytlar (O)" title="Tüm slaytlar (O)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></svg></button>
+</nav>
+
+<script src="js/dsp.js?v=202610141823"></script>
+<script src="js/lib.js?v=202610141823"></script>
+<script src="js/viz.js?v=202610141823"></script>
+<script src="js/music.js?v=202610141823"></script>
+<script src="js/signals.js?v=202610141823"></script>
+<script src="js/audio.js?v=202610141823"></script>
+<script src="js/demos/ch0.js?v=202610141823"></script>
+<script src="js/demos/ch1.js?v=202610141823"></script>
+<script src="js/demos/ch2.js?v=202610141823"></script>
+<script src="js/demos/ch3.js?v=202610141823"></script>
+<script src="js/demos/ch4.js?v=202610141823"></script>
+<script src="js/demos/ch5.js?v=202610141823"></script>
+<script src="js/demos/ch6.js?v=202610141823"></script>
+<script src="js/demos/ch6b.js?v=202610141823"></script>
+<script src="js/demos/ch7.js?v=202610141823"></script>
+<script src="js/glossary.js?v=202610141823"></script>
+<script src="js/app.js?v=202610141823"></script>
+<script src="js/narrator.js?v=202610141823"></script>
+<script src="js/guide.js?v=202610141823"></script>
+</body>
+</html>

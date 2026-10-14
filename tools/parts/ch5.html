@@ -1,0 +1,137 @@
+<!-- ================= 5. ALICININ İÇİ ================= -->
+<section class="slide" data-chapter="5" data-demo="rxChain" id="blok-diyagram">
+  <div class="text">
+    <h2>Alıcının içi</h2>
+    <p class="lead">Antenden bilgisayara giden yol altı kutudan geçer. Her kutu sinyale tek bir şey yapar.</p>
+    <p>Anten havadaki her şeyi toplar, LNA yükseltir. Asıl numara karıştırıcıda: sinyal, yerel osilatörün (LO) dalgasıyla çarpılır ve bütün spektrum aşağı kayar. Ayarladığınız istasyon 0 Hz'e oturur.</p>
+    <p>Sonra filtre yalnızca merkezin çevresini bırakır, ADC bu dar dilimi <span class="ci">I</span> ve <span class="cq">Q</span> olarak saniyede milyonlarca kez ölçer. Bilgisayara artık radyo dalgası değil, sayı akar.</p>
+    <details class="more"><summary>Daha fazla: doğrudan dönüşüm ve süperheterodin</summary>
+      <p>Burada gösterilen yapı doğrudan dönüşüm (sıfır IF): LO tam istasyonun frekansında, karıştırıcı iki kollu (0° ve 90°) ve çıkış doğrudan I ve Q. PlutoSDR ve USRP B210'daki AD936x çipleri böyle çalışır.</p>
+      <p>Klasik süperheterodin alıcı sinyali önce sabit bir ara frekansa (IF) indirir. RTL-SDR ikisinin karışımıdır: R820T/R828D ayarlayıcısı sinyali yaklaşık 3,57 MHz'lik düşük bir IF'ye indirir; RTL2832U bu IF'yi 28,8 MHz'de 8 bitle örnekler ve I/Q'ya dönüşümü sayısal olarak yapar.</p>
+    </details>
+    <p class="try">Kutulara tıklayın: sinyalin her noktadaki spektrumunu görün. Sonra LO'yu kaydırın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Spektrumlar tutarlı bir modelden hesaplanıyor: antende FM istasyonları (−50 ile −92 dBm arası), LNA +20 dB kazanç ve 3 dB gürültü katsayısı, 5. dereceden alçak geçiren filtre (kesim 1 MHz), 2,4 MS/sn ve 8 bit ideal ADC. ADC'de ±1,2 MHz'in dışındaki her şey içeri katlanır (filtre bu yüzden var).</li>
+    <li>8 bit ideal ADC: SNR = 6,02 × 8 + 1,76 ≈ 49,9 dB (Analog Devices MT-001). Zayıf istasyonların ADC görünümünde nicemleme gürültüsünün altında kaybolduğunu gösterin: kazanç ile aşırı yükleme arasındaki çekişme "Gerçek alıcının izleri" slaytında.</li>
+    <li>RTL-SDR: R820T/R820T2 düşük IF kullanır (ölçülen IF ≈ 3,57 MHz; qsl.net/py4zbz/r820.htm), eski E4000 ayarlayıcı sıfır IF'ydi ve merkezde belirgin bir DC tümseği verirdi (osmocom-sdr e-posta listesi, 2013). RTL2832U 28,8 MHz kristalle çalışır; IF'yi 8 bitle örnekleyip sayısal olarak I/Q'ya indirir ve 2,4 MS/sn gibi hızlara azaltır (ayrıntı yaklaşık, linuxtv.org/wiki RealTek RTL2832U). Blog V4'te ayarlayıcı R828D.</li>
+    <li>Olası soru: "Neden iki karıştırıcı?" Tek karıştırıcı +f ile −f'yi ayıramaz (IQ bölümündeki ayna). 90° kaydırılmış ikinci kol Q'yu verir; ikisi birlikte frekansın işaretini taşır.</li>
+    <li>Olası soru: "LO tam istasyonun üstündeyse merkezde ne olur?" LO'nun bir kısmı girişe sızar ve kendisiyle karışıp 0 Hz'de sabit bir gerilim (DC) bırakır. Sonraki slaytlarda göreceğimiz DC sivrisi budur.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="5" data-demo="mixTune" id="karistirma">
+  <div class="text">
+    <h2>Karıştırma: spektrumu kaydırmak</h2>
+    <p class="lead">Radyonun ayar düğmesini çevirmek aslında bütün spektrumu yana kaydırmaktır.</p>
+    <p>IQ akışını dönen bir okla (sayısal osilatör, NCO) çarpınca her frekans aynı miktarda kayar. Düğmeyi çevirdikçe alttaki spektrum ve şelale kayıyor; istediğiniz istasyon ortadaki kırmızı ibreye gelince alıcı onu duyar.</p>
+    <p>İbre iki istasyonun arasındaysa duyduğunuz şey gürültü: eski radyolardaki "istasyon arası" hışırtı.</p>
+    <details class="more"><summary>Daha fazla: neden çarpma kaydırır?</summary>
+      <p>Frekansı f olan bir ses e<sup>j2πft</sup> gibi döner. Bunu e<sup>−j2πf<sub>0</sub>t</sub></sup> ile çarpınca açılar toplanır: dönüş hızı f − f<sub>0</sub> olur. Her bileşen aynı f<sub>0</sub> kadar yer değiştirir.</p>
+      <span class="formula">y[n] = x[n] · e^(−j2π·f₀·n / fs)</span>
+      <p>Sayısal sinyalde frekans ±fs/2'de "sarar": kenardan taşan istasyon öbür kenardan girer. Düğmeyi sona kadar çevirip bakın.</p>
+    </details>
+    <p class="try">Büyük düğmeyi çevirin, bir istasyonu kırmızı ibreye getirin ve "Dinle"ye basın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Bant 240 kHz genişliğinde, beş hayalî istasyon: AM müzik (−85 kHz), telsiz konuşması NFM (−45 kHz), NFM müzik (+20 kHz), Mors (+55 kHz), AM konuşma (+90 kHz). İstasyonlar ve ses tarayıcıda sentezleniyor.</li>
+    <li>Ses, Signals.Receiver ile gerçekten demodüle ediliyor: NCO → alçak geçiren filtre → 5 kat azaltma (48 kHz) → AM zarfı ya da FM faz farkı. Mors için ibreden 700 Hz uzağa ayarlanıp gerçek kısım dinleniyor (BFO), bu yüzden bip sesi çıkıyor.</li>
+    <li>Düğmeyi bırakınca, bir istasyonun 2,5 kHz yakınındaysanız ibre ona kilitlenir (otomatik frekans kontrolü, AFC). Kaydırıcı ve ok tuşları da çalışır.</li>
+    <li>FM istasyonunu biraz kaçırınca ses bozulur; AM daha hoşgörülüdür. Telsiz kanallarının neden tam frekansa ayarlandığını buradan anlatın.</li>
+    <li>Gerçek SDR programlarında (SDR#, GQRX, SDR++) şelaleye tıklayınca olan da budur: donanım LO'su yerinde kalır, ince ayarı yazılımdaki NCO yapar.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="5" data-demo="filterDecim" id="filtre">
+  <div class="text">
+    <h2>Filtrele ve azalt</h2>
+    <p class="lead">İstasyon ortada, ama komşuları hâlâ orada. Önce süz, sonra gereksiz örnekleri at.</p>
+    <p>Alçak geçiren filtre yalnızca merkezin çevresini bırakır. Kesimi geniş açarsanız 14 kHz ötedeki komşu da içeri sızar: seste ıslık ve araya karışan bir konuşma duyulur. Çok daraltırsanız müziğin tınısı kesilir, ses boğuklaşır.</p>
+    <p>Süzdükten sonra bant artık dar; saniyede 240 bin örneğe gerek yok. Her M örnekten birini tutmak (azaltma) hesap yükünü M kat düşürür.</p>
+    <details class="more"><summary>Daha fazla: katsayı sayısı ve örtüşme</summary>
+      <p>FIR filtre son T örneğin ağırlıklı toplamıdır. T büyüdükçe kenar dikleşir (geçiş bandı daralır) ama her çıkış örneği T çarpma ister. Burada yük, yalnızca tutulan örnekler hesaplanarak ölçülüyor: 2 × T × fs / M.</p>
+      <p>Azaltmadan sonra görülebilen bant ±fs/(2M) olur. Kesim bundan genişse dışarıdaki istasyonlar içeri katlanır: Nyquist sınırındaki örtüşmenin aynısı.</p>
+    </details>
+    <p class="try">"Dinle"ye basın ve kesimi 30 kHz'e açın: komşu sızar. Sonra 1 kHz'e kısın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Dinlenen istasyon AM (org tınısı), komşu 14 kHz ötede bir AM konuşma. Komşu filtreden geçince AM zarf dedektörü iki taşıyıcının farkını, 14 kHz'lik bir ıslığı üretir. Avrupa'da orta dalga istasyonları 9 kHz arayla dizilir; eski radyolarda duyulan ıslık budur.</li>
+    <li>Filtre pencereli sinc (Blackman), DSP.firLowpass ile tasarlanıyor; yanıt DSP.freqResponse ile çiziliyor. Ekrandaki kesim, geçiş bandı ve komşuya bastırma bu yanıttan ölçülüyor.</li>
+    <li>M = 20'de kalan bant ±6 kHz. Kesim 6 kHz'in üstündeyse uyarı çıkar: dışarıdaki her şey içeri katlanır.</li>
+    <li>Hesap yükü örneği: 63 katsayı, M = 5 → 2 × 63 × 48.000 ≈ 6 milyon çarpma/sn. Azaltmasız (M = 1) ≈ 30 milyon. Gerçek alıcılar bunu basamaklı yapar (önce kaba, ucuz azaltma; sonra keskin filtre).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="5" data-demo="bandWindow" id="bant-geciren">
+  <div class="text">
+    <h2>Bant geçiren filtre: yalnızca bir pencere</h2>
+    <p class="lead">Filtre bir penceredir: içinden bakılan yeri siz seçersiniz, gerisi kararır.</p>
+    <p>Alçak geçiren pencere hep 0 Hz'in çevresindedir. Bant geçiren pencere istediğiniz yere taşınır; bant durduran (çentik) ise tersini yapar: yalnızca pencerenin içini söndürür.</p>
+    <p><strong>Gerçek</strong> katsayılı filtre IQ'da hem +f hem −f'de pencere açar: IQ bölümündeki aynanın aynısı. <strong>Karmaşık</strong> katsayılı filtre yalnızca seçtiğiniz tarafı görür.</p>
+    <details class="more"><summary>Daha fazla: güçlü istasyonu bastırmak</summary>
+      <p>Bant durduranı güçlü yayının üstüne koyun: ekran ölçeği bir sonraki en güçlü sinyale iner ve dibindeki zayıf istasyon ortaya çıkar.</p>
+      <p>Gerçek hayatta SDR'cılar bunun için anten ile alıcı arasına 88–108 MHz'i 50 dB'den fazla bastıran FM bant durduran filtreler takar. Filtre ADC'den <em>önce</em> olmalıdır: güçlü yayın ADC'nin sınırlı dinamik aralığını bir kez doldurduysa, sonradan yazılımla süzmek zayıf sinyali geri getirmez.</p>
+    </details>
+    <p class="try">Pencereyi ortasından tutup sürükleyin, kenarlarından genişletin; sonra "Karmaşık"ı seçin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Katsayılar DSP.firBandpass (karmaşık: alçak geçireni e^(j2πf₀n) ile kaydırmak), DSP.firBandpassReal (gerçek: 2·h·cos, iki yanlı) ve DSP.firBandstop ile tasarlanıyor; çıkış DSP.CFIR ile gerçekten süzülüyor. Yanıt, DSP.freqResponseC ile aynı tanımla sıfır dolgulu FFT'den hesaplanıyor (sürüklerken akıcı kalsın diye).</li>
+    <li>Ekrandaki geçiş bandı (−3 dB), geçiş eğimi (−3 → −60 dB), durdurma bandı ve çentik derinliği yanıttan ölçülüyor. 95 katsayılı Blackman pencerede durdurma bandı −70 dB civarındadır.</li>
+    <li>"Dinle", pencere merkezindeki istasyonu süzülmüş sinyalden demodüle eder. Bant durdurana geçince dinlenen istasyon kaybolur (FM'de hışırtıya döner).</li>
+    <li>FM bant durduran filtre örnekleri: RTL-SDR Blog FM bandstop (88–108 MHz'de >50 dB, 7. dereceden Chebyshev; rtl-sdr.com/product/rtl-sdr-blog-broadcast-fm-band-stop-filter), Nooelec Flamingo FM (dağıtıcıya göre ortalama >60 dB; yaklaşık). Uçak bandının alt ucunu (118–124 MHz) da biraz zayıflatabilir.</li>
+    <li>Ölçeğin "en güçlü sinyale uyması" çoğu SDR programındaki otomatik aralığa benzer; zayıf istasyonun görünür olmasının buradaki nedeni bu. Gerçek donanımda asıl sorun ADC'nin dinamik aralığıdır (8 bit ≈ 50 dB).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="5" data-demo="rxFlaws" id="kusurlar">
+  <div class="text">
+    <h2>Gerçek alıcının izleri</h2>
+    <p class="lead">Ucuz bir alıcının spektrumunda olmayan şeyler görürsünüz. Çoğu donanımın imzasıdır.</p>
+    <ul>
+      <li><span class="cr">DC sivrisi:</span> LO'nun sızıntısı ve devredeki küçük kaymalar merkezde sabit bir tepe bırakır.</li>
+      <li><span class="cq">IQ dengesizliği:</span> I ve Q kolları tam eş değilse her istasyonun −f'de soluk bir aynası belirir.</li>
+      <li><span class="cr">Aşırı yükleme:</span> kazanç fazlaysa ADC tepeleri kırpar; spektrumda olmayan istasyonlar ve yükselen bir taban çıkar.</li>
+    </ul>
+    <details class="more"><summary>Daha fazla: görüntü bastırma oranı</summary>
+      <p>Kazanç oranı g ve faz hatası φ ise istasyon ile aynası arasındaki fark:</p>
+      <span class="formula">IRR = 10·log₁₀[(1 + 2g·cos φ + g²) / (1 − 2g·cos φ + g²)]</span>
+      <p>1 dB ve 6° hatada yaklaşık 22 dB. "IQ dengeleme" I ile Q'nun ilişkisini ölçüp Q'yu yeniden diker: önce I'ya benzeyen kısmı çıkarır, sonra iki kolun gücünü eşitler.</p>
+    </details>
+    <p class="try">Faz hatasını artırın, aynaları izleyin; "IQ dengeleme"ye basın. Sonra RF kazancını yükseltin.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>Kusurlar IQ akışına gerçekten uygulanıyor: Q' = g·(Q·cos φ + I·sin φ), I ve Q'ya sabit eklenti (DC), ardından ±1'de kırpma ve 8 bit nicemleme. Düzeltmeler de gerçek: DC giderme blok ortalamasını izleyip çıkarır; IQ dengeleme E[I·Q], E[I²], E[Q²] istatistikleriyle Gram–Schmidt dikleştirmesi yapar.</li>
+    <li>Görüntü bastırma iki yoldan gösteriliyor: formülden (kuramsal) ve spektrumda +30 kHz istasyonu ile −30 kHz aynasının farkından (ölçülen). İkisi birkaç dB içinde örtüşmeli.</li>
+    <li>Aşırı yüklemeyi IQ düzleminde gösterin: noktalar kesik çizgili karenin (ADC sınırı) kenarına yapışıyor. RTL-SDR'da "RF gain" ayarını sonuna kadar açmak tam olarak bunu yapar.</li>
+    <li>DC sivrisinden kaçmanın eski yolu: donanımı istasyonun biraz yanına ayarlayıp (ör. 250 kHz) istasyonu yazılımda NCO ile merkeze getirmek. Birçok SDR programında "offset tuning" adıyla bulunur.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-chapter="5" data-demo="hwCompare" id="donanim">
+  <div class="text">
+    <h2>Gerçek donanım</h2>
+    <p class="lead">Aynı fikir, dört fiyat sınıfı: 30 dolarlık USB çubuktan laboratuvar cihazına.</p>
+    <p>Bir SDR'ı dört soru tanımlar: hangi frekansları duyar, bir anda ne kadar genişliği görür, kaç bitle ölçer ve gönderebilir mi.</p>
+    <p>Bit sayısı dinamik aralığı belirler: her bit yaklaşık 6 dB ekler. 8 bitlik bir RTL-SDR'da güçlü ve zayıf sinyal arasında ≈ 50 dB, 12 bitlik bir PlutoSDR'da ≈ 74 dB yer vardır.</p>
+    <details class="more"><summary>Daha fazla: gönderme yeteneği</summary>
+      <p>RTL-SDR yalnızca alır. HackRF One gönderebilir ama aynı anda alamaz (yarı çift yönlü). PlutoSDR ve USRP B210 aynı anda alıp gönderir (tam çift yönlü).</p>
+      <p>Göndermek için amatör telsizcilik belgesi ya da izin gerekir; bu, sunumun sonundaki yasal bölümün konusu.</p>
+    </details>
+    <p class="try">Bir hedef seçin: hangi cihazların alabildiğine ve nedenine bakın.</p>
+  </div>
+  <div class="stage"></div>
+  <aside class="notes"><ul>
+    <li>RTL-SDR (R820T2): 24–1766 MHz, 8 bit (ENOB ≈ 7), en çok 3,2 MS/sn ama örnek kaçırır; kayıpsız en yüksek 2,56 MS/sn, alışılmış güvenli değer 2,4 MS/sn; gönderme yok; ≈ 30 $. Kaynak: rtl-sdr.com/about-rtl-sdr.</li>
+    <li>RTL-SDR Blog V4: R828D ayarlayıcı, dahili HF yukarı çeviriciyle yaklaşık 500 kHz–1,766 GHz; 29,95 $ (antenli set 39,95 $). Kaynak: rtl-sdr.com/rtl-sdr-blog-v4-dongle-initial-release.</li>
+    <li>HackRF One: 1 MHz–6 GHz, 2–20 MS/sn, 8 bit, yarı çift yönlü. Kaynak: hackrf.readthedocs.io (HackRF One). Fiyat resmî değil, satıcılarda ≈ 300–350 $ (yaklaşık).</li>
+    <li>ADALM-PLUTO: AD9363, 325–3800 MHz, 12 bit, 61,44 MS/sn, 20 MHz anlık bant, 1 alma + 1 gönderme (tam çift yönlü). Yazılımla AD9364 gibi tanıtılarak 70 MHz–6 GHz ve 56 MHz'e açılabiliyor; garanti değil. Kaynak: rtl-sdr.com ADALM-PLUTO duyurusu ve "70 MHz to 6 GHz hack" yazısı. Fiyat ilk çıkışta 149 $, bugün dağıtıcılarda ≈ 220 $ (yaklaşık).</li>
+    <li>USRP B210: 70 MHz–6 GHz, AD9361 (12 bit), 61,44 MS/sn ile 56 MHz'e kadar anlık bant, 2×2 MIMO, tam çift yönlü; Ettus sayfasında 2.387 $ (yalnızca kart). Kaynak: ettus.com/all-products/ub210-kit.</li>
+    <li>Hedefler: kısa dalga 40 m amatör bandı (7,0–7,2 MHz), FM yayın 87,5–108 MHz (Bölge 1), ADS-B 1090 MHz, GPS L1 1575,42 MHz (≈ 2 MHz genişlik), Wi-Fi 2,4 GHz kanal 1 (2401–2423 MHz), Wi-Fi 5 GHz kanal 36 (5170–5190 MHz). "Tüm FM bandı" 20,5 MHz genişlik ister: yalnızca B210 tek seferde görür.</li>
+    <li>Dinamik aralık: ideal ADC için 6,02·N + 1,76 dB (Analog Devices MT-001). Gerçekte etkin bit sayısı (ENOB) daha düşüktür; ayrıca azaltma ile işlem kazancı elde edilir.</li>
+  </ul></aside>
+</section>
