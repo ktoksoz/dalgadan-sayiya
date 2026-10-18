@@ -1,4 +1,4 @@
-# sdr.koraytoksoz.com — DreamHost (Apache) ayarları
+# egitim.koraytoksoz.com/sdr/ — DreamHost (Apache) ayarları
 
 # HTTP'yi HTTPS'e yönlendir
 <IfModule mod_rewrite.c>

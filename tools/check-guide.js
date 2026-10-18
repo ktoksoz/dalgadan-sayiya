@@ -7,7 +7,7 @@ const d = fs.readdirSync(base).filter((n) => /^chromium-\d+$/.test(n)).sort().po
 (async () => {
   const browser = await chromium.launch({ executablePath: path.join(base, d, "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing") });
   const page = await browser.newPage({ viewport: { width: 1440, height: 860 } });
-  await page.addInitScript(() => { try { localStorage.setItem("rehber.kapali", "1"); } catch (e) {} });
+  await page.addInitScript(() => { try { localStorage.setItem("sdr.rehber.kapali", "1"); } catch (e) {} });
   await page.goto("file://" + path.resolve(__dirname, "../index.html"));
   await page.waitForTimeout(500);
   const ids = await page.evaluate(() => [...document.querySelectorAll(".slide")].map((s) => s.id));

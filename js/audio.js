@@ -10,8 +10,8 @@
   let ctx = null, master = null, duckGain = null;
   const streams = new Set();
   const store = {
-    get(k, d) { try { const v = localStorage.getItem("ses." + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
-    set(k, v) { try { localStorage.setItem("ses." + k, JSON.stringify(v)); } catch (e) {} },
+    get(k, d) { try { const v = localStorage.getItem("sdr.ses." + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem("sdr.ses." + k, JSON.stringify(v)); } catch (e) {} },
   };
   let volume = store.get("duzey", 0.7), muted = store.get("sessiz", false), ducked = false;
 

@@ -1,6 +1,6 @@
 # Dalgadan Sayıya
 
-**Canlı site: https://sdr.koraytoksoz.com**
+**Canlı site: https://egitim.koraytoksoz.com/sdr/** (eski adres https://sdr.koraytoksoz.com buraya yönlendirilir; bütün eğitimler: https://egitim.koraytoksoz.com)
 
 Yazılım tanımlı radyoyu (SDR) ve IQ verisini, radyo dalgasından örneklemeye, I ve Q'dan spektruma, alıcının içinden modülasyona kadar slayt slayt anlatan, Türkçe, etkileşimli bir sunum sitesi. Her slaytta görülüp duyulabilen, oynanabilen bir deney var; bütün sinyaller tarayıcıda üretilir, SDR donanımı gerekmez.
 
@@ -88,7 +88,7 @@ NODE_PATH=<node_modules> node tools/check-guide.js
 ## Yayınlama
 
 ```sh
-tools/deploy.sh   # varsayılan koray@koraytoksoz.com → ~/sdr.koraytoksoz.com
+tools/deploy.sh   # varsayılan koray@koraytoksoz.com → ~/egitim.koraytoksoz.com/sdr/
 ```
 
 Betik önce `index.html`'i parçalardan kurar ve CSS/JS bağlantılarındaki `?v=` sürüm etiketini yeniler, sonra `rsync` ile yalnızca değişen dosyaları gönderir. `.htaccess` HTTPS yönlendirmesi, sıkıştırma ve önbellek ayarlarını içerir.
@@ -159,4 +159,4 @@ Sinyallerin ve seslerin tamamı tarayıcıda üretilir; "Neşeye Övgü" (Beetho
 
 Önerilen atıf:
 
-> Koray Toksöz, Dalgadan Sayıya, https://sdr.koraytoksoz.com
+> Koray Toksöz, Dalgadan Sayıya, https://egitim.koraytoksoz.com/sdr/

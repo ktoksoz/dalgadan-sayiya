@@ -11,7 +11,7 @@
   const S = window.GUIDE_SCENARIOS || {};
 
   let enabled = true;
-  try { enabled = localStorage.getItem("rehber.kapali") !== "1"; } catch (e) {}
+  try { enabled = localStorage.getItem("sdr.rehber.kapali") !== "1"; } catch (e) {}
   const seen = new Set();
 
   // sentetik pointer olaylarında setPointerCapture hata vermesin
@@ -220,7 +220,7 @@
     if (!e.isTrusted) return;
     if ((e.key === "g" || e.key === "G") && !e.metaKey && !e.ctrlKey && !(e.target.matches && e.target.matches("input[type=text], textarea"))) {
       enabled = !enabled;
-      try { localStorage.setItem("rehber.kapali", enabled ? "0" : "1"); } catch (er) {}
+      try { localStorage.setItem("sdr.rehber.kapali", enabled ? "0" : "1"); } catch (er) {}
       toast(enabled ? "Deney gösterimleri açık" : "Deney gösterimleri kapalı (G ile açılır)");
       if (!enabled) stop();
       return;

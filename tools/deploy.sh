@@ -11,5 +11,5 @@ sed -i '' -E "s/\?v=[0-9]+\"/?v=$V\"/g" index.html
 echo "Sürüm etiketi: $V"
 rsync -avz \
   --exclude tools --exclude tests --exclude README.md --exclude PLAN.md --exclude .DS_Store --exclude .git \
-  ./ "$HOST:~/sdr.koraytoksoz.com/"
-echo "Yüklendi: https://sdr.koraytoksoz.com"
+  ./ "$HOST:~/egitim.koraytoksoz.com/sdr/"
+echo "Yüklendi: https://egitim.koraytoksoz.com/sdr/"

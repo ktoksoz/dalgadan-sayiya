@@ -20,7 +20,7 @@ const exe = (() => {
     const page = await browser.newPage({ viewport: { width: w, height: hh }, deviceScaleFactor: 1 });
     page.on("console", (m) => { if (m.type() === "error" || m.type() === "warning") { errors += m.type() === "error"; console.log(`  [${m.type()}] ${w}x${hh}: ${m.text()}`); } });
     page.on("pageerror", (e) => { errors++; console.log(`  [pageerror] ${w}x${hh}: ${e.message}`); });
-    await page.addInitScript(() => { try { localStorage.setItem("rehber.kapali", "1"); } catch (e) {} });
+    await page.addInitScript(() => { try { localStorage.setItem("sdr.rehber.kapali", "1"); } catch (e) {} });
     await page.goto(url);
     await page.waitForTimeout(600);
     const ids = await page.evaluate(() => [...document.querySelectorAll(".slide")].map((s) => s.id));
