@@ -170,14 +170,19 @@
     const ctrl = h("div.controls");
     stage.append(h("div.controls.top", reads), fill, ctrl);
 
+    // Sinyal en çok 6 kHz: insan kulağının rahatça duyduğu aralık. Kaydırıcılar logaritmik
+    // (değer = min · (max/min)^konum): her oktav kaydırıcıda aynı uzunlukta yer kaplar.
+    const F_MIN = 100, F_MAX = 6000;
+    const rf = (v) => (v < 1000 ? Math.round(v / 10) * 10 : Math.round(v / 50) * 50);
+    const rfs = (v) => Math.round(v / 100) * 100;
     let fs = 8000, f = 1000, stream = null, sweep = null, aph = 0, tau = 0;
-    const sF = L.slider({ label: "Sinyal frekansı", min: 50, max: 20000, step: 10, value: f, fmt: (v) => hz(v, 3), oninput: (v) => { f = v; sweep = null; upd(); }, cls: "cr", width: "min(220px, 40vw)" });
-    const sS = L.slider({ label: "Örnekleme hızı", min: 2000, max: 16000, step: 100, value: fs, fmt: (v) => trim(num(v / 1000, 1)) + " kHz", oninput: (v) => { fs = v; upd(); }, width: "min(150px, 32vw)" });
+    const sF = L.slider({ label: "Sinyal frekansı", min: F_MIN, max: F_MAX, value: f, log: true, fmt: (v) => hz(rf(v), 3), oninput: (v) => { f = rf(v); sweep = null; upd(); }, cls: "cr", width: "min(220px, 40vw)" });
+    const sS = L.slider({ label: "Örnekleme hızı", min: 1000, max: 16000, value: fs, log: true, fmt: (v) => trim(num(rfs(v) / 1000, 1)) + " kHz", oninput: (v) => { fs = rfs(v); upd(); }, width: "min(150px, 32vw)" });
     const listen = L.toggle("Dinle", false, (on) => {
       if (on) stream = Sound.stream(slide, fillAudio, { gain: 0.5 });
       else if (stream) { stream.stop(); stream = null; }
     });
-    const sweepB = h("button.btn", { type: "button", onclick: () => { sweep = { t: 0, from: 200, to: Math.min(20000, 2.2 * fs) }; } }, "Süpür");
+    const sweepB = h("button.btn", { type: "button", onclick: () => { sweep = { t: 0, from: 200, to: F_MAX }; } }, "Süpür");
     ctrl.append(sF, sS, listen, sweepB);
 
     function upd() {
@@ -203,7 +208,9 @@
       const pad = 16, x0 = pad, pw = w - 2 * pad;
       const topY = 26, topH = Math.round((H - 30) * 0.56), dY = topY + topH + 46, dH = H - dY - 30;
       const Y = (v) => topY + topH / 2 - v * topH * 0.42;
-      const NS = w < 520 ? 14 : 22, Tw = NS / fs, a = aliasOf(f, fs);
+      // sabit zaman penceresi: fs değişince dalga yerinde kalır, noktaların sıklığı değişir
+      const Tw = w < 520 ? 0.0025 : 0.004, a = aliasOf(f, fs);
+      const gap = (pw / Tw) / fs, dotR = Math.max(2, Math.min(4.5, gap * 0.28));
       const X = (t) => x0 + ((t - tau) / Tw) * pw;
       ctx.strokeStyle = rgba(C.ink, 0.12); ctx.beginPath(); ctx.moveTo(x0, Math.round(Y(0)) + 0.5); ctx.lineTo(x0 + pw, Math.round(Y(0)) + 0.5); ctx.stroke();
       // gerçek dalga
@@ -220,14 +227,14 @@
       for (let k = k0; k <= k1; k++) {
         const t = k / fs, px = X(t), y = Y(Math.cos(TAU * f * t));
         ctx.strokeStyle = rgba(C.ink, 0.25); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(px, Y(0)); ctx.lineTo(px, y); ctx.stroke();
-        V.dot(ctx, px, y, 4.5, C.ink, 6);
+        V.dot(ctx, px, y, dotR, C.ink, dotR > 3 ? 6 : 0);
       }
       // gösterge
       const lg = [[rgba(C.ink, 0.6), "gerçek dalga " + hz(f, 3)], [ALIAS, "örneklerin çizdiği dalga " + hz(Math.abs(a), 3)]];
       let lx = x0;
       lg.forEach(([c, s]) => { ctx.fillStyle = c; ctx.fillRect(lx, 11, 16, 3); V.text(ctx, s, lx + 22, 16, { color: C.ink2, size: 12 }); ctx.font = `400 12px ${FONT.body}`; lx += 22 + ctx.measureText(s).width + 18; });
       // katlanma diyagramı: görünen frekans ↔ gerçek frekans
-      const fMax = Math.max(20000, fs * 1.6), DX = (v) => x0 + (v / fMax) * pw, DY = (v) => dY + dH - (v / (fs / 2)) * dH;
+      const fMax = Math.max(F_MAX, fs * 0.6), DX = (v) => x0 + (v / fMax) * pw, DY = (v) => dY + dH - (v / (fs / 2)) * dH;
       V.text(ctx, "katlanma: gerçek frekans (yatay) → görünen frekans (dikey)", x0, dY - 26, { color: C.ink2, size: 12 });
       ctx.fillStyle = rgba(C.bg, 0.35); ctx.fillRect(x0, dY, pw, dH);
       for (let k = 1; k * fs / 2 <= fMax; k++) {
@@ -253,7 +260,7 @@
     }
     const st = canvas(cv, () => draw());
     const lp = loop((dt) => {
-      tau += dt * (1.4 / fs);
+      tau += dt * 0.0004; // pencere saniyede 0,4 ms kayar: dalga ağır çekimde akar
       if (sweep) {
         sweep.t += dt;
         const u = Math.min(1, sweep.t / 7);

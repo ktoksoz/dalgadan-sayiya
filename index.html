@@ -160,14 +160,14 @@
     <p>Sinyal bu sınırı geçince noktalar <span class="alias-c">sahte, daha yavaş bir dalga</span> çizmeye başlar. Buna <strong>örtüşme</strong> denir. Alttaki diyagram frekansın sınıra çarpıp geri katlandığını gösterir: sinyal ne kadar hızlanırsa hızlansın, görünen frekans hep sıfır ile sınır arasında kalır.</p>
     <details class="more"><summary>Daha fazla: görünen frekans</summary>
       <span class="formula">f<sub>görünen</sub> = | f − k · f<sub>s</sub> |, &nbsp; k = en yakın tam sayı (f / f<sub>s</sub>)</span>
-      <p>8 kHz örneklemede 7 kHz'lik ton 1 kHz gibi, 9 kHz'lik ton da yine 1 kHz gibi görünür. Örneklerden bakarak ikisini ayırmanın yolu yoktur. Bu yüzden ADC'nin önüne, sınırın üstünü kesen bir örtüşme önleyici filtre konur.</p>
+      <p>8 kHz örneklemede 5 kHz'lik ton 3 kHz gibi görünür: örnekleri, gerçekten 3 kHz olan bir tonun örnekleriyle birebir aynıdır. Örneklerden bakarak ikisini ayırmanın yolu yoktur. Bu yüzden ADC'nin önüne, sınırın üstünü kesen bir örtüşme önleyici filtre konur.</p>
     </details>
     <p class="try">"Dinle"yi açıp <b>Süpür</b>'e basın: ton tizleşirken 4 kHz'de geri dönüp pesleşir.</p>
   </div>
   <div class="stage"></div>
   <aside class="notes"><ul>
     <li>İnce fildişi: gerçek dalga. Noktalar: örnekler. Pirinç rengi: örneklerden geri kurulabilecek tek dalga (ideal DAC'ın çıkışı). Sınırın altında ikisi üst üste biner.</li>
-    <li>"Dinle" ideal geri kurulumu çalar: örnekleri ideal bir DAC'tan geçirseydik duyacağımız ton. Süpürme 200 Hz'den 2,2 × fs'ye 7 saniyede gider.</li>
+    <li>"Dinle" ideal geri kurulumu çalar: örnekleri ideal bir DAC'tan geçirseydik duyacağımız ton. Süpürme 200 Hz'den 6 kHz'e 7 saniyede gider; kaydırıcılar logaritmiktir. Sinyal üst sınırı 6 kHz: 20 kHz insan kulağının kuramsal sınırı, yetişkinlerin çoğu 10 kHz'in üstünü zor duyar.</li>
     <li>Katlanma diyagramındaki üçgen dalga, spektrumun fs/2 çizgisinde "akordeon gibi" katlanmasıdır. IQ ile örneklemede (sonraki bölüm) pencere −fs/2…+fs/2 olur ve işaret de korunur.</li>
     <li>Olası soru: "Tam fs/2'de ne olur?" Örnekler fazına göre ya tepe ya sıfır yakalar; güvenilir değildir. Pratikte sınırın biraz altında kalınır.</li>
   </ul></aside>
